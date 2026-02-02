@@ -1,13 +1,13 @@
 const NexusLogo = ({ size = 80 }) => {
   return (
-    <div 
+    <div
       className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg"
       style={{ width: size, height: size }}
     >
-      <svg 
-        width={size * 0.5} 
-        height={size * 0.5} 
-        viewBox="0 0 24 24" 
+      <svg
+        width={size * 0.5}
+        height={size * 0.5}
+        viewBox="0 0 24 24"
         fill="none"
       >
         <circle cx="12" cy="12" r="3" fill="white" />
