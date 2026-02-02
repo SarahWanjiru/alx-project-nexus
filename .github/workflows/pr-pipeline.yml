@@ -80,7 +80,7 @@ jobs:
           cache-dependency-path: nexus/pnpm-lock.yaml
       - run: pnpm install
       - run: pnpm test -- --coverage --watchAll=false
-      - uses: codecov/codecov-action@v4
+      - uses: codecov/codecov-action@v5
         with:
           directory: ./nexus/coverage
 
