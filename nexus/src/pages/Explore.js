@@ -56,8 +56,8 @@ const Explore = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-20">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen bg-gray-50 pb-20 lg:pb-0">
+      <div className="max-w-7xl mx-auto lg:px-6 lg:py-6">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           <div className="lg:col-span-8">
             <div className="bg-white lg:rounded-2xl lg:shadow-sm min-h-screen lg:min-h-0">
