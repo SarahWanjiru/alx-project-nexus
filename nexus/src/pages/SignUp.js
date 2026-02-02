@@ -20,7 +20,7 @@ const SignUp = () => {
     e.preventDefault();
     const result = await signup(formData);
     if (result.success) {
-      navigate('/jobs');
+      navigate('/explore');
     }
   };
 

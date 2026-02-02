@@ -16,7 +16,7 @@ const Login = () => {
     e.preventDefault();
     const result = await login(formData);
     if (result.success) {
-      navigate('/jobs');
+      navigate('/explore');
     }
   };
 
