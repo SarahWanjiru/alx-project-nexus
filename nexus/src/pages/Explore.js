@@ -4,7 +4,6 @@ import MobileFilters from '../components/MobileFilters';
 
 const Explore = () => {
   const navigate = useNavigate();
-  
   // State initialization with explicit default values
   const [showFilters, setShowFilters] = useState(false);
 
@@ -45,17 +44,6 @@ const Explore = () => {
       saved: false,
     },
     {
-      id: 4,
-      title: 'Social Media Manager',
-      company: 'Spark Creative',
-      location: 'New York, NY',
-      time: '2d ago',
-      level: 'MID LEVEL',
-      type: 'FULL-TIME',
-      saved: false,
-    },
-
-     {
       id: 4,
       title: 'Social Media Manager',
       company: 'Spark Creative',
@@ -111,9 +99,6 @@ const Explore = () => {
                     Search Jobs
                   </button>
                 </div>
-
-
-
                 <div className="flex items-center justify-between mb-4">
                   <h2 className="text-lg font-bold text-gray-900">
                     Recent Job Postings
@@ -220,7 +205,6 @@ const Explore = () => {
               </div>
             </div>
           </div>
-
           <div className="hidden lg:block lg:col-span-4">
             <div className="bg-white rounded-2xl shadow-sm p-6 sticky top-6">
               <h3 className="text-lg font-bold text-gray-900 mb-4">
@@ -244,7 +228,6 @@ const Explore = () => {
           </div>
         </div>
       </div>
-
       <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200">
         <div className="flex items-center justify-around py-3">
           <button className="flex flex-col items-center gap-1 text-blue-600">
@@ -293,5 +276,4 @@ const Explore = () => {
     </div>
   );
 };
-
 export default Explore;

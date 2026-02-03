@@ -46,8 +46,18 @@ const MobileFilters = ({ isOpen, onClose, onApply }) => {
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-gray-200">
         <button onClick={onClose} className="text-blue-500">
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+          <svg
+            className="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M15 19l-7-7 7-7"
+            />
           </svg>
         </button>
         <h1 className="text-xl font-bold text-gray-900">Filters</h1>
@@ -59,12 +69,16 @@ const MobileFilters = ({ isOpen, onClose, onApply }) => {
       <div className="p-4 space-y-6 pb-32">
         {/* Job Title */}
         <div>
-          <label className="block text-sm font-semibold text-gray-900 mb-2">Job Title</label>
+          <label className="block text-sm font-semibold text-gray-900 mb-2">
+            Job Title
+          </label>
           <div className="relative">
             <input
               type="text"
               value={filters.jobTitle}
-              onChange={(e) => setFilters({ ...filters, jobTitle: e.target.value })}
+              onChange={(e) =>
+                setFilters({ ...filters, jobTitle: e.target.value })
+              }
               placeholder="Search job titles..."
               className="w-full pl-4 pr-10 py-3 bg-gray-50 text-gray-900 placeholder-gray-400 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
@@ -84,12 +98,16 @@ const MobileFilters = ({ isOpen, onClose, onApply }) => {
 
         {/* Location */}
         <div>
-          <label className="block text-sm font-semibold text-gray-900 mb-2">Location</label>
+          <label className="block text-sm font-semibold text-gray-900 mb-2">
+            Location
+          </label>
           <div className="relative">
             <input
               type="text"
               value={filters.location}
-              onChange={(e) => setFilters({ ...filters, location: e.target.value })}
+              onChange={(e) =>
+                setFilters({ ...filters, location: e.target.value })
+              }
               placeholder="City or Remote"
               className="w-full pl-4 pr-10 py-3 bg-gray-50 text-gray-900 placeholder-gray-400 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
@@ -112,22 +130,23 @@ const MobileFilters = ({ isOpen, onClose, onApply }) => {
           <h2 className="text-lg font-bold text-gray-900 mb-3">Categories</h2>
           <div className="flex gap-2 overflow-x-auto pb-2">
             {[
-              { name: 'Design', icon: '🎨' },
-              { name: 'Development', icon: '💻' },
-              { name: 'Marketing', icon: '📢' },
-              { name: 'Sales', icon: '💼' },
-              { name: 'Finance', icon: '💰' },
+              { name: 'Design' },
+              { name: 'Development' },
+              { name: 'Marketing' },
+              { name: 'Sales' },
+              { name: 'Finance' },
             ].map((category) => (
               <button
                 key={category.name}
-                onClick={() => setFilters({ ...filters, category: category.name })}
+                onClick={() =>
+                  setFilters({ ...filters, category: category.name })
+                }
                 className={`flex items-center gap-2 px-4 py-2 rounded-full font-medium whitespace-nowrap transition-all ${
                   filters.category === category.name
                     ? 'bg-blue-600 text-white'
                     : 'bg-gray-100 text-gray-700'
                 }`}
               >
-                <span>{category.icon}</span>
                 <span>{category.name}</span>
               </button>
             ))}
@@ -136,12 +155,14 @@ const MobileFilters = ({ isOpen, onClose, onApply }) => {
 
         {/* Experience Level */}
         <div>
-          <h2 className="text-lg font-bold text-gray-900 mb-3">Experience Level</h2>
+          <h2 className="text-lg font-bold text-gray-900 mb-3">
+            Experience Level
+          </h2>
           <div className="space-y-3">
             {[
-              { value: 'entry', label: 'Entry Level', icon: '🎓' },
-              { value: 'mid', label: 'Mid Level', icon: '📈' },
-              { value: 'senior', label: 'Senior', icon: '⭐' },
+              { value: 'entry', label: 'Entry Level' },
+              { value: 'mid', label: 'Mid Level' },
+              { value: 'senior', label: 'Senior' },
             ].map((level) => (
               <button
                 key={level.value}
@@ -149,8 +170,9 @@ const MobileFilters = ({ isOpen, onClose, onApply }) => {
                 className="w-full flex items-center justify-between p-4 bg-gray-50 rounded-xl border border-gray-200 hover:border-gray-300 transition-colors"
               >
                 <div className="flex items-center gap-3">
-                  <span className="text-2xl">{level.icon}</span>
-                  <span className="text-gray-900 font-medium">{level.label}</span>
+                  <span className="text-gray-900 font-medium">
+                    {level.label}
+                  </span>
                 </div>
                 <div
                   className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${
@@ -160,7 +182,11 @@ const MobileFilters = ({ isOpen, onClose, onApply }) => {
                   }`}
                 >
                   {filters.experienceLevel.includes(level.value) && (
-                    <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <svg
+                      className="w-4 h-4 text-white"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
                       <path
                         fillRule="evenodd"
                         d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
@@ -179,10 +205,10 @@ const MobileFilters = ({ isOpen, onClose, onApply }) => {
           <h2 className="text-lg font-bold text-gray-900 mb-3">Job Type</h2>
           <div className="grid grid-cols-2 gap-3">
             {[
-              { value: 'fulltime', label: 'Full-time', icon: '💼' },
-              { value: 'remote', label: 'Remote', icon: '🏠' },
-              { value: 'contract', label: 'Contract', icon: '📝' },
-              { value: 'parttime', label: 'Part-time', icon: '⏰' },
+              { value: 'fulltime', label: 'Full-time' },
+              { value: 'remote', label: 'Remote' },
+              { value: 'contract', label: 'Contract' },
+              { value: 'parttime', label: 'Part-time' },
             ].map((type) => (
               <button
                 key={type.value}
@@ -194,10 +220,11 @@ const MobileFilters = ({ isOpen, onClose, onApply }) => {
                 }`}
               >
                 <div className="flex items-center gap-2">
-                  <span className="text-xl">{type.icon}</span>
                   <span
                     className={`font-medium text-sm ${
-                      filters.jobType.includes(type.value) ? 'text-white' : 'text-gray-900'
+                      filters.jobType.includes(type.value)
+                        ? 'text-white'
+                        : 'text-gray-900'
                     }`}
                   >
                     {type.label}
@@ -222,7 +249,10 @@ const MobileFilters = ({ isOpen, onClose, onApply }) => {
             max="250"
             value={filters.salaryRange[0]}
             onChange={(e) =>
-              setFilters({ ...filters, salaryRange: [parseInt(e.target.value), filters.salaryRange[1]] })
+              setFilters({
+                ...filters,
+                salaryRange: [parseInt(e.target.value), filters.salaryRange[1]],
+              })
             }
             className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-500"
           />
