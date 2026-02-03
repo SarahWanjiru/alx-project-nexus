@@ -73,7 +73,7 @@ const Explore = () => {
                         <path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" />
                       </svg>
                     </div>
-                    <h1 className="text-2xl font-bold text-gray-900">
+                    <h1 className="text-lg font-bold text-gray-900">
                       Explore Jobs
                     </h1>
                   </div>
