@@ -2,22 +2,15 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import MobileFilters from '../components/MobileFilters';
 
-// Constants for consistent behavior
-const CATEGORIES = ['Design', 'Development', 'Marketing', 'Sales', 'Finance'];
-const DEFAULT_CATEGORY = 'Design';
-
 const Explore = () => {
   const navigate = useNavigate();
   
   // State initialization with explicit default values
-  const [activeCategory, setActiveCategory] = useState(DEFAULT_CATEGORY);
   const [showFilters, setShowFilters] = useState(false);
 
   const handleApplyFilters = (filters) => {
     console.log('Applied filters:', filters);
   };
-
-  const categories = ['Design', 'Development', 'Marketing', 'Sales', 'Finance'];
 
   const jobs = [
     {
@@ -52,6 +45,17 @@ const Explore = () => {
       saved: false,
     },
     {
+      id: 4,
+      title: 'Social Media Manager',
+      company: 'Spark Creative',
+      location: 'New York, NY',
+      time: '2d ago',
+      level: 'MID LEVEL',
+      type: 'FULL-TIME',
+      saved: false,
+    },
+
+     {
       id: 4,
       title: 'Social Media Manager',
       company: 'Spark Creative',
@@ -108,26 +112,7 @@ const Explore = () => {
                   </button>
                 </div>
 
-                <div className="mb-6">
-                  <h2 className="text-lg font-bold text-gray-900 mb-3">
-                    Categories
-                  </h2>
-                  <div className="flex gap-2 overflow-x-auto pb-2">
-                    {categories.map((category) => (
-                      <button
-                        key={category}
-                        onClick={() => setActiveCategory(category)}
-                        className={`px-4 py-2 rounded-full font-medium whitespace-nowrap transition-all ${
-                          activeCategory === category
-                            ? 'bg-blue-600 text-white'
-                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                        }`}
-                      >
-                        {category}
-                      </button>
-                    ))}
-                  </div>
-                </div>
+
 
                 <div className="flex items-center justify-between mb-4">
                   <h2 className="text-lg font-bold text-gray-900">
