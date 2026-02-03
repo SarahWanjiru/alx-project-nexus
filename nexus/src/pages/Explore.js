@@ -1,20 +1,15 @@
-import { useState, useCallback, useMemo } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import MobileFilters from '../components/MobileFilters';
 
 // Constants for consistent behavior
 const CATEGORIES = ['Design', 'Development', 'Marketing', 'Sales', 'Finance'];
-const DEFAULT_SEARCH_DATA = {
-  jobTitle: '',
-  location: '',
-};
 const DEFAULT_CATEGORY = 'Design';
 
 const Explore = () => {
   const navigate = useNavigate();
   
   // State initialization with explicit default values
-  const [searchData, setSearchData] = useState(DEFAULT_SEARCH_DATA);
   const [activeCategory, setActiveCategory] = useState(DEFAULT_CATEGORY);
   const [showFilters, setShowFilters] = useState(false);
 
@@ -101,73 +96,7 @@ const Explore = () => {
                   </button>
                 </div>
 
-                <div className="space-y-4 mb-6">
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-900 mb-2">
-                      Job Title
-                    </label>
-                    <div className="relative">
-                      <input
-                        type="text"
-                        value={searchData.jobTitle}
-                        onChange={(e) =>
-                          setSearchData({
-                            ...searchData,
-                            jobTitle: e.target.value,
-                          })
-                        }
-                        placeholder="Search job titles..."
-                        className="w-full pl-4 pr-12 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 placeholder-gray-400"
-                      />
-                      <button className="absolute right-4 top-1/2 -translate-y-1/2">
-                        <svg
-                          className="w-5 h-5 text-gray-400"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                      </button>
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-900 mb-2">
-                      Location
-                    </label>
-                    <div className="relative">
-                      <input
-                        type="text"
-                        value={searchData.location}
-                        onChange={(e) =>
-                          setSearchData({
-                            ...searchData,
-                            location: e.target.value,
-                          })
-                        }
-                        placeholder="City or Remote"
-                        className="w-full pl-4 pr-12 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 placeholder-gray-400"
-                      />
-                      <button className="absolute right-4 top-1/2 -translate-y-1/2">
-                        <svg
-                          className="w-5 h-5 text-blue-600"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                      </button>
-                    </div>
-                  </div>
-
+                <div className="mb-6">
                   <button
                     onClick={() => setShowFilters(true)}
                     className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold py-3 rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all lg:hidden"
