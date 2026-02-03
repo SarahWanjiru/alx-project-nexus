@@ -1,13 +1,26 @@
-import { useState } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
+import MobileFilters from '../components/MobileFilters';
+
+// Constants for consistent behavior
+const CATEGORIES = ['Design', 'Development', 'Marketing', 'Sales', 'Finance'];
+const DEFAULT_SEARCH_DATA = {
+  jobTitle: '',
+  location: '',
+};
+const DEFAULT_CATEGORY = 'Design';
 
 const Explore = () => {
   const navigate = useNavigate();
-  const [searchData, setSearchData] = useState({
-    jobTitle: '',
-    location: '',
-  });
-  const [activeCategory, setActiveCategory] = useState('Design');
+  
+  // State initialization with explicit default values
+  const [searchData, setSearchData] = useState(DEFAULT_SEARCH_DATA);
+  const [activeCategory, setActiveCategory] = useState(DEFAULT_CATEGORY);
+  const [showFilters, setShowFilters] = useState(false);
+
+  const handleApplyFilters = (filters) => {
+    console.log('Applied filters:', filters);
+  };
 
   const categories = ['Design', 'Development', 'Marketing', 'Sales', 'Finance'];
 
@@ -155,7 +168,13 @@ const Explore = () => {
                     </div>
                   </div>
 
-                  <button className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold py-3 rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all">
+                  <button
+                    onClick={() => setShowFilters(true)}
+                    className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold py-3 rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all lg:hidden"
+                  >
+                    Search & Filter
+                  </button>
+                  <button className="hidden lg:block w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold py-3 rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all">
                     Search Jobs
                   </button>
                 </div>
@@ -351,6 +370,12 @@ const Explore = () => {
           </button>
         </div>
       </nav>
+
+      <MobileFilters
+        isOpen={showFilters}
+        onClose={() => setShowFilters(false)}
+        onApply={handleApplyFilters}
+      />
     </div>
   );
 };
