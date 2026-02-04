@@ -1,12 +1,13 @@
 import { useState } from 'react';
+import { useAuth } from '../contexts/AuthContext';
 
 const Jobs = () => {
+  const { logout } = useAuth();
   const [filters, setFilters] = useState({
     category: '',
     location: '',
     experience: '',
   });
-
   const jobs = [
     {
       id: 1,
@@ -50,7 +51,13 @@ const Jobs = () => {
               Nexus Connect
             </span>
           </div>
-          <button className="text-gray-600 hover:text-gray-900">Logout</button>
+          <button
+            className="text-gray-600 hover:text-gray-900"
+            aria-label="Logout"
+            onClick={logout}
+          >
+            Logout
+          </button>
         </div>
       </nav>
 

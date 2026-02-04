@@ -11,6 +11,7 @@ const SignUp = () => {
     password: '',
   });
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState('');
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -18,9 +19,14 @@ const SignUp = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError('');
     const result = await signup(formData);
     if (result.success) {
       navigate('/explore');
+    } else if (result.error) {
+      setError(result.error);
+    } else {
+      setError('Signup failed. Please try again.');
     }
   };
 
@@ -51,6 +57,11 @@ const SignUp = () => {
           </p>
         </div>
 
+        {error && (
+          <div className="mb-4 text-red-600 bg-red-50 border border-red-200 rounded-lg px-4 py-3 text-sm">
+            {error}
+          </div>
+        )}
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             <label className="block text-sm font-semibold text-gray-900 mb-2">

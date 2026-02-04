@@ -1,14 +1,28 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import MobileFilters from '../components/MobileFilters';
-
+import { useAuth } from '../contexts/AuthContext';
+// ...existing code...
 const Explore = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
+
   // State initialization with explicit default values
   const [showFilters, setShowFilters] = useState(false);
+  const [appliedFilters, setAppliedFilters] = useState(null);
+
+  useEffect(() => {
+    if (!user) {
+      navigate('/login', { replace: true });
+    }
+  }, [user, navigate]);
+
+  if (!user) {
+    return null;
+  }
 
   const handleApplyFilters = (filters) => {
-    console.log('Applied filters:', filters);
+    setAppliedFilters(filters);
   };
 
   const jobs = [
@@ -54,6 +68,66 @@ const Explore = () => {
       saved: false,
     },
   ];
+
+  // Filtering logic
+  const filteredJobs = jobs.filter((job) => {
+    if (!appliedFilters) return true;
+    // Filter by job title (case-insensitive substring)
+    if (
+      appliedFilters.jobTitle &&
+      !job.title.toLowerCase().includes(appliedFilters.jobTitle.toLowerCase())
+    ) {
+      return false;
+    }
+    // Filter by location (case-insensitive substring)
+    if (
+      appliedFilters.location &&
+      !job.location
+        .toLowerCase()
+        .includes(appliedFilters.location.toLowerCase())
+    ) {
+      return false;
+    }
+    // Filter by category (if you add category to jobs)
+    if (
+      appliedFilters.category &&
+      job.category &&
+      job.category !== appliedFilters.category
+    ) {
+      return false;
+    }
+    // Filter by experience level
+    if (
+      appliedFilters.experienceLevel &&
+      appliedFilters.experienceLevel.length > 0 &&
+      !appliedFilters.experienceLevel.includes(job.level)
+    ) {
+      return false;
+    }
+    // Filter by job type
+    if (
+      appliedFilters.jobType &&
+      appliedFilters.jobType.length > 0 &&
+      !appliedFilters.jobType.includes(job.type)
+    ) {
+      return false;
+    }
+    // Filter by salary range (if salary exists)
+    if (job.salary && appliedFilters.salaryRange) {
+      // Extract min/max from job.salary string (e.g., "$140K - $180K")
+      const match = job.salary.match(/\$(\d+)K/);
+      if (match) {
+        const minSalary = parseInt(match[1], 10);
+        if (
+          minSalary < appliedFilters.salaryRange[0] ||
+          minSalary > appliedFilters.salaryRange[1]
+        ) {
+          return false;
+        }
+      }
+    }
+    return true;
+  });
 
   return (
     <div className="min-h-screen bg-gray-50 pb-20 lg:pb-0">
@@ -109,7 +183,12 @@ const Explore = () => {
                 </div>
 
                 <div className="space-y-3">
-                  {jobs.map((job) => (
+                  {filteredJobs.length === 0 && (
+                    <div className="text-center text-gray-500 py-8">
+                      No jobs found matching your filters.
+                    </div>
+                  )}
+                  {filteredJobs.map((job) => (
                     <div
                       key={job.id}
                       className="bg-white border border-gray-200 rounded-2xl p-4 hover:shadow-md transition-shadow"

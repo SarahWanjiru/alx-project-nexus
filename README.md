@@ -2,11 +2,11 @@
 
 A modern Progressive Web Application (PWA) for job seekers to explore, filter, and apply for job opportunities.
 
-##  Project Overview
+## Project Overview
 
 Nexus is an interactive job board platform built as part of the ProDev Frontend Engineering program. This project demonstrates advanced frontend development skills including API integration, responsive design, and accessibility best practices.
 
-##  Features
+## Features
 
 - **Dynamic Job Listings** - Fetch and display jobs from API
 - **Advanced Filtering** - Filter by category, location, and experience level
@@ -15,7 +15,7 @@ Nexus is an interactive job board platform built as part of the ProDev Frontend 
 - **Accessible Forms** - ARIA compliant job application forms
 - **User Authentication** - Secure login and registration
 
-##  Tech Stack
+## Tech Stack
 
 - **Frontend**: React 19
 - **Styling**: Tailwind CSS
@@ -24,7 +24,7 @@ Nexus is an interactive job board platform built as part of the ProDev Frontend 
 - **Package Manager**: pnpm
 - **Version Control**: Git
 
-##  Design
+## Design
 
 The application features a clean, modern interface with:
 - Blue gradient branding (#2563eb to #1d4ed8)
@@ -32,7 +32,7 @@ The application features a clean, modern interface with:
 - Mobile-first responsive design
 - Accessibility-focused form design
 
-##  Project Structure
+## Project Structure
 
 ```
 nexus/
@@ -45,7 +45,7 @@ nexus/
 └── README.md
 ```
 
-##  Getting Started
+## Getting Started
 
 ### Prerequisites
 - Node.js (v18+)
@@ -66,7 +66,7 @@ pnpm install
 pnpm start
 ```
 
-##  Development Workflow
+## Development Workflow
 
 ### Branch Strategy
 - `main` - Production ready code
@@ -81,7 +81,7 @@ pnpm start
 - `docs:` - Documentation updates
 - `refactor:` - Code refactoring
 
-##  Evaluation Criteria
+## Evaluation Criteria
 
 This project is evaluated on:
 - **Functionality (15%)** - Working features, completeness
@@ -92,15 +92,15 @@ This project is evaluated on:
 - **Deployment (10%)** - Live, accessible application
 - **Presentation (30%)** - Demo, documentation, journey
 
-##  Deployment
+## Deployment
 
 The application will be deployed on Vercel/Netlify for public access.
 
-##  Contributing
+## Contributing
 
 This is a capstone project for the ProDev Frontend Engineering program.
 
-##  License
+## License
 
 This project is part of the ALX ProDev program.
 
