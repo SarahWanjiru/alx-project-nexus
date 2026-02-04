@@ -52,8 +52,8 @@ jobs:
           node-version: '18'
           cache: 'pnpm'
           cache-dependency-path: nexus/pnpm-lock.yaml
+      - run: pnpm store prune
       - run: pnpm install
-      - run: pnpm build
       - uses: actions/upload-artifact@v4
         with:
           name: build
