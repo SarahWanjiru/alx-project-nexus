@@ -153,5 +153,6 @@ jobs:
       - uses: treosh/lighthouse-ci-action@v11
         with:
           configPath: ./lighthouserc.js
+          runs: 1
           uploadArtifacts: true
           temporaryPublicStorage: true
