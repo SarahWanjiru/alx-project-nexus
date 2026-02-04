@@ -52,14 +52,14 @@ jobs:
           node-version: '18'
           cache: 'pnpm'
           cache-dependency-path: nexus/pnpm-lock.yaml
-      - run: pnpm store prune || true
+      - run: rm -rf node_modules pnpm-lock.yaml
       - run: pnpm install
       - uses: actions/upload-artifact@v4
         with:
           name: build
           path: nexus/build
 
-  lint:
+  lint: 
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -74,6 +74,7 @@ jobs:
           node-version: '18'
           cache: 'pnpm'
           cache-dependency-path: nexus/pnpm-lock.yaml
+      - run: rm -rf node_modules pnpm-lock.yaml
       - run: pnpm install
       - run: pnpm lint
 
@@ -92,6 +93,7 @@ jobs:
           node-version: '18'
           cache: 'pnpm'
           cache-dependency-path: nexus/pnpm-lock.yaml
+      - run: rm -rf node_modules pnpm-lock.yaml
       - run: pnpm install
       - run: pnpm format:check
 
@@ -110,6 +112,7 @@ jobs:
           node-version: '18'
           cache: 'pnpm'
           cache-dependency-path: nexus/pnpm-lock.yaml
+      - run: rm -rf node_modules pnpm-lock.yaml
       - run: pnpm install
       - run: pnpm audit --audit-level=critical || true
 
@@ -128,6 +131,7 @@ jobs:
           node-version: '18'
           cache: 'pnpm'
           cache-dependency-path: nexus/pnpm-lock.yaml
+      - run: rm -rf node_modules pnpm-lock.yaml
       - run: pnpm install
       - run: pnpm test -- --coverage --watchAll=false
       - uses: codecov/codecov-action@v4
