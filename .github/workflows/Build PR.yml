@@ -132,6 +132,7 @@ jobs:
           cache: 'pnpm'
           cache-dependency-path: nexus/pnpm-lock.yaml
       - run: rm -rf node_modules pnpm-lock.yaml
+      - run: pnpm list react-router-dom
       - run: pnpm install
       - run: pnpm test -- --coverage --watchAll=false
       - uses: codecov/codecov-action@v4
