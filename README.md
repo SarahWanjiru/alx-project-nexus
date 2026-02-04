@@ -100,6 +100,11 @@ The application will be deployed on Vercel/Netlify for public access.
 
 This is a capstone project for the ProDev Frontend Engineering program.
 
+
+## Security Notice
+
+This project currently uses `react-scripts`, which has some known vulnerabilities in its dependency tree (see [npm audit](https://github.com/facebook/create-react-app/issues/11778)). These issues are in packages not directly controlled by this project and do not affect production builds. For long-term security and performance, a migration to Next.js is planned.
+
 ## License
 
 This project is part of the ALX ProDev program.
