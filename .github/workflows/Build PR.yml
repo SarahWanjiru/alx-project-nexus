@@ -152,6 +152,6 @@ jobs:
           path: build
       - uses: treosh/lighthouse-ci-action@v11
         with:
-          staticDistDir: ./build
+          configPath: ./lighthouserc.js
           uploadArtifacts: true
           temporaryPublicStorage: true
