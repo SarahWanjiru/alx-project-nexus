@@ -152,7 +152,7 @@ jobs:
           path: build
       - uses: treosh/lighthouse-ci-action@v11
         with:
-          configPath: ./lighthouserc.js
+          configPath: ./nexus/lighthouserc.js
           runs: 1
           uploadArtifacts: true
           temporaryPublicStorage: true
