@@ -81,16 +81,6 @@ pnpm start
 - `docs:` - Documentation updates
 - `refactor:` - Code refactoring
 
-## Evaluation Criteria
-
-This project is evaluated on:
-- **Functionality (15%)** - Working features, completeness
-- **Code Quality (20%)** - Clean, maintainable code
-- **User Experience (10%)** - Intuitive, responsive design
-- **Version Control (15%)** - Professional Git workflow
-- **Best Practices (20%)** - Industry standards, security
-- **Deployment (10%)** - Live, accessible application
-- **Presentation (30%)** - Demo, documentation, journey
 
 ## Deployment
 
