@@ -55,7 +55,7 @@ jobs:
       - run: rm -rf node_modules pnpm-lock.yaml
       - run: pnpm install
       - run: pnpm build
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v6
         with:
           name: build
           path: nexus/build
