@@ -1,11 +1,9 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
 import MobileFilters from '../components/MobileFilters';
 
 const Jobs = () => {
   const navigate = useNavigate();
-  const { user, logout } = useAuth();
   const [selectedCategory, setSelectedCategory] = useState('Design');
   const [showFilters, setShowFilters] = useState(false);
 
@@ -245,7 +243,7 @@ const Jobs = () => {
             <span className="text-xs font-semibold">APPLIED</span>
           </button>
           <button
-            onClick={() => (user ? logout() : navigate('/login'))}
+            onClick={() => navigate('/profile')}
             className="flex flex-col items-center gap-1 text-gray-400"
           >
             <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
