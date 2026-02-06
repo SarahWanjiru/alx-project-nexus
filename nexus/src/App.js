@@ -2,7 +2,6 @@ import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import Landing from './pages/Landing';
-import About from './pages/About';
 import SignUp from './pages/SignUp';
 import Login from './pages/Login';
 import Explore from './pages/Explore';
@@ -18,7 +17,6 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Landing />} />
-          <Route path="/about" element={<About />} />
           <Route path="/jobs" element={<Jobs />} />
           <Route path="/explore" element={<Explore />} />
           <Route path="/saved" element={<SavedJobs />} />

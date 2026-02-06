@@ -3,36 +3,11 @@ import { useNavigate } from 'react-router-dom';
 const Header = () => {
   const navigate = useNavigate();
 
-  const scrollToSection = (sectionId) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
   return (
     <nav className="bg-white border-b border-gray-200 px-9 py-6">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
-        <img src="/nexusconnect.jpeg" alt="Nexus Connect" className="h-16" />
-        <div className="flex items-center gap-8">
-          <button
-            onClick={() => scrollToSection('about')}
-            className="text-gray-700 hover:text-blue-600 font-medium transition-colors"
-          >
-            About
-          </button>
-          <button
-            onClick={() => scrollToSection('careers')}
-            className="text-gray-700 hover:text-blue-600 font-medium transition-colors"
-          >
-            Careers
-          </button>
-          <button
-            onClick={() => scrollToSection('blog')}
-            className="text-gray-700 hover:text-blue-600 font-medium transition-colors"
-          >
-            Blog
-          </button>
+        <img src="/nexusconnect.jpeg" alt="Nexus Connect" className="h-32" />
+        <div className="flex items-center gap-4">
           <button
             onClick={() => navigate('/login')}
             className="text-blue-600 font-semibold"

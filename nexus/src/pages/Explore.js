@@ -124,6 +124,24 @@ const Explore = () => {
               <div className="p-4 lg:p-6">
                 <div className="flex items-center justify-between mb-6">
                   <div className="flex items-center gap-3">
+                    <button
+                      onClick={() => navigate('/')}
+                      className="p-2 hover:bg-gray-100 rounded-full"
+                    >
+                      <svg
+                        className="w-6 h-6 text-gray-600"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M15 19l-7-7 7-7"
+                        />
+                      </svg>
+                    </button>
                     <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
                       <svg
                         className="w-6 h-6 text-blue-600"
@@ -151,12 +169,9 @@ const Explore = () => {
                 <div className="mb-6">
                   <button
                     onClick={() => setShowFilters(true)}
-                    className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold py-3 rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all lg:hidden"
+                    className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold py-3 rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all"
                   >
                     Search & Filter
-                  </button>
-                  <button className="hidden lg:block w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold py-3 rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all">
-                    Search Jobs
                   </button>
                 </div>
                 <div className="flex items-center justify-between mb-4">
