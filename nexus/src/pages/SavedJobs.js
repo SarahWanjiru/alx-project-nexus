@@ -79,7 +79,10 @@ const SavedJobs = () => {
                     <p className="text-sm text-blue-600">{job.company}</p>
                   </div>
                   <div className="flex flex-col gap-2">
-                    <button onClick={() => removeJob(job.id)}>
+                    <button
+                      aria-label="Unsave job"
+                      onClick={() => removeJob(job.id)}
+                    >
                       <svg
                         className="w-6 h-6 text-blue-600 fill-current"
                         fill="none"
@@ -95,6 +98,7 @@ const SavedJobs = () => {
                       </svg>
                     </button>
                     <button
+                      aria-label="Remove saved job"
                       onClick={() => removeJob(job.id)}
                       className="text-red-400 hover:text-red-600"
                     >
@@ -170,13 +174,13 @@ const SavedJobs = () => {
       <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200">
         <div className="flex items-center justify-around py-3">
           <button
-            onClick={() => navigate('/explore')}
+            onClick={() => navigate('/jobs')}
             className="flex flex-col items-center gap-1 text-gray-400"
           >
             <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
               <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
             </svg>
-            <span className="text-xs font-semibold">EXPLORE</span>
+            <span className="text-xs font-semibold">JOBS</span>
           </button>
           <button className="flex flex-col items-center gap-1 text-blue-600">
             <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">

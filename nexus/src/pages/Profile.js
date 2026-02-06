@@ -53,7 +53,7 @@ const Profile = () => {
           <h2 className="text-2xl font-bold text-gray-900 mb-1">
             {user?.fullName || 'Alex Thompson'}
           </h2>
-          <p className="text-gray-500">Senior Product Designer</p>
+          <p className="text-gray-500">{user?.role || 'Role not set'}</p>
         </div>
       </div>
 
@@ -65,43 +65,77 @@ const Profile = () => {
               Add New
             </button>
           </div>
-          <div className="bg-white rounded-2xl p-4 flex items-center gap-3">
-            <div className="w-12 h-12 bg-red-50 rounded-xl flex items-center justify-center flex-shrink-0">
-              <svg
-                className="w-6 h-6 text-red-600"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z"
-                  clipRule="evenodd"
-                />
-              </svg>
+          {user?.resumeFilename ? (
+            <div className="bg-white rounded-2xl p-4 flex items-center gap-3">
+              <div className="w-12 h-12 bg-red-50 rounded-xl flex items-center justify-center flex-shrink-0">
+                <svg
+                  className="w-6 h-6 text-red-600"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </div>
+              <div className="flex-1">
+                <h4 className="font-semibold text-gray-900">
+                  {user.resumeFilename}
+                </h4>
+                <p className="text-xs text-gray-500">
+                  Primary CV • Updated 2 days ago
+                </p>
+              </div>
+              <button className="p-2 text-gray-400 hover:text-gray-600">
+                <svg
+                  className="w-5 h-5"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </button>
+              <button className="p-2 text-gray-400 hover:text-gray-600">
+                <svg
+                  className="w-5 h-5"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                </svg>
+              </button>
             </div>
-            <div className="flex-1">
-              <h4 className="font-semibold text-gray-900">
-                Resume_Alex_2024.pdf
-              </h4>
-              <p className="text-xs text-gray-500">
-                Primary CV • Updated 2 days ago
-              </p>
+          ) : (
+            <div className="bg-white rounded-2xl p-4 flex items-center gap-3 opacity-50">
+              <div className="w-12 h-12 bg-gray-50 rounded-xl flex items-center justify-center flex-shrink-0">
+                <svg
+                  className="w-6 h-6 text-gray-400"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </div>
+              <div className="flex-1">
+                <h4 className="font-semibold text-gray-400">
+                  Resume not uploaded
+                </h4>
+                <p className="text-xs text-gray-400">
+                  Upload your resume to apply for jobs
+                </p>
+              </div>
             </div>
-            <button className="p-2 text-gray-400 hover:text-gray-600">
-              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                <path
-                  fillRule="evenodd"
-                  d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            </button>
-            <button className="p-2 text-gray-400 hover:text-gray-600">
-              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
-              </svg>
-            </button>
-          </div>
+          )}
         </div>
 
         <div>
