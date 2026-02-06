@@ -272,7 +272,7 @@ const Jobs = () => {
       <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200">
         <div className="flex items-center justify-around py-3">
           <button
-            onClick={() => navigate('/jobs')}
+            onClick={() => navigate('/explore')}
             className="flex flex-col items-center gap-1 text-blue-600"
           >
             <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">

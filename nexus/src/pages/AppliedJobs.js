@@ -153,7 +153,10 @@ const AppliedJobs = () => {
             </svg>
             <span className="text-xs font-semibold">SAVED</span>
           </button>
-          <button className="flex flex-col items-center gap-1 text-blue-600">
+          <button
+            onClick={() => navigate('/applied')}
+            className="flex flex-col items-center gap-1 text-blue-600"
+          >
             <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
               <path
                 fillRule="evenodd"
