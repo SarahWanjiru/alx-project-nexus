@@ -1,9 +1,9 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const SavedJobs = () => {
   const navigate = useNavigate();
-
-  const savedJobs = [
+  const [jobs, setJobs] = useState([
     {
       id: 2,
       title: 'Frontend Engineer (React)',
@@ -12,7 +12,6 @@ const SavedJobs = () => {
       savedTime: '2d ago',
       level: 'MID LEVEL',
       type: 'FULL-TIME',
-      saved: true,
     },
     {
       id: 1,
@@ -23,7 +22,6 @@ const SavedJobs = () => {
       level: 'SENIOR',
       type: 'FULL-TIME',
       salary: '$180K',
-      saved: true,
     },
     {
       id: 3,
@@ -33,7 +31,6 @@ const SavedJobs = () => {
       savedTime: '1w ago',
       level: 'ENTRY',
       type: 'CONTRACT',
-      saved: true,
     },
     {
       id: 4,
@@ -43,9 +40,12 @@ const SavedJobs = () => {
       savedTime: '1w ago',
       level: 'MID LEVEL',
       type: 'FULL-TIME',
-      saved: true,
     },
-  ];
+  ]);
+
+  const removeJob = (jobId) => {
+    setJobs((prev) => prev.filter((job) => job.id !== jobId));
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 pb-20">
@@ -53,19 +53,13 @@ const SavedJobs = () => {
         <div className="flex items-center justify-between mb-4">
           <h1 className="text-xl font-bold text-gray-900">Saved Jobs</h1>
           <div className="px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-sm font-semibold">
-            {savedJobs.length} Total
+            {jobs.length} Total
           </div>
         </div>
-        <p className="text-gray-400 text-sm flex items-center gap-2">
-          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z" />
-          </svg>
-          Swipe left on a card to remove from list
-        </p>
       </div>
 
       <div className="p-4 space-y-3">
-        {savedJobs.map((job) => (
+        {jobs.map((job) => (
           <div
             key={job.id}
             className="bg-white border border-gray-200 rounded-2xl p-4 hover:shadow-md transition-shadow"
@@ -85,7 +79,7 @@ const SavedJobs = () => {
                     <p className="text-sm text-blue-600">{job.company}</p>
                   </div>
                   <div className="flex flex-col gap-2">
-                    <button>
+                    <button onClick={() => removeJob(job.id)}>
                       <svg
                         className="w-6 h-6 text-blue-600 fill-current"
                         fill="none"
@@ -100,7 +94,10 @@ const SavedJobs = () => {
                         />
                       </svg>
                     </button>
-                    <button className="text-gray-300 hover:text-gray-400">
+                    <button
+                      onClick={() => removeJob(job.id)}
+                      className="text-red-400 hover:text-red-600"
+                    >
                       <svg
                         className="w-6 h-6"
                         fill="currentColor"
@@ -149,7 +146,13 @@ const SavedJobs = () => {
                   <span className="px-3 py-1 bg-blue-50 text-blue-600 rounded-lg text-xs font-semibold">
                     {job.level}
                   </span>
-                  <span className="px-3 py-1 bg-green-50 text-green-600 rounded-lg text-xs font-semibold">
+                  <span
+                    className={`px-3 py-1 rounded-lg text-xs font-semibold ${
+                      job.type === 'FULL-TIME'
+                        ? 'bg-green-50 text-green-600'
+                        : 'bg-orange-50 text-orange-600'
+                    }`}
+                  >
                     {job.type}
                   </span>
                   {job.salary && (
@@ -167,7 +170,7 @@ const SavedJobs = () => {
       <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200">
         <div className="flex items-center justify-around py-3">
           <button
-            onClick={() => navigate('/')}
+            onClick={() => navigate('/explore')}
             className="flex flex-col items-center gap-1 text-gray-400"
           >
             <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
