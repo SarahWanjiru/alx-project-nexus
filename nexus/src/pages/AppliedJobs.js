@@ -41,27 +41,7 @@ const AppliedJobs = () => {
     <div className="min-h-screen bg-gray-50 pb-20">
       <div className="bg-white p-4 sticky top-0 z-10 border-b border-gray-200">
         <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => navigate('/')}
-              className="p-2 hover:bg-gray-100 rounded-full"
-            >
-              <svg
-                className="w-6 h-6 text-gray-900"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 19l-7-7 7-7"
-                />
-              </svg>
-            </button>
-            <h1 className="text-xl font-bold text-gray-900">Applied Jobs</h1>
-          </div>
+          <h1 className="text-xl font-bold text-gray-900">Applied Jobs</h1>
           <div className="px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-sm font-semibold">
             {jobs.length} Total
           </div>
