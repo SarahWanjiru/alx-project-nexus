@@ -6,6 +6,7 @@ import Login from './pages/Login';
 import Explore from './pages/Explore';
 import Jobs from './pages/Jobs';
 import SavedJobs from './pages/SavedJobs';
+import AppliedJobs from './pages/AppliedJobs';
 import './App.css';
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
           <Route path="/" element={<Jobs />} />
           <Route path="/explore" element={<Explore />} />
           <Route path="/saved" element={<SavedJobs />} />
+          <Route path="/applied" element={<AppliedJobs />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/login" element={<Login />} />
         </Routes>
