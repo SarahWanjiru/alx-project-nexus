@@ -6,6 +6,21 @@ const Jobs = () => {
   const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState('Design');
   const [showFilters, setShowFilters] = useState(false);
+  const [savedJobs, setSavedJobs] = useState([2]);
+  const [appliedFilters, setAppliedFilters] = useState(null);
+
+  const handleApplyFilters = (filters) => {
+    setAppliedFilters(filters);
+    setShowFilters(false);
+  };
+
+  const toggleSave = (jobId) => {
+    setSavedJobs((prev) =>
+      prev.includes(jobId)
+        ? prev.filter((id) => id !== jobId)
+        : [...prev, jobId]
+    );
+  };
 
   const categories = [
     { name: 'Design', icon: '🎨' },
@@ -23,7 +38,6 @@ const Jobs = () => {
       level: 'SENIOR',
       type: 'FULL-TIME',
       salary: '$140K - $180K',
-      saved: false,
       category: 'Design',
     },
     {
@@ -34,7 +48,6 @@ const Jobs = () => {
       time: '5h ago',
       level: 'MID LEVEL',
       type: 'FULL-TIME',
-      saved: true,
       category: 'Development',
     },
     {
@@ -45,7 +58,6 @@ const Jobs = () => {
       time: '1d ago',
       level: 'ENTRY',
       type: 'CONTRACT',
-      saved: false,
       category: 'Development',
     },
     {
@@ -56,12 +68,51 @@ const Jobs = () => {
       time: '2d ago',
       level: 'MID LEVEL',
       type: 'FULL-TIME',
-      saved: false,
       category: 'Marketing',
     },
   ];
 
-  const filteredJobs = jobs.filter((job) => job.category === selectedCategory);
+  const filteredJobs = jobs.filter((job) => {
+    // First filter by category
+    if (job.category !== selectedCategory) return false;
+
+    // Then apply additional filters if any
+    if (!appliedFilters) return true;
+
+    if (
+      appliedFilters.jobTitle &&
+      !job.title.toLowerCase().includes(appliedFilters.jobTitle.toLowerCase())
+    ) {
+      return false;
+    }
+
+    if (
+      appliedFilters.location &&
+      !job.location
+        .toLowerCase()
+        .includes(appliedFilters.location.toLowerCase())
+    ) {
+      return false;
+    }
+
+    if (
+      appliedFilters.experienceLevel &&
+      appliedFilters.experienceLevel.length > 0 &&
+      !appliedFilters.experienceLevel.includes(job.level)
+    ) {
+      return false;
+    }
+
+    if (
+      appliedFilters.jobType &&
+      appliedFilters.jobType.length > 0 &&
+      !appliedFilters.jobType.includes(job.type)
+    ) {
+      return false;
+    }
+
+    return true;
+  });
 
   return (
     <div className="min-h-screen bg-gray-50 pb-20">
@@ -141,10 +192,10 @@ const Jobs = () => {
                 <div className="flex-1">
                   <div className="flex items-start justify-between mb-1">
                     <h3 className="font-semibold text-gray-900">{job.title}</h3>
-                    <button>
+                    <button onClick={() => toggleSave(job.id)}>
                       <svg
                         className={`w-5 h-5 ${
-                          job.saved
+                          savedJobs.includes(job.id)
                             ? 'text-blue-600 fill-current'
                             : 'text-gray-400'
                         }`}
@@ -270,7 +321,7 @@ const Jobs = () => {
       <MobileFilters
         isOpen={showFilters}
         onClose={() => setShowFilters(false)}
-        onApply={() => setShowFilters(false)}
+        onApply={handleApplyFilters}
       />
     </div>
   );
