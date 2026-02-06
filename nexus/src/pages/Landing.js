@@ -1,30 +1,13 @@
 import { useNavigate } from 'react-router-dom';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
 
 const Landing = () => {
   const navigate = useNavigate();
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Header */}
-      <nav className="bg-white border-b border-gray-200 px-9 py-6">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <img src="/nexusconnect.jpeg" alt="Nexus Connect" className="h-16" />
-          <div className="flex items-center gap-4">
-            <button
-              onClick={() => navigate('/login')}
-              className="text-blue-600 font-semibold"
-            >
-              Log In
-            </button>
-            <button
-              onClick={() => navigate('/signup')}
-              className="px-6 py-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all"
-            >
-              Sign Up
-            </button>
-          </div>
-        </div>
-      </nav>
+      <Header />
 
       {/* Hero Section */}
       <section className="max-w-7xl mx-auto px-6 py-20">
@@ -135,33 +118,342 @@ const Landing = () => {
         </div>
       </section>
 
-      {/* CTA Section */}
+      {/* Reviews Section */}
       <section className="max-w-7xl mx-auto px-6 py-20">
-        <div className="bg-gradient-to-r from-blue-600 to-blue-700 rounded-3xl p-12 text-center">
-          <h2 className="text-4xl font-bold text-white mb-6">
-            Ready to Find Your Next Opportunity?
+        <div className="text-center mb-16">
+          <h2 className="text-4xl font-bold text-gray-900 mb-4">
+            Trusted by Job Seekers
           </h2>
-          <p className="text-xl text-blue-100 mb-8">
-            Join thousands of job seekers who found their dream jobs through
-            Nexus Connect
+          <div className="flex items-center justify-center gap-2 mb-2">
+            <div className="flex">
+              {[...Array(5)].map((_, i) => (
+                <svg
+                  key={i}
+                  className="w-6 h-6 text-yellow-400"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                </svg>
+              ))}
+            </div>
+            <span className="text-gray-600 font-semibold">4.8 out of 5</span>
+          </div>
+          <p className="text-gray-500">Based on 2,500+ reviews</p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+            <div className="flex mb-4">
+              {[...Array(5)].map((_, i) => (
+                <svg
+                  key={i}
+                  className="w-5 h-5 text-yellow-400"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                </svg>
+              ))}
+            </div>
+            <p className="text-gray-600 mb-6">
+              "Found my dream job within 2 weeks! The platform is easy to use
+              and the job matches were perfect for my skills."
+            </p>
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                <span className="text-blue-600 font-bold">MJ</span>
+              </div>
+              <div>
+                <p className="font-semibold text-gray-900">Michael Johnson</p>
+                <p className="text-sm text-gray-500">Software Engineer</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+            <div className="flex mb-4">
+              {[...Array(5)].map((_, i) => (
+                <svg
+                  key={i}
+                  className="w-5 h-5 text-yellow-400"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                </svg>
+              ))}
+            </div>
+            <p className="text-gray-600 mb-6">
+              "The best job board I've used. Clean interface, relevant listings,
+              and great support team. Highly recommended!"
+            </p>
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                <span className="text-blue-600 font-bold">SP</span>
+              </div>
+              <div>
+                <p className="font-semibold text-gray-900">Sarah Parker</p>
+                <p className="text-sm text-gray-500">Product Designer</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+            <div className="flex mb-4">
+              {[...Array(5)].map((_, i) => (
+                <svg
+                  key={i}
+                  className="w-5 h-5 text-yellow-400"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                </svg>
+              ))}
+            </div>
+            <p className="text-gray-600 mb-6">
+              "Nexus Connect made my job search so much easier. Got multiple
+              interviews and landed an amazing role!"
+            </p>
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                <span className="text-blue-600 font-bold">DL</span>
+              </div>
+              <div>
+                <p className="font-semibold text-gray-900">David Lee</p>
+                <p className="text-sm text-gray-500">Marketing Manager</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="bg-gradient-to-r from-blue-700 to-blue-800 py-20">
+        <div className="max-w-7xl mx-auto px-6">
+          <h2 className="text-4xl font-bold text-white text-center mb-12">
+            What kind of job are you looking for?
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+            <div className="bg-white rounded-2xl p-8 text-center hover:shadow-2xl transition-all cursor-pointer border-4 border-blue-600">
+              <div className="w-20 h-20 mx-auto mb-6 flex items-center justify-center">
+                <svg
+                  className="w-16 h-16 text-blue-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+                  />
+                </svg>
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">
+                100% Remote
+              </h3>
+              <p className="text-gray-600 text-sm">
+                No daily commute to the office, work from home or the location
+                of your choice.
+              </p>
+            </div>
+
+            <div className="bg-white rounded-2xl p-8 text-center hover:shadow-2xl transition-all cursor-pointer border-2 border-gray-200">
+              <div className="w-20 h-20 mx-auto mb-6 flex items-center justify-center">
+                <svg
+                  className="w-16 h-16 text-gray-700"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+                  />
+                </svg>
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">
+                Hybrid Remote
+              </h3>
+              <p className="text-gray-600 text-sm">
+                A blend of working in the office near you and working from home.
+              </p>
+            </div>
+
+            <div className="bg-white rounded-2xl p-8 text-center hover:shadow-2xl transition-all cursor-pointer border-2 border-gray-200">
+              <div className="w-20 h-20 mx-auto mb-6 flex items-center justify-center">
+                <svg
+                  className="w-16 h-16 text-gray-700"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+                  />
+                </svg>
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">
+                Option for Remote
+              </h3>
+              <p className="text-gray-600 text-sm">
+                Mostly in office, but with work-from-home flexibility.
+              </p>
+            </div>
+          </div>
+          <div className="text-center mt-12">
+            <button
+              onClick={() => navigate('/signup')}
+              className="px-12 py-4 bg-orange-500 text-white font-bold rounded-xl hover:bg-orange-600 transition-all text-lg shadow-lg"
+            >
+              Next
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* About Section */}
+      <section id="about" className="max-w-7xl mx-auto px-6 py-20">
+        <h2 className="text-4xl font-bold text-gray-900 mb-6 text-center">
+          About Nexus Connect
+        </h2>
+        <p className="text-xl text-gray-600 text-center mb-16 max-w-3xl mx-auto">
+          Connecting talented professionals with their dream careers
+        </p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="text-center">
+            <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+              <svg
+                className="w-8 h-8 text-white"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </div>
+            <h3 className="text-xl font-bold text-gray-900 mb-3">Trust</h3>
+            <p className="text-gray-600">
+              Every job listing is verified to ensure authenticity and quality
+            </p>
+          </div>
+          <div className="text-center">
+            <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+              <svg
+                className="w-8 h-8 text-white"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z" />
+              </svg>
+            </div>
+            <h3 className="text-xl font-bold text-gray-900 mb-3">Community</h3>
+            <p className="text-gray-600">
+              Building a supportive network of professionals and employers
+            </p>
+          </div>
+          <div className="text-center">
+            <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+              <svg
+                className="w-8 h-8 text-white"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </div>
+            <h3 className="text-xl font-bold text-gray-900 mb-3">Innovation</h3>
+            <p className="text-gray-600">
+              Constantly improving our platform with cutting-edge technology
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Careers Section */}
+      <section id="careers" className="bg-gray-50 py-20">
+        <div className="max-w-7xl mx-auto px-6 text-center">
+          <h2 className="text-4xl font-bold text-gray-900 mb-6">Join Our Team</h2>
+          <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+            We're always looking for talented individuals to join our mission of
+            connecting people with their dream careers.
           </p>
-          <button
-            onClick={() => navigate('/signup')}
-            className="px-8 py-4 bg-white text-blue-600 font-semibold rounded-xl hover:bg-gray-100 transition-all text-lg shadow-lg"
-          >
-            Get Started Today
+          <button className="px-8 py-4 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-all">
+            View Open Positions
           </button>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12">
-        <div className="max-w-7xl mx-auto px-6 text-center">
-          <p className="text-gray-400">
-            © 2024 Nexus Connect. All Rights Reserved.
-          </p>
+      {/* Blog Section */}
+      <section id="blog" className="max-w-7xl mx-auto px-6 py-20">
+        <h2 className="text-4xl font-bold text-gray-900 mb-12 text-center">
+          Latest from Our Blog
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+            <div className="h-48 bg-gradient-to-br from-blue-100 to-blue-200"></div>
+            <div className="p-6">
+              <h3 className="text-xl font-bold text-gray-900 mb-3">
+                Top 10 Interview Tips
+              </h3>
+              <p className="text-gray-600 mb-4">
+                Ace your next interview with these proven strategies from industry
+                experts.
+              </p>
+              <button className="text-blue-600 font-semibold hover:text-blue-700">
+                Read More →
+              </button>
+            </div>
+          </div>
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+            <div className="h-48 bg-gradient-to-br from-blue-100 to-blue-200"></div>
+            <div className="p-6">
+              <h3 className="text-xl font-bold text-gray-900 mb-3">
+                Remote Work Best Practices
+              </h3>
+              <p className="text-gray-600 mb-4">
+                Learn how to stay productive and maintain work-life balance while
+                working remotely.
+              </p>
+              <button className="text-blue-600 font-semibold hover:text-blue-700">
+                Read More →
+              </button>
+            </div>
+          </div>
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+            <div className="h-48 bg-gradient-to-br from-blue-100 to-blue-200"></div>
+            <div className="p-6">
+              <h3 className="text-xl font-bold text-gray-900 mb-3">
+                Career Growth Strategies
+              </h3>
+              <p className="text-gray-600 mb-4">
+                Discover actionable tips to advance your career and reach your
+                professional goals.
+              </p>
+              <button className="text-blue-600 font-semibold hover:text-blue-700">
+                Read More →
+              </button>
+            </div>
+          </div>
         </div>
-      </footer>
+      </section>
+
+      <Footer />
     </div>
   );
 };

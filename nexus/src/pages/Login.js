@@ -27,8 +27,27 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
-      <div className="max-w-md w-full">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white flex items-center justify-center px-4 py-12">
+      <div className="max-w-md w-full bg-white rounded-3xl shadow-xl p-8 border border-gray-100">
+        <button
+          onClick={() => navigate('/')}
+          className="mb-6 flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
+        >
+          <svg
+            className="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M15 19l-7-7 7-7"
+            />
+          </svg>
+          Home
+        </button>
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-24 h-24 bg-gradient-to-br from-blue-600 to-blue-700 rounded-3xl shadow-lg mb-6">
             <svg
@@ -54,7 +73,7 @@ const Login = () => {
         </div>
 
         {error && (
-          <div className="mb-4 text-red-600 bg-red-50 border border-red-200 rounded-lg px-4 py-3 text-sm">
+          <div className="mb-6 text-red-600 bg-red-50 border border-red-200 rounded-xl px-4 py-3 text-sm">
             {error}
           </div>
         )}
