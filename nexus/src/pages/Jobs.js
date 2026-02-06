@@ -24,6 +24,7 @@ const Jobs = () => {
       type: 'FULL-TIME',
       salary: '$140K - $180K',
       saved: false,
+      category: 'Design',
     },
     {
       id: 2,
@@ -34,6 +35,7 @@ const Jobs = () => {
       level: 'MID LEVEL',
       type: 'FULL-TIME',
       saved: true,
+      category: 'Development',
     },
     {
       id: 3,
@@ -44,6 +46,7 @@ const Jobs = () => {
       level: 'ENTRY',
       type: 'CONTRACT',
       saved: false,
+      category: 'Development',
     },
     {
       id: 4,
@@ -54,8 +57,11 @@ const Jobs = () => {
       level: 'MID LEVEL',
       type: 'FULL-TIME',
       saved: false,
+      category: 'Marketing',
     },
   ];
+
+  const filteredJobs = jobs.filter((job) => job.category === selectedCategory);
 
   return (
     <div className="min-h-screen bg-gray-50 pb-20">
@@ -121,7 +127,7 @@ const Jobs = () => {
         </div>
 
         <div className="space-y-3">
-          {jobs.map((job) => (
+          {filteredJobs.map((job) => (
             <div
               key={job.id}
               className="bg-white border border-gray-200 rounded-2xl p-4 hover:shadow-md transition-shadow"
