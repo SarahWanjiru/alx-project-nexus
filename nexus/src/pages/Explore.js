@@ -155,15 +155,36 @@ const Explore = () => {
                       Explore Jobs
                     </h1>
                   </div>
-                  <button className="p-2 hover:bg-gray-100 rounded-full">
-                    <svg
-                      className="w-6 h-6 text-gray-600"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
+                  <div className="flex items-center gap-2">
+                    <button className="p-2 hover:bg-gray-100 rounded-full">
+                      <svg
+                        className="w-6 h-6 text-gray-600"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
+                      </svg>
+                    </button>
+                    <button
+                      onClick={() => navigate('/profile')}
+                      className="hidden lg:flex items-center gap-2 px-4 py-2 hover:bg-gray-100 rounded-full transition-colors"
                     >
-                      <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
-                    </svg>
-                  </button>
+                      <svg
+                        className="w-6 h-6 text-gray-600"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                      <span className="text-sm font-semibold text-gray-700">
+                        Profile
+                      </span>
+                    </button>
+                  </div>
                 </div>
 
                 <div className="mb-6">
@@ -258,7 +279,7 @@ const Explore = () => {
                               {job.time}
                             </span>
                           </div>
-                          <div className="flex flex-wrap gap-2">
+                          <div className="flex flex-wrap gap-2 mb-3">
                             <span className="px-3 py-1 bg-blue-50 text-blue-600 rounded-lg text-xs font-semibold">
                               {job.level}
                             </span>
@@ -277,6 +298,12 @@ const Explore = () => {
                               </span>
                             )}
                           </div>
+                          <button
+                            onClick={() => navigate('/login')}
+                            className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold py-2 rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all"
+                          >
+                            Apply Now
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -295,14 +322,20 @@ const Explore = () => {
                   <p className="text-sm text-gray-600 mb-1">Total Jobs</p>
                   <p className="text-2xl font-bold text-blue-600">1,234</p>
                 </div>
-                <div className="p-4 bg-green-50 rounded-xl">
+                <button
+                  onClick={() => navigate('/applied')}
+                  className="w-full p-4 bg-green-50 rounded-xl hover:bg-green-100 transition-colors text-left"
+                >
                   <p className="text-sm text-gray-600 mb-1">Applied</p>
                   <p className="text-2xl font-bold text-green-600">12</p>
-                </div>
-                <div className="p-4 bg-purple-50 rounded-xl">
+                </button>
+                <button
+                  onClick={() => navigate('/saved')}
+                  className="w-full p-4 bg-purple-50 rounded-xl hover:bg-purple-100 transition-colors text-left"
+                >
                   <p className="text-sm text-gray-600 mb-1">Saved</p>
                   <p className="text-2xl font-bold text-purple-600">8</p>
-                </div>
+                </button>
               </div>
             </div>
           </div>

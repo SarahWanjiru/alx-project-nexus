@@ -12,7 +12,7 @@ const Footer = () => {
               />
             </div>
             <p className="text-gray-400 text-sm">
-              Your trusted partner in finding the perfect career opportunity.
+             Where talent meets opportunity.
             </p>
           </div>
 
