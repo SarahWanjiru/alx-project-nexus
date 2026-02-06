@@ -1,25 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import MobileFilters from '../components/MobileFilters';
-import { useAuth } from '../contexts/AuthContext';
-// ...existing code...
+
 const Explore = () => {
   const navigate = useNavigate();
-  const { user } = useAuth();
-
-  // State initialization with explicit default values
   const [showFilters, setShowFilters] = useState(false);
   const [appliedFilters, setAppliedFilters] = useState(null);
-
-  useEffect(() => {
-    if (!user) {
-      navigate('/login', { replace: true });
-    }
-  }, [user, navigate]);
-
-  if (!user) {
-    return null;
-  }
 
   const handleApplyFilters = (filters) => {
     setAppliedFilters(filters);
