@@ -182,7 +182,7 @@ const SignUp = () => {
               <div className="w-full border-t border-gray-200"></div>
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-4 bg-gray-50 text-gray-500">
+              <span className="px-4 bg-white text-gray-500">
                 Or continue with
               </span>
             </div>
