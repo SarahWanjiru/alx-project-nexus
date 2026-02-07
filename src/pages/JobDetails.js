@@ -9,11 +9,25 @@ const JobDetails = () => {
   const { user } = useAuth();
   const [job, setJob] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isSaved, setIsSaved] = useState(false);
 
   useEffect(() => {
     fetchJobDetails();
+    if (user) checkIfSaved();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
+
+  const checkIfSaved = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await api.savedJobs.getAll(token);
+      if (response.success && response.jobs) {
+        setIsSaved(response.jobs.some(j => j.job_id === id));
+      }
+    } catch (error) {
+      console.error('Failed to check saved status:', error);
+    }
+  };
 
   const fetchJobDetails = async () => {
     setLoading(true);
@@ -27,6 +41,36 @@ const JobDetails = () => {
       console.error("Failed to fetch job:", error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleSave = async () => {
+    if (!user) {
+      alert('Please login to save jobs');
+      navigate('/login');
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem('token');
+      if (isSaved) {
+        await api.savedJobs.remove(id, token);
+        setIsSaved(false);
+      } else {
+        await api.savedJobs.save({
+          jobId: id,
+          title: job.title,
+          company: job.company,
+          location: job.location,
+          salary_min: job.salary_min,
+          salary_max: job.salary_max,
+          contract_type: job.contract_type,
+          category: job.category
+        }, token);
+        setIsSaved(true);
+      }
+    } catch (error) {
+      console.error('Failed to save job:', error);
     }
   };
 
@@ -151,10 +195,10 @@ const JobDetails = () => {
 
         <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4">
           <div className="max-w-4xl mx-auto flex gap-3">
-            <button className="p-3 border border-gray-300 rounded-xl hover:bg-gray-50">
+            <button onClick={handleSave} className="p-3 border border-gray-300 rounded-xl hover:bg-gray-50">
               <svg
                 className="w-6 h-6 text-gray-600"
-                fill="none"
+                fill={isSaved ? "currentColor" : "none"}
                 stroke="currentColor"
                 viewBox="0 0 24 24"
               >

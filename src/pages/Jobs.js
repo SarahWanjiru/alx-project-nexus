@@ -89,15 +89,31 @@ const Jobs = () => {
             </div>
             <h1 className="text-lg font-bold text-gray-900">Explore Jobs</h1>
           </div>
-          <button className="p-2 hover:bg-gray-100 rounded-full">
-            <svg
-              className="w-6 h-6 text-gray-600"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-            >
-              <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
-            </svg>
-          </button>
+          <div className="flex items-center gap-2">
+            <button className="p-2 hover:bg-gray-100 rounded-full flex md:hidden">
+              <svg
+                className="w-6 h-6 text-gray-600"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
+              </svg>
+            </button>
+            <nav className="hidden md:flex items-center gap-1">
+              <button onClick={() => navigate("/jobs")} className="px-4 py-2 text-blue-600 bg-blue-50 rounded-lg font-semibold text-sm">
+                Jobs
+              </button>
+              <button onClick={() => navigate("/saved")} className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg font-semibold text-sm">
+                Saved
+              </button>
+              <button onClick={() => navigate("/applied")} className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg font-semibold text-sm">
+                Applied
+              </button>
+              <button onClick={() => navigate("/profile")} className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg font-semibold text-sm">
+                Profile
+              </button>
+            </nav>
+          </div>
         </div>
 
         <button
@@ -230,6 +246,12 @@ const Jobs = () => {
                         </span>
                       )}
                     </div>
+                    <button
+                      onClick={() => navigate(`/job/${job.id}`)}
+                      className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold py-2 rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all mt-3"
+                    >
+                      View Details
+                    </button>
                   </div>
                 </div>
               </div>
@@ -238,51 +260,31 @@ const Jobs = () => {
         </div>
       </div>
 
-      <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200">
-        <div className="flex items-center justify-around py-3">
-          <button
-            onClick={() => navigate("/explore")}
-            className="flex flex-col items-center gap-1 text-blue-600"
-          >
-            <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+      <nav className="flex md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200">
+        <div className="flex items-center justify-around py-2 w-full">
+          <button onClick={() => navigate("/explore")} className="flex flex-col items-center gap-1 min-w-0">
+            <svg className="w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
               <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
             </svg>
-            <span className="text-xs font-semibold">JOBS</span>
+            <span className="text-[10px] font-medium text-blue-600">Jobs</span>
           </button>
-          <button
-            onClick={() => navigate("/saved")}
-            className="flex flex-col items-center gap-1 text-gray-400"
-          >
-            <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+          <button onClick={() => navigate("/saved")} className="flex flex-col items-center gap-1 min-w-0">
+            <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
               <path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z" />
             </svg>
-            <span className="text-xs font-semibold">SAVED</span>
+            <span className="text-[10px] font-medium text-gray-400">Saved</span>
           </button>
-          <button
-            onClick={() => navigate("/applied")}
-            className="flex flex-col items-center gap-1 text-gray-400"
-          >
-            <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-              <path
-                fillRule="evenodd"
-                d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                clipRule="evenodd"
-              />
+          <button onClick={() => navigate("/applied")} className="flex flex-col items-center gap-1 min-w-0">
+            <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
             </svg>
-            <span className="text-xs font-semibold">APPLIED</span>
+            <span className="text-[10px] font-medium text-gray-400">Applied</span>
           </button>
-          <button
-            onClick={() => navigate("/profile")}
-            className="flex flex-col items-center gap-1 text-gray-400"
-          >
-            <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-              <path
-                fillRule="evenodd"
-                d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-                clipRule="evenodd"
-              />
+          <button onClick={() => navigate("/profile")} className="flex flex-col items-center gap-1 min-w-0">
+            <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
             </svg>
-            <span className="text-xs font-semibold">PROFILE</span>
+            <span className="text-[10px] font-medium text-gray-400">Profile</span>
           </button>
         </div>
       </nav>
