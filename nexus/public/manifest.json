@@ -3,8 +3,13 @@
   "name": "Nexus Connect - Job Board Platform",
   "icons": [
     {
-      "src": "Nexus Connect.jpeg",
-      "type": "image/jpeg",
+      "src": "nexus-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "nexus-512.png",
+      "type": "image/png",
       "sizes": "512x512"
     }
   ],
