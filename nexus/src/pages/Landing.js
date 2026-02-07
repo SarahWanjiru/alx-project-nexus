@@ -11,7 +11,7 @@ const Landing = () => {
         <div className="container mx-auto">
           <div className="flex justify-between items-center mb-12">
             <img
-              src="/Nexus Connect.jpeg"
+              src="/nexus-connect.jpeg"
               alt="Nexus Logo"
               className="h-32 w-auto mx-auto md:mx-0"
             />
@@ -55,7 +55,7 @@ const Landing = () => {
           <div className="relative">
             <div className="relative w-full max-w-lg mx-auto">
               <img
-                src="/a person working on a laptop.jpg"
+                src="/person-working-laptop.jpg"
                 alt="Professional working on laptop"
                 className="rounded-full w-full h-auto object-cover shadow-2xl"
               />
@@ -189,7 +189,7 @@ const Landing = () => {
         <div className="container mx-auto px-6">
           <div className="flex flex-col items-center gap-6">
             <img
-              src="/Nexus Connect.jpeg"
+              src="/nexus-connect.jpeg"
               alt="Nexus Logo"
               className="h-20 w-auto"
             />
