@@ -1,0 +1,16 @@
+{
+  "short_name": "Nexus Connect",
+  "name": "Nexus Connect - Job Board Platform",
+  "icons": [
+    {
+      "src": "nexusconnect.jpeg",
+      "type": "image/jpeg",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#2563eb",
+  "background_color": "#ffffff",
+  "description": "Interactive job board platform for job seekers"
+}
