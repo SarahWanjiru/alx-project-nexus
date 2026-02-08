@@ -1,0 +1,19 @@
+version: 1
+specVersion: 1.0
+frontend:
+  phases:
+    preBuild:
+      commands:
+        - cd nexus
+        - npm install -g pnpm
+        - pnpm install
+    build:
+      commands:
+        - pnpm run build
+  artifacts:
+    baseDirectory: nexus/build
+    files:
+      - '**/*'
+  cache:
+    paths:
+      - nexus/node_modules/**/*
