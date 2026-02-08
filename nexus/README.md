@@ -154,10 +154,10 @@ This project is evaluated on:
 
 Detailed documentation available in `/docs` folder:
 
-- **[Architecture Overview](./nexus/docs/ARCHITECTURE.md)** - System design and tech stack
-- **[API Documentation](./nexus/docs/API.md)** - Backend API endpoints and usage
-- **[User Roles & Permissions](./nexus/docs/USER_ROLES.md)** - Role-based access control
-- **[Deployment Guide](./nexus/docs/DEPLOYMENT.md)** - Production deployment instructions
+- **[Architecture Overview](./docs/ARCHITECTURE.md)** - System design and tech stack
+- **[API Documentation](./docs/API.md)** - Backend API endpoints and usage
+- **[User Roles & Permissions](./docs/USER_ROLES.md)** - Role-based access control
+- **[Deployment Guide](./docs/DEPLOYMENT.md)** - Production deployment instructions
 
 ## User Roles
 
@@ -190,7 +190,7 @@ Key features:
 - Pagination and filtering
 - Search functionality
 
-See [API Documentation](./nexus/docs/API.md) for detailed endpoint information.
+See [API Documentation](./docs/API.md) for detailed endpoint information.
 
 ## Deployment
 
@@ -199,7 +199,7 @@ The application can be deployed on:
 - **Netlify**
 - **GitHub Pages**
 
-See [Deployment Guide](./nexus/docs/DEPLOYMENT.md) for step-by-step instructions.
+See [Deployment Guide](./docs/DEPLOYMENT.md) for step-by-step instructions.
 
 ## Contributing
 
