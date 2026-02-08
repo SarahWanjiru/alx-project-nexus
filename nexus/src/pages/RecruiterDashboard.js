@@ -1,24 +1,21 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { api } from '../utils/api';
 import RecruiterSidebar from '../components/RecruiterSidebar';
 
 const RecruiterDashboard = () => {
-  const navigate = useNavigate();
   const { user, logout } = useAuth();
-  const [stats, setStats] = useState({
+  const [jobPosts, setJobPosts] = useState([]);
+  const [stats] = useState({
     openPositions: 8,
     totalApplicants: 246,
     interviewsToday: 5,
     avgTimeToHire: '18d',
   });
-  const [jobPosts, setJobPosts] = useState([]);
-  const [candidates, setCandidates] = useState([
+  const [candidates] = useState([
     {
       id: 1,
       name: 'Marco Russo',
-      avatar: '/api/placeholder/40/40',
       appliedFor: 'Product Designer',
       matchScore: 95,
       status: 'Interview',
@@ -26,7 +23,6 @@ const RecruiterDashboard = () => {
     {
       id: 2,
       name: 'Elena Gilbert',
-      avatar: '/api/placeholder/40/40',
       appliedFor: 'Frontend Developer',
       matchScore: 88,
       status: 'New',

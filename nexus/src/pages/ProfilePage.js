@@ -7,7 +7,6 @@ const ProfilePage = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
   const isRecruiter = user?.role === 'recruiter' || user?.role === 'admin';
-  const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
     fullName: 'Alex Rivera',
     professionalTitle: 'Senior Product Designer',
@@ -20,7 +19,6 @@ const ProfilePage = () => {
   const [newSkill, setNewSkill] = useState('');
 
   const handleSave = () => {
-    setIsEditing(false);
     // TODO: Save to backend
   };
 

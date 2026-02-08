@@ -1,14 +1,9 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
 import RecruiterSidebar from '../components/RecruiterSidebar';
 
 const Interviews = () => {
-  const navigate = useNavigate();
-  const { user } = useAuth();
-  const [view, setView] = useState('calendar');
-  const [currentDate, setCurrentDate] = useState(new Date(2023, 9, 24)); // October 24, 2023
-
+  const [view] = useState('calendar');
+  const [currentDate] = useState(new Date());
   const todaysInterviews = [
     {
       id: 1,

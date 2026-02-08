@@ -16,7 +16,7 @@ const handleResponse = async (response) => {
     // Parse Django validation errors
     if (typeof error === 'object' && !error.error && !error.detail) {
       const messages = [];
-      for (const [field, errors] of Object.entries(error)) {
+      for (const [, errors] of Object.entries(error)) {
         if (Array.isArray(errors)) {
           messages.push(...errors);
         } else {

@@ -1,17 +1,8 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
 import RecruiterSidebar from '../components/RecruiterSidebar';
 
 const Candidates = () => {
-  const navigate = useNavigate();
-  const { user } = useAuth();
   const [searchQuery, setSearchQuery] = useState('');
-  const [filters, setFilters] = useState({
-    experienceLevel: ['mid-senior'],
-    applicationStatus: ['new'],
-    skills: [],
-  });
 
   const candidates = [
     {

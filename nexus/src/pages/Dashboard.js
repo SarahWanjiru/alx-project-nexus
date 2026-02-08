@@ -4,7 +4,6 @@ import { useJobs } from '../contexts/JobContext';
 import { useTheme } from '../contexts/ThemeContext';
 import { useState } from 'react';
 import ApplicationModal from '../components/ApplicationModal';
-import NexusLogo from '../components/NexusLogo';
 
 const Dashboard = () => {
   const navigate = useNavigate();

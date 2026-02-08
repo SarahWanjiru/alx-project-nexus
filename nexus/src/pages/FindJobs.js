@@ -1,18 +1,16 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
+// import { useAuth } from '../contexts/AuthContext';
 import { useJobs } from '../contexts/JobContext';
 import ApplicationModal from '../components/ApplicationModal';
 
 const FindJobs = () => {
   const navigate = useNavigate();
-  const { user } = useAuth();
   const { jobs, loading } = useJobs();
   const [selectedJob, setSelectedJob] = useState(null);
   const [showApplicationModal, setShowApplicationModal] = useState(false);
   const [applicationJob, setApplicationJob] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
-  const [salaryRange, setSalaryRange] = useState([40, 200]);
   const [employmentTypes, setEmploymentTypes] = useState({
     fullTime: true,
     contract: false,
@@ -370,9 +368,9 @@ const FindJobs = () => {
               <div>
                 <h2 className="text-2xl font-bold mb-2">{selectedJob.title}</h2>
                 <div className="flex items-center gap-2 mb-2">
-                  <a href="#" className="text-blue-500 font-semibold">
+                  <button type="button" className="text-blue-500 font-semibold">
                     {selectedJob.company}
-                  </a>
+                  </button>
                   <span className="text-gray-400">•</span>
                   <span className="text-gray-600">{selectedJob.location}</span>
                 </div>

@@ -1,9 +1,8 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import RecruiterSidebar from '../components/RecruiterSidebar';
 
 const Reports = () => {
-  const navigate = useNavigate();
   const [dateRange, setDateRange] = useState('30');
 
   return (

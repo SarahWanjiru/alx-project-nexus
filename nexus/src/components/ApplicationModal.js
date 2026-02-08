@@ -372,11 +372,11 @@ const ApplicationModal = ({ job, onClose, onSuccess }) => {
           {/* Footer Info */}
           <div className="mt-6 text-center text-sm text-gray-500">
             By submitting this application, you agree to TechCorp's{' '}
-            <a href="#" className="text-blue-500 hover:underline">
+            <a href="/privacy" className="text-blue-500 hover:underline">
               Privacy Policy
             </a>{' '}
             and{' '}
-            <a href="#" className="text-blue-500 hover:underline">
+            <a href="/terms" className="text-blue-500 hover:underline">
               Terms of Service
             </a>
             . Your data will be shared with the recruiter for this position.
