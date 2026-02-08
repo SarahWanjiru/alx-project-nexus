@@ -1,51 +1,16 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useJobs } from '../contexts/JobContext';
+import ComingSoonModal from '../components/ComingSoonModal';
 
 const SavedJobs = () => {
   const navigate = useNavigate();
+  const { savedJobs, loading } = useJobs();
+  const [showComingSoon, setShowComingSoon] = useState(false);
 
-  const savedJobs = [
-    {
-      id: 2,
-      title: 'Frontend Engineer (React)',
-      company: 'Vortex Systems',
-      location: 'Remote',
-      savedTime: '2d ago',
-      level: 'MID LEVEL',
-      type: 'FULL-TIME',
-      saved: true,
-    },
-    {
-      id: 1,
-      title: 'Senior Product Designer',
-      company: 'Nexus Tech',
-      location: 'San Francisco, CA',
-      savedTime: '5d ago',
-      level: 'SENIOR',
-      type: 'FULL-TIME',
-      salary: '$180K',
-      saved: true,
-    },
-    {
-      id: 3,
-      title: 'Junior Data Analyst',
-      company: 'Insight Global',
-      location: 'Austin, TX',
-      savedTime: '1w ago',
-      level: 'ENTRY',
-      type: 'CONTRACT',
-      saved: true,
-    },
-    {
-      id: 4,
-      title: 'Social Media Manager',
-      company: 'Spark Creative',
-      location: 'New York, NY',
-      savedTime: '1w ago',
-      level: 'MID LEVEL',
-      type: 'FULL-TIME',
-      saved: true,
-    },
-  ];
+  const handleFeatureClick = () => {
+    setShowComingSoon(true);
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 pb-20">
@@ -60,15 +25,36 @@ const SavedJobs = () => {
           <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
             <path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z" />
           </svg>
-          Swipe left on a card to remove from list
+          Click the bookmark icon to remove from saved jobs
         </p>
       </div>
 
       <div className="p-4 space-y-3">
+        {loading && (
+          <div className="text-center py-8 text-gray-500">Loading saved jobs...</div>
+        )}
+        {!loading && savedJobs.length === 0 && (
+          <div className="text-center py-12">
+            <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg className="w-10 h-10 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z" />
+              </svg>
+            </div>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">No Saved Jobs Yet</h3>
+            <p className="text-gray-500 mb-4">Start saving jobs you're interested in!</p>
+            <button
+              onClick={() => navigate('/')}
+              className="bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-700"
+            >
+              Explore Jobs
+            </button>
+          </div>
+        )}
         {savedJobs.map((job) => (
           <div
             key={job.id}
-            className="bg-white border border-gray-200 rounded-2xl p-4 hover:shadow-md transition-shadow"
+            onClick={handleFeatureClick}
+            className="bg-white border border-gray-200 rounded-2xl p-4 hover:shadow-md transition-shadow cursor-pointer"
           >
             <div className="flex gap-3">
               <div className="w-16 h-16 bg-gray-800 rounded-xl flex items-center justify-center flex-shrink-0">
@@ -85,7 +71,7 @@ const SavedJobs = () => {
                     <p className="text-sm text-blue-600">{job.company}</p>
                   </div>
                   <div className="flex flex-col gap-2">
-                    <button>
+                    <button onClick={(e) => { e.stopPropagation(); handleFeatureClick(); }}>
                       <svg
                         className="w-6 h-6 text-blue-600 fill-current"
                         fill="none"
@@ -100,7 +86,7 @@ const SavedJobs = () => {
                         />
                       </svg>
                     </button>
-                    <button className="text-gray-300 hover:text-gray-400">
+                    <button onClick={(e) => { e.stopPropagation(); handleFeatureClick(); }}>
                       <svg
                         className="w-6 h-6"
                         fill="currentColor"
@@ -142,19 +128,18 @@ const SavedJobs = () => {
                         clipRule="evenodd"
                       />
                     </svg>
-                    Saved {job.savedTime}
+                    Saved recently
                   </span>
                 </div>
                 <div className="flex flex-wrap gap-2">
-                  <span className="px-3 py-1 bg-blue-50 text-blue-600 rounded-lg text-xs font-semibold">
-                    {job.level}
-                  </span>
-                  <span className="px-3 py-1 bg-green-50 text-green-600 rounded-lg text-xs font-semibold">
-                    {job.type}
-                  </span>
-                  {job.salary && (
-                    <span className="px-3 py-1 bg-gray-100 text-gray-700 rounded-lg text-xs font-semibold">
-                      {job.salary}
+                  {job.contract_type && (
+                    <span className="px-3 py-1 bg-blue-50 text-blue-600 rounded-lg text-xs font-semibold">
+                      {job.contract_type.toUpperCase()}
+                    </span>
+                  )}
+                  {job.category && (
+                    <span className="px-3 py-1 bg-green-50 text-green-600 rounded-lg text-xs font-semibold">
+                      {job.category}
                     </span>
                   )}
                 </div>
@@ -209,6 +194,12 @@ const SavedJobs = () => {
           </button>
         </div>
       </nav>
+
+      <ComingSoonModal
+        isOpen={showComingSoon}
+        onClose={() => setShowComingSoon(false)}
+        feature="Saved Jobs"
+      />
     </div>
   );
 };

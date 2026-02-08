@@ -46,7 +46,7 @@ const Landing = () => {
               across the globe.
             </p>
             <button
-              onClick={() => navigate('/explore')}
+              onClick={() => navigate('/signup')}
               className="bg-blue-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-blue-700 transition-colors shadow-lg"
             >
               Start Exploring Now!
@@ -112,7 +112,7 @@ const Landing = () => {
           We verify 100% of our job listings to ensure quality and authenticity
         </p>
         <button
-          onClick={() => navigate('/explore')}
+          onClick={() => navigate('/signup')}
           className="bg-blue-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-blue-700 transition-colors shadow-lg"
         >
           Start Your Job Search Now!

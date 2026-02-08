@@ -1,16 +1,25 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import ComingSoonModal from '../components/ComingSoonModal';
 
 const Profile = () => {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
+  const [showComingSoon, setShowComingSoon] = useState(false);
+  const [comingSoonFeature, setComingSoonFeature] = useState('');
+
+  const handleFeatureClick = (feature) => {
+    setComingSoonFeature(feature);
+    setShowComingSoon(true);
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 pb-20">
       <div className="bg-white p-4">
         <div className="flex items-center justify-between mb-8">
           <h1 className="text-2xl font-bold text-gray-900">Profile</h1>
-          <button className="p-2 hover:bg-gray-100 rounded-full">
+          <button onClick={() => handleFeatureClick('Settings')} className="p-2 hover:bg-gray-100 rounded-full">
             <svg
               className="w-6 h-6 text-gray-600"
               fill="currentColor"
@@ -40,7 +49,7 @@ const Profile = () => {
                 />
               </svg>
             </div>
-            <button className="absolute bottom-0 right-0 w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center shadow-lg">
+            <button onClick={() => handleFeatureClick('Profile Photo')} className="absolute bottom-0 right-0 w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center shadow-lg">
               <svg
                 className="w-5 h-5 text-white"
                 fill="currentColor"
@@ -61,7 +70,7 @@ const Profile = () => {
         <div>
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-xl font-bold text-gray-900">Documents</h3>
-            <button className="text-blue-600 font-semibold text-sm">
+            <button onClick={() => handleFeatureClick('Documents')} className="text-blue-600 font-semibold text-sm">
               Add New
             </button>
           </div>
@@ -87,7 +96,7 @@ const Profile = () => {
                 Primary CV • Updated 2 days ago
               </p>
             </div>
-            <button className="p-2 text-gray-400 hover:text-gray-600">
+            <button onClick={() => handleFeatureClick('Document Download')} className="p-2 text-gray-400 hover:text-gray-600">
               <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                 <path
                   fillRule="evenodd"
@@ -96,7 +105,7 @@ const Profile = () => {
                 />
               </svg>
             </button>
-            <button className="p-2 text-gray-400 hover:text-gray-600">
+            <button onClick={() => handleFeatureClick('Document Edit')} className="p-2 text-gray-400 hover:text-gray-600">
               <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                 <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
               </svg>
@@ -109,7 +118,7 @@ const Profile = () => {
             Personal Information
           </h3>
           <div className="bg-white rounded-2xl overflow-hidden">
-            <button className="w-full p-4 flex items-center justify-between hover:bg-gray-50 border-b border-gray-100">
+            <button onClick={() => handleFeatureClick('Personal Information')} className="w-full p-4 flex items-center justify-between hover:bg-gray-50 border-b border-gray-100">
               <div className="text-left">
                 <p className="text-xs text-gray-400 mb-1">FULL NAME</p>
                 <p className="font-semibold text-gray-900">
@@ -128,7 +137,7 @@ const Profile = () => {
                 />
               </svg>
             </button>
-            <button className="w-full p-4 flex items-center justify-between hover:bg-gray-50 border-b border-gray-100">
+            <button onClick={() => handleFeatureClick('Personal Information')} className="w-full p-4 flex items-center justify-between hover:bg-gray-50 border-b border-gray-100">
               <div className="text-left">
                 <p className="text-xs text-gray-400 mb-1">EMAIL ADDRESS</p>
                 <p className="font-semibold text-gray-900">
@@ -147,7 +156,7 @@ const Profile = () => {
                 />
               </svg>
             </button>
-            <button className="w-full p-4 flex items-center justify-between hover:bg-gray-50">
+            <button onClick={() => handleFeatureClick('Personal Information')} className="w-full p-4 flex items-center justify-between hover:bg-gray-50">
               <div className="text-left">
                 <p className="text-xs text-gray-400 mb-1">PHONE NUMBER</p>
                 <p className="font-semibold text-gray-900">+1 (555) 012-3456</p>
@@ -170,7 +179,7 @@ const Profile = () => {
         <div>
           <h3 className="text-xl font-bold text-gray-900 mb-4">Settings</h3>
           <div className="bg-white rounded-2xl overflow-hidden">
-            <button className="w-full p-4 flex items-center gap-3 hover:bg-gray-50 border-b border-gray-100">
+            <button onClick={() => handleFeatureClick('Notifications')} className="w-full p-4 flex items-center gap-3 hover:bg-gray-50 border-b border-gray-100">
               <svg
                 className="w-6 h-6 text-gray-600"
                 fill="currentColor"
@@ -193,7 +202,7 @@ const Profile = () => {
                 />
               </svg>
             </button>
-            <button className="w-full p-4 flex items-center gap-3 hover:bg-gray-50 border-b border-gray-100">
+            <button onClick={() => handleFeatureClick('Security')} className="w-full p-4 flex items-center gap-3 hover:bg-gray-50 border-b border-gray-100">
               <svg
                 className="w-6 h-6 text-gray-600"
                 fill="currentColor"
@@ -288,6 +297,12 @@ const Profile = () => {
           </button>
         </div>
       </nav>
+
+      <ComingSoonModal
+        isOpen={showComingSoon}
+        onClose={() => setShowComingSoon(false)}
+        feature={comingSoonFeature}
+      />
     </div>
   );
 };

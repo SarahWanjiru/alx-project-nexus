@@ -1,4 +1,5 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
+import { api } from '../utils/api';
 
 const AuthContext = createContext();
 
@@ -14,13 +15,42 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    const token = localStorage.getItem('access_token');
+    const userData = localStorage.getItem('user');
+    if (token && userData) {
+      setUser(JSON.parse(userData));
+    }
+  }, []);
+
   const signup = async (userData) => {
     setLoading(true);
     try {
-      // TODO: API call
-      console.log('Signup:', userData);
-      setUser(userData);
-      return { success: true };
+      const data = await api.auth.register({
+        username: userData.email.split('@')[0],
+        email: userData.email,
+        first_name: userData.fullName.split(' ')[0],
+        last_name: userData.fullName.split(' ').slice(1).join(' ') || userData.fullName.split(' ')[0],
+        password: userData.password,
+        role: userData.role || 'user',
+      });
+
+      if (data.user_id) {
+        const loginData = await api.auth.login({
+          username: userData.email.split('@')[0],
+          password: userData.password,
+        });
+
+        if (loginData.access) {
+          localStorage.setItem('access_token', loginData.access);
+          localStorage.setItem('refresh_token', loginData.refresh);
+          const userInfo = { email: userData.email, role: userData.role || 'user' };
+          localStorage.setItem('user', JSON.stringify(userInfo));
+          setUser(userInfo);
+          return { success: true, role: userData.role || 'user' };
+        }
+      }
+      return { success: false, error: data.error || 'Signup failed' };
     } catch (error) {
       return { success: false, error: error.message };
     } finally {
@@ -31,10 +61,38 @@ export const AuthProvider = ({ children }) => {
   const login = async (credentials) => {
     setLoading(true);
     try {
-      // TODO: API call
-      console.log('Login:', credentials);
-      setUser(credentials);
-      return { success: true };
+      const data = await api.auth.login({
+        username: credentials.email.split('@')[0],
+        password: credentials.password,
+      });
+
+      if (data.access) {
+        localStorage.setItem('access_token', data.access);
+        localStorage.setItem('refresh_token', data.refresh);
+        
+        try {
+          const payload = JSON.parse(atob(data.access.split('.')[1]));
+          const userRole = payload.role || 'user';
+          const userData = { email: credentials.email, role: userRole };
+          localStorage.setItem('user', JSON.stringify(userData));
+          setUser(userData);
+          return { success: true, role: userRole };
+        } catch {
+          const storedUser = localStorage.getItem('user');
+          if (storedUser) {
+            const userData = JSON.parse(storedUser);
+            if (userData.email === credentials.email) {
+              setUser(userData);
+              return { success: true, role: userData.role };
+            }
+          }
+          const userData = { email: credentials.email, role: 'user' };
+          localStorage.setItem('user', JSON.stringify(userData));
+          setUser(userData);
+          return { success: true, role: 'user' };
+        }
+      }
+      return { success: false, error: data.detail || 'Invalid credentials' };
     } catch (error) {
       return { success: false, error: error.message };
     } finally {
@@ -42,7 +100,18 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const logout = () => {
+  const logout = async () => {
+    const refreshToken = localStorage.getItem('refresh_token');
+    if (refreshToken) {
+      try {
+        await api.auth.logout(refreshToken);
+      } catch (error) {
+        console.error('Logout error:', error);
+      }
+    }
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('refresh_token');
+    localStorage.removeItem('user');
     setUser(null);
   };
 

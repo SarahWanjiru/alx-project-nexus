@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useJobs } from '../contexts/JobContext';
 import MobileFilters from '../components/MobileFilters';
 
 const Jobs = () => {
   const navigate = useNavigate();
+  const { jobs, loading, error } = useJobs();
   const [selectedCategory, setSelectedCategory] = useState('Design');
   const [showFilters, setShowFilters] = useState(false);
 
@@ -11,50 +13,6 @@ const Jobs = () => {
     { name: 'Design', icon: '🎨' },
     { name: 'Development', icon: '</>' },
     { name: 'Marketing', icon: '📢' },
-  ];
-
-  const jobs = [
-    {
-      id: 1,
-      title: 'Senior Product Designer',
-      company: 'Nexus Tech',
-      location: 'San Francisco, CA',
-      time: '2h ago',
-      level: 'SENIOR',
-      type: 'FULL-TIME',
-      salary: '$140K - $180K',
-      saved: false,
-    },
-    {
-      id: 2,
-      title: 'Frontend Engineer (React)',
-      company: 'Vortex Systems',
-      location: 'Remote',
-      time: '5h ago',
-      level: 'MID LEVEL',
-      type: 'FULL-TIME',
-      saved: true,
-    },
-    {
-      id: 3,
-      title: 'Junior Data Analyst',
-      company: 'Insight Global',
-      location: 'Austin, TX',
-      time: '1d ago',
-      level: 'ENTRY',
-      type: 'CONTRACT',
-      saved: false,
-    },
-    {
-      id: 4,
-      title: 'Social Media Manager',
-      company: 'Spark Creative',
-      location: 'New York, NY',
-      time: '2d ago',
-      level: 'MID LEVEL',
-      type: 'FULL-TIME',
-      saved: false,
-    },
   ];
 
   return (
@@ -121,6 +79,15 @@ const Jobs = () => {
         </div>
 
         <div className="space-y-3">
+          {loading && (
+            <div className="text-center py-8 text-gray-500">Loading jobs...</div>
+          )}
+          {error && (
+            <div className="text-center py-8 text-red-600">Error: {error}</div>
+          )}
+          {!loading && !error && jobs.length === 0 && (
+            <div className="text-center py-8 text-gray-500">No jobs found.</div>
+          )}
           {jobs.map((job) => (
             <div
               key={job.id}
@@ -171,37 +138,25 @@ const Jobs = () => {
                       </svg>
                       {job.location}
                     </span>
-                    <span className="flex items-center gap-1">
-                      <svg
-                        className="w-4 h-4"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                      {job.time}
-                    </span>
                   </div>
                   <div className="flex flex-wrap gap-2">
-                    <span className="px-3 py-1 bg-blue-50 text-blue-600 rounded-lg text-xs font-semibold">
-                      {job.level}
-                    </span>
-                    <span
-                      className={`px-3 py-1 rounded-lg text-xs font-semibold ${
-                        job.type === 'FULL-TIME'
-                          ? 'bg-green-50 text-green-600'
-                          : 'bg-orange-50 text-orange-600'
-                      }`}
-                    >
-                      {job.type}
-                    </span>
-                    {job.salary && (
+                    {job.contract_type && (
+                      <span className="px-3 py-1 bg-blue-50 text-blue-600 rounded-lg text-xs font-semibold">
+                        {job.contract_type}
+                      </span>
+                    )}
+                    {job.category && (
+                      <span className="px-3 py-1 bg-green-50 text-green-600 rounded-lg text-xs font-semibold">
+                        {job.category}
+                      </span>
+                    )}
+                    {(job.salary_min || job.salary_max) && (
                       <span className="px-3 py-1 bg-gray-100 text-gray-700 rounded-lg text-xs font-semibold">
-                        {job.salary}
+                        {job.salary_min && job.salary_max
+                          ? `$${Math.round(job.salary_min / 1000)}K - $${Math.round(job.salary_max / 1000)}K`
+                          : job.salary_min
+                          ? `$${Math.round(job.salary_min / 1000)}K+`
+                          : `Up to $${Math.round(job.salary_max / 1000)}K`}
                       </span>
                     )}
                   </div>
