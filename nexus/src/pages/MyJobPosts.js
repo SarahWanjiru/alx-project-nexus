@@ -163,18 +163,14 @@ const MyJobPosts = () => {
               </p>
             </div>
             <div className="flex gap-4">
-              <div className="bg-white rounded-xl border border-gray-200 p-4 flex items-center gap-3">
-                <div className="w-12 h-12 bg-teal-100 rounded-lg flex items-center justify-center">
+              <div className="bg-white rounded-xl border-l-4 border-blue-500 p-4 flex items-center gap-3 shadow-sm">
+                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
                   <svg
-                    className="w-6 h-6 text-teal-600"
+                    className="w-6 h-6 text-blue-500"
                     fill="currentColor"
                     viewBox="0 0 20 20"
                   >
-                    <path
-                      fillRule="evenodd"
-                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                      clipRule="evenodd"
-                    />
+                    <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
                   </svg>
                 </div>
                 <div>
@@ -182,10 +178,10 @@ const MyJobPosts = () => {
                   <p className="text-2xl font-bold">{activeJobs}</p>
                 </div>
               </div>
-              <div className="bg-white rounded-xl border border-gray-200 p-4 flex items-center gap-3">
-                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+              <div className="bg-white rounded-xl border-l-4 border-teal-500 p-4 flex items-center gap-3 shadow-sm">
+                <div className="w-12 h-12 bg-teal-100 rounded-lg flex items-center justify-center">
                   <svg
-                    className="w-6 h-6 text-blue-600"
+                    className="w-6 h-6 text-teal-500"
                     fill="currentColor"
                     viewBox="0 0 20 20"
                   >
@@ -193,7 +189,7 @@ const MyJobPosts = () => {
                   </svg>
                 </div>
                 <div>
-                  <p className="text-gray-500 text-sm">New Applicants</p>
+                  <p className="text-gray-500 text-sm">Total Applicants</p>
                   <p className="text-2xl font-bold">{totalApplicants}</p>
                 </div>
               </div>
@@ -225,13 +221,13 @@ const MyJobPosts = () => {
                   <option>Closed</option>
                 </select>
               </div>
-              <p className="text-gray-500 text-sm">Showing 1-8 of 14 jobs</p>
+              <p className="text-gray-500 text-sm">Showing 1-5 of 5 jobs</p>
             </div>
 
             {/* Table */}
             <div className="overflow-x-auto">
               <table className="w-full">
-                <thead className="bg-teal-700 text-white">
+                <thead className="bg-gradient-to-r from-teal-700 to-teal-800 text-white">
                   <tr>
                     <th className="px-6 py-4 text-left font-semibold">
                       JOB TITLE
@@ -243,6 +239,9 @@ const MyJobPosts = () => {
                       TOTAL APPLICANTS
                     </th>
                     <th className="px-6 py-4 text-left font-semibold">
+                      NEW
+                    </th>
+                    <th className="px-6 py-4 text-left font-semibold">
                       STATUS
                     </th>
                     <th className="px-6 py-4 text-left font-semibold">
@@ -250,152 +249,62 @@ const MyJobPosts = () => {
                     </th>
                   </tr>
                 </thead>
-                <tbody className="bg-white">
-                  {mockJobs.map((job, index) => (
-                    <tr
-                      key={job.id}
-                      className={
-                        index !== mockJobs.length - 1
-                          ? 'border-b border-gray-200'
-                          : ''
-                      }
-                    >
-                      <td className="px-6 py-4">
-                        <div>
-                          <p className="font-bold text-teal-700">{job.title}</p>
-                          <p className="text-sm text-gray-600">
-                            {job.employment_type} • {job.location}
-                          </p>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 text-gray-700">
-                        {job.created_at}
-                      </td>
-                      <td className="px-6 py-4">
-                        <div className="flex items-center gap-2">
-                          <span className="text-2xl font-bold text-blue-500">
-                            {job.applicants}
-                          </span>
-                          {job.newApplicants > 0 && (
-                            <span className="text-sm text-green-600 font-semibold">
-                              +{job.newApplicants} new
-                            </span>
-                          )}
-                        </div>
-                      </td>
-                      <td className="px-6 py-4">
-                        <div className="flex items-center gap-2">
-                          <div
-                            className={`w-8 h-8 ${getStatusBadge(job.status).class} rounded-full flex items-center justify-center text-white font-bold`}
-                          >
-                            {getStatusBadge(job.status).icon}
+                <tbody>
+                  {mockJobs.map((job) => {
+                    const badge = getStatusBadge(job.status);
+                    return (
+                      <tr key={job.id} className="border-b hover:bg-gray-50">
+                        <td className="px-6 py-4">
+                          <div>
+                            <p className="font-semibold text-gray-900">{job.title}</p>
+                            <p className="text-sm text-gray-500">{job.employment_type} • {job.location}</p>
                           </div>
-                          <span
-                            className={`font-bold uppercase text-sm ${
-                              job.status === 'active'
-                                ? 'text-green-600'
-                                : job.status === 'paused'
-                                  ? 'text-orange-600'
-                                  : 'text-gray-600'
-                            }`}
-                          >
-                            {job.status}
+                        </td>
+                        <td className="px-6 py-4 text-gray-600">{job.created_at}</td>
+                        <td className="px-6 py-4">
+                          <span className="font-semibold text-gray-900">{job.applicants}</span>
+                        </td>
+                        <td className="px-6 py-4">
+                          {job.newApplicants > 0 ? (
+                            <span className="px-3 py-1 bg-blue-100 text-blue-600 rounded-full text-xs font-bold">
+                              +{job.newApplicants}
+                            </span>
+                          ) : (
+                            <span className="text-gray-400 text-sm">—</span>
+                          )}
+                        </td>
+                        <td className="px-6 py-4">
+                          <span className={`px-3 py-1 ${badge.class} text-white rounded-full text-xs font-semibold flex items-center gap-1 w-fit`}>
+                            <span>{badge.icon}</span>
+                            <span className="capitalize">{job.status}</span>
                           </span>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4">
-                        <div className="flex items-center gap-3">
-                          <button className="flex items-center gap-1 text-gray-600 hover:text-gray-900">
-                            <svg
-                              className="w-4 h-4"
-                              fill="currentColor"
-                              viewBox="0 0 20 20"
-                            >
-                              <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
-                            </svg>
-                            Edit
-                          </button>
-                          <button className="flex items-center gap-1 text-blue-500 hover:text-blue-600 font-semibold">
-                            <svg
-                              className="w-4 h-4"
-                              fill="currentColor"
-                              viewBox="0 0 20 20"
-                            >
-                              <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-                              <path
-                                fillRule="evenodd"
-                                d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
-                                clipRule="evenodd"
-                              />
-                            </svg>
-                            View Applicants
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
+                        </td>
+                        <td className="px-6 py-4">
+                          <div className="flex items-center gap-2">
+                            <button className="p-2 hover:bg-gray-100 rounded-lg" title="View">
+                              <svg className="w-5 h-5 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                                <path fillRule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" />
+                              </svg>
+                            </button>
+                            <button className="p-2 hover:bg-gray-100 rounded-lg" title="Edit">
+                              <svg className="w-5 h-5 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                              </svg>
+                            </button>
+                            <button className="p-2 hover:bg-gray-100 rounded-lg" title="Delete">
+                              <svg className="w-5 h-5 text-red-600" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
+                              </svg>
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>
-
-            {/* Pagination */}
-            <div className="p-6 flex items-center justify-between border-t border-gray-200">
-              <button className="flex items-center gap-2 text-gray-600 hover:text-gray-900">
-                <svg
-                  className="w-5 h-5"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-                Previous
-              </button>
-              <div className="flex items-center gap-2">
-                <button className="w-10 h-10 bg-blue-500 text-white rounded-lg font-semibold">
-                  1
-                </button>
-                <button className="w-10 h-10 hover:bg-gray-100 rounded-lg font-semibold">
-                  2
-                </button>
-                <button className="w-10 h-10 hover:bg-gray-100 rounded-lg font-semibold">
-                  3
-                </button>
-              </div>
-              <button className="flex items-center gap-2 text-gray-600 hover:text-gray-900">
-                Next
-                <svg
-                  className="w-5 h-5"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </button>
-            </div>
-          </div>
-
-          {/* Upgrade Banner */}
-          <div className="bg-gradient-to-r from-teal-600 to-blue-600 rounded-xl p-8 flex items-center justify-between text-white">
-            <div>
-              <h3 className="text-2xl font-bold mb-2">
-                Want to reach more candidates?
-              </h3>
-              <p className="text-blue-100">
-                Boost your job posts to the top of search results and attract
-                high-quality talent faster.
-              </p>
-            </div>
-            <button className="px-8 py-3 bg-white text-blue-600 rounded-lg font-bold hover:bg-blue-50">
-              Upgrade to Premium
-            </button>
           </div>
         </div>
       </main>

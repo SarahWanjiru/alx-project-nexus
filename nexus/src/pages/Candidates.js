@@ -21,7 +21,7 @@ const Candidates = () => {
       appliedFor: 'Senior Frontend Engineer',
       appliedTime: '2H AGO',
       status: 'IN SCREENING',
-      statusColor: 'text-teal-600',
+      statusColor: 'text-blue-600',
       matchScore: 98,
     },
     {
@@ -188,12 +188,12 @@ const Candidates = () => {
           </div>
 
           {/* Pro Tip */}
-          <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-6 text-white">
+          <div className="bg-gradient-to-br from-teal-600 to-teal-700 rounded-xl p-6 text-white">
             <p className="text-sm font-bold mb-2">PRO TIP</p>
             <p className="text-sm mb-4">
               Use the AI Match Score to prioritize top applicants automatically.
             </p>
-            <button className="w-full bg-white text-blue-600 py-2 rounded-lg font-semibold hover:bg-blue-50">
+            <button className="w-full bg-white text-teal-600 py-2 rounded-lg font-semibold hover:bg-teal-50">
               Learn More
             </button>
           </div>
@@ -288,7 +288,7 @@ const Candidates = () => {
 
                 <div className="flex items-center gap-6">
                   <div className="text-center">
-                    <p className="text-4xl font-bold text-blue-500 mb-1">
+                    <p className="text-4xl font-bold text-teal-500 mb-1">
                       {candidate.matchScore}%
                     </p>
                     <p className="text-xs text-gray-500 uppercase">
