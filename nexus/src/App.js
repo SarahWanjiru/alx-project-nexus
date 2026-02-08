@@ -26,24 +26,108 @@ function App() {
       <JobProvider>
         <ThemeProvider>
           <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Landing />} />
-            <Route path="/signup" element={<SignUp />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/dashboard" element={<ProtectedRoute allowedRoles={['user']}><Dashboard /></ProtectedRoute>} />
-            <Route path="/profile" element={<ProtectedRoute allowedRoles={['user']}><ProfilePage /></ProtectedRoute>} />
-            <Route path="/find-jobs" element={<ProtectedRoute allowedRoles={['user']}><FindJobs /></ProtectedRoute>} />
-            <Route path="/messages" element={<ProtectedRoute allowedRoles={['user']}><Messages /></ProtectedRoute>} />
-            <Route path="/applications" element={<ProtectedRoute allowedRoles={['user']}><Applications /></ProtectedRoute>} />
-            <Route path="/admin/dashboard" element={<ProtectedRoute allowedRoles={['admin', 'recruiter']}><RecruiterDashboard /></ProtectedRoute>} />
-            <Route path="/admin/jobs" element={<ProtectedRoute allowedRoles={['admin', 'recruiter']}><MyJobPosts /></ProtectedRoute>} />
-            <Route path="/admin/candidates" element={<ProtectedRoute allowedRoles={['admin', 'recruiter']}><Candidates /></ProtectedRoute>} />
-            <Route path="/admin/interviews" element={<ProtectedRoute allowedRoles={['admin', 'recruiter']}><Interviews /></ProtectedRoute>} />
-            <Route path="/admin/messages" element={<ProtectedRoute allowedRoles={['admin', 'recruiter']}><Messages /></ProtectedRoute>} />
-            <Route path="/admin/reports" element={<ProtectedRoute allowedRoles={['admin', 'recruiter']}><Reports /></ProtectedRoute>} />
-            <Route path="/admin/profile" element={<ProtectedRoute allowedRoles={['admin', 'recruiter']}><ProfilePage /></ProtectedRoute>} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
+            <Routes>
+              <Route path="/" element={<Landing />} />
+              <Route path="/signup" element={<SignUp />} />
+              <Route path="/login" element={<Login />} />
+              <Route
+                path="/dashboard"
+                element={
+                  <ProtectedRoute allowedRoles={['user']}>
+                    <Dashboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/profile"
+                element={
+                  <ProtectedRoute allowedRoles={['user']}>
+                    <ProfilePage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/find-jobs"
+                element={
+                  <ProtectedRoute allowedRoles={['user']}>
+                    <FindJobs />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/messages"
+                element={
+                  <ProtectedRoute allowedRoles={['user']}>
+                    <Messages />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/applications"
+                element={
+                  <ProtectedRoute allowedRoles={['user']}>
+                    <Applications />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/dashboard"
+                element={
+                  <ProtectedRoute allowedRoles={['admin', 'recruiter']}>
+                    <RecruiterDashboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/jobs"
+                element={
+                  <ProtectedRoute allowedRoles={['admin', 'recruiter']}>
+                    <MyJobPosts />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/candidates"
+                element={
+                  <ProtectedRoute allowedRoles={['admin', 'recruiter']}>
+                    <Candidates />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/interviews"
+                element={
+                  <ProtectedRoute allowedRoles={['admin', 'recruiter']}>
+                    <Interviews />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/messages"
+                element={
+                  <ProtectedRoute allowedRoles={['admin', 'recruiter']}>
+                    <Messages />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/reports"
+                element={
+                  <ProtectedRoute allowedRoles={['admin', 'recruiter']}>
+                    <Reports />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/profile"
+                element={
+                  <ProtectedRoute allowedRoles={['admin', 'recruiter']}>
+                    <ProfilePage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
           </BrowserRouter>
         </ThemeProvider>
       </JobProvider>

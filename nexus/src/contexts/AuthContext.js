@@ -30,9 +30,12 @@ export const AuthProvider = ({ children }) => {
         username: userData.email.split('@')[0],
         email: userData.email,
         first_name: userData.fullName.split(' ')[0],
-        last_name: userData.fullName.split(' ').slice(1).join(' ') || userData.fullName.split(' ')[0],
+        last_name:
+          userData.fullName.split(' ').slice(1).join(' ') ||
+          userData.fullName.split(' ')[0],
         password: userData.password,
         role: userData.role || 'user',
+        phone_number: null,
       });
 
       if (data.user_id) {
@@ -44,7 +47,10 @@ export const AuthProvider = ({ children }) => {
         if (loginData.access) {
           localStorage.setItem('access_token', loginData.access);
           localStorage.setItem('refresh_token', loginData.refresh);
-          const userInfo = { email: userData.email, role: userData.role || 'user' };
+          const userInfo = {
+            email: userData.email,
+            role: userData.role || 'user',
+          };
           localStorage.setItem('user', JSON.stringify(userInfo));
           setUser(userInfo);
           return { success: true, role: userData.role || 'user' };
@@ -69,23 +75,17 @@ export const AuthProvider = ({ children }) => {
       if (data.access) {
         localStorage.setItem('access_token', data.access);
         localStorage.setItem('refresh_token', data.refresh);
-        
+
         try {
-          const payload = JSON.parse(atob(data.access.split('.')[1]));
-          const userRole = payload.role || 'user';
+          // Fetch current user's profile to get role
+          const userProfile = await api.profile.getMe();
+          const userRole = userProfile.user?.role || 'user';
+
           const userData = { email: credentials.email, role: userRole };
           localStorage.setItem('user', JSON.stringify(userData));
           setUser(userData);
           return { success: true, role: userRole };
         } catch {
-          const storedUser = localStorage.getItem('user');
-          if (storedUser) {
-            const userData = JSON.parse(storedUser);
-            if (userData.email === credentials.email) {
-              setUser(userData);
-              return { success: true, role: userData.role };
-            }
-          }
           const userData = { email: credentials.email, role: 'user' };
           localStorage.setItem('user', JSON.stringify(userData));
           setUser(userData);

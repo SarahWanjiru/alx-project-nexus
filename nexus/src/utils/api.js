@@ -3,13 +3,29 @@ const API_URL = process.env.REACT_APP_API_URL;
 const getAuthHeaders = () => {
   const token = localStorage.getItem('access_token');
   return {
-    'Authorization': token ? `Bearer ${token}` : '',
+    Authorization: token ? `Bearer ${token}` : '',
   };
 };
 
 const handleResponse = async (response) => {
   if (!response.ok) {
-    const error = await response.json().catch(() => ({ error: 'Request failed' }));
+    const error = await response
+      .json()
+      .catch(() => ({ error: 'Request failed' }));
+
+    // Parse Django validation errors
+    if (typeof error === 'object' && !error.error && !error.detail) {
+      const messages = [];
+      for (const [field, errors] of Object.entries(error)) {
+        if (Array.isArray(errors)) {
+          messages.push(...errors);
+        } else {
+          messages.push(errors);
+        }
+      }
+      throw new Error(messages.join('. '));
+    }
+
     throw new Error(error.error || error.detail || 'Request failed');
   }
   return response.json();
@@ -99,7 +115,9 @@ export const api = {
   jobs: {
     getAll: async (params = {}) => {
       const query = new URLSearchParams(params).toString();
-      const response = await fetch(`${API_URL}/jobs/${query ? `?${query}` : ''}`);
+      const response = await fetch(
+        `${API_URL}/jobs/${query ? `?${query}` : ''}`
+      );
       return handleResponse(response);
     },
 
@@ -172,9 +190,12 @@ export const api = {
     // Company Jobs
     getJobs: async (companyId, params = {}) => {
       const query = new URLSearchParams(params).toString();
-      const response = await fetch(`${API_URL}/companies/${companyId}/jobs/${query ? `?${query}` : ''}`, {
-        headers: getAuthHeaders(),
-      });
+      const response = await fetch(
+        `${API_URL}/companies/${companyId}/jobs/${query ? `?${query}` : ''}`,
+        {
+          headers: getAuthHeaders(),
+        }
+      );
       return handleResponse(response);
     },
 
@@ -191,90 +212,124 @@ export const api = {
     },
 
     getJobById: async (companyId, jobId) => {
-      const response = await fetch(`${API_URL}/companies/${companyId}/jobs/${jobId}/`, {
-        headers: getAuthHeaders(),
-      });
+      const response = await fetch(
+        `${API_URL}/companies/${companyId}/jobs/${jobId}/`,
+        {
+          headers: getAuthHeaders(),
+        }
+      );
       return handleResponse(response);
     },
 
     updateJob: async (companyId, jobId, jobData) => {
-      const response = await fetch(`${API_URL}/companies/${companyId}/jobs/${jobId}/`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-          ...getAuthHeaders(),
-        },
-        body: JSON.stringify(jobData),
-      });
+      const response = await fetch(
+        `${API_URL}/companies/${companyId}/jobs/${jobId}/`,
+        {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            ...getAuthHeaders(),
+          },
+          body: JSON.stringify(jobData),
+        }
+      );
       return handleResponse(response);
     },
 
     deleteJob: async (companyId, jobId) => {
-      const response = await fetch(`${API_URL}/companies/${companyId}/jobs/${jobId}/`, {
-        method: 'DELETE',
-        headers: getAuthHeaders(),
-      });
+      const response = await fetch(
+        `${API_URL}/companies/${companyId}/jobs/${jobId}/`,
+        {
+          method: 'DELETE',
+          headers: getAuthHeaders(),
+        }
+      );
       return response.ok;
     },
 
     // Company Job Applications
     getJobApplications: async (companyId, jobId) => {
-      const response = await fetch(`${API_URL}/companies/${companyId}/jobs/${jobId}/applications/`, {
-        headers: getAuthHeaders(),
-      });
+      const response = await fetch(
+        `${API_URL}/companies/${companyId}/jobs/${jobId}/applications/`,
+        {
+          headers: getAuthHeaders(),
+        }
+      );
       return handleResponse(response);
     },
 
     getJobApplicationById: async (companyId, jobId, applicationId) => {
-      const response = await fetch(`${API_URL}/companies/${companyId}/jobs/${jobId}/applications/${applicationId}/`, {
-        headers: getAuthHeaders(),
-      });
+      const response = await fetch(
+        `${API_URL}/companies/${companyId}/jobs/${jobId}/applications/${applicationId}/`,
+        {
+          headers: getAuthHeaders(),
+        }
+      );
       return handleResponse(response);
     },
 
-    updateApplicationStatus: async (companyId, jobId, applicationId, status) => {
-      const response = await fetch(`${API_URL}/companies/${companyId}/jobs/${jobId}/applications/${applicationId}/`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-          ...getAuthHeaders(),
-        },
-        body: JSON.stringify({ status }),
-      });
+    updateApplicationStatus: async (
+      companyId,
+      jobId,
+      applicationId,
+      status
+    ) => {
+      const response = await fetch(
+        `${API_URL}/companies/${companyId}/jobs/${jobId}/applications/${applicationId}/`,
+        {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            ...getAuthHeaders(),
+          },
+          body: JSON.stringify({ status }),
+        }
+      );
       return handleResponse(response);
     },
 
     // Company Reviews
     getReviews: async (companyId) => {
-      const response = await fetch(`${API_URL}/companies/${companyId}/reviews/`);
+      const response = await fetch(
+        `${API_URL}/companies/${companyId}/reviews/`
+      );
       return handleResponse(response);
     },
 
     createReview: async (companyId, reviewData) => {
-      const response = await fetch(`${API_URL}/companies/${companyId}/reviews/`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          ...getAuthHeaders(),
-        },
-        body: JSON.stringify(reviewData),
-      });
+      const response = await fetch(
+        `${API_URL}/companies/${companyId}/reviews/`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            ...getAuthHeaders(),
+          },
+          body: JSON.stringify(reviewData),
+        }
+      );
       return handleResponse(response);
     },
 
     // Company Notifications
     getNotifications: async (companyId) => {
-      const response = await fetch(`${API_URL}/companies/${companyId}/notifications/`, {
-        headers: getAuthHeaders(),
-      });
+      const response = await fetch(
+        `${API_URL}/companies/${companyId}/notifications/`,
+        {
+          headers: getAuthHeaders(),
+        }
+      );
       return handleResponse(response);
     },
 
     markNotificationAsRead: async (companyId, notificationId) => {
-      const response = await fetch(`${API_URL}/companies/${companyId}/notifications/${notificationId}/mark-as-read/`, {
-        method: 'PATCH',
-        headers: getAuthHeaders(),
-      });
+      const response = await fetch(
+        `${API_URL}/companies/${companyId}/notifications/${notificationId}/mark-as-read/`,
+        {
+          method: 'PATCH',
+          headers: getAuthHeaders(),
+        }
+      );
       return handleResponse(response);
     },
   },
@@ -334,9 +389,12 @@ export const api = {
     },
 
     getById: async (userId, applicationId) => {
-      const response = await fetch(`${API_URL}/users/${userId}/applications/${applicationId}/`, {
-        headers: getAuthHeaders(),
-      });
+      const response = await fetch(
+        `${API_URL}/users/${userId}/applications/${applicationId}/`,
+        {
+          headers: getAuthHeaders(),
+        }
+      );
       return handleResponse(response);
     },
   },

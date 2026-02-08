@@ -20,9 +20,9 @@ export const JobProvider = ({ children }) => {
     setError(null);
     try {
       const data = await api.jobs.getAll(filters);
-      
+
       if (data.results) {
-        const formattedJobs = data.results.map(job => ({
+        const formattedJobs = data.results.map((job) => ({
           id: job.job_id,
           title: job.title,
           company: job.company?.name || 'Unknown Company',
@@ -50,7 +50,7 @@ export const JobProvider = ({ children }) => {
 
   const saveJob = async (job) => {
     try {
-      setSavedJobs(prev => [...prev, job]);
+      setSavedJobs((prev) => [...prev, job]);
       return { success: true };
     } catch (err) {
       return { success: false, error: err.message };
@@ -59,7 +59,7 @@ export const JobProvider = ({ children }) => {
 
   const unsaveJob = async (jobId) => {
     try {
-      setSavedJobs(prev => prev.filter(job => job.id !== jobId));
+      setSavedJobs((prev) => prev.filter((job) => job.id !== jobId));
       return { success: true };
     } catch (err) {
       return { success: false, error: err.message };
@@ -67,7 +67,9 @@ export const JobProvider = ({ children }) => {
   };
 
   return (
-    <JobContext.Provider value={{ jobs, loading, error, fetchJobs, savedJobs, saveJob, unsaveJob }}>
+    <JobContext.Provider
+      value={{ jobs, loading, error, fetchJobs, savedJobs, saveJob, unsaveJob }}
+    >
       {children}
     </JobContext.Provider>
   );
