@@ -23,14 +23,9 @@ const Applications = () => {
     try {
       setLoading(true);
       setError(null);
-      // Get user's profile to get user ID
-      const profile = await api.profile.getMe();
-      const userId = profile.user?.id;
-      
-      if (userId) {
-        const data = await api.applications.getMyApplications(userId);
-        setApplications(data);
-      }
+      const data = await api.applications.getMyApplications(user.id);
+      console.log('Applications data:', data);
+      setApplications(Array.isArray(data) ? data : data.results || []);
     } catch (err) {
       setError(err.message);
       console.error('Failed to fetch applications:', err);

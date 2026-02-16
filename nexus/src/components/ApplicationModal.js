@@ -42,7 +42,7 @@ const ApplicationModal = ({ job, onClose, onSuccess }) => {
       await api.jobs.apply(job.id, data);
       onSuccess();
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to submit application');
+      setError(err.message || 'Failed to submit application');
     } finally {
       setLoading(false);
     }
@@ -365,9 +365,16 @@ const ApplicationModal = ({ job, onClose, onSuccess }) => {
             </button>
           </div>
 
+          {/* Error Message */}
+          {error && (
+            <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg text-red-600">
+              {error}
+            </div>
+          )}
+
           {/* Footer Info */}
           <div className="mt-6 text-center text-sm text-gray-500">
-            By submitting this application, you agree to TechCorp's{' '}
+            By submitting this application, you agree to Nexus Connect's{' '}
             <a href="/privacy" className="text-blue-500 hover:underline">
               Privacy Policy
             </a>{' '}
