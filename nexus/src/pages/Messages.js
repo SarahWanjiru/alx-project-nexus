@@ -109,8 +109,8 @@ const Messages = () => {
                 </svg>
               </div>
               <div>
-                <h1 className="font-bold">JobPortal</h1>
-                <p className="text-xs text-teal-300">SEEKER ACCOUNT</p>
+                <h1 className="font-bold">Nexus Connect</h1>
+                <p className="text-xs text-teal-300">JOB SEEKER</p>
               </div>
             </div>
 
