@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { useEffect, useCallback } from 'react';
+import { useEffect } from 'react';
 import { useJobs } from '../contexts/JobContext';
 import { useTheme } from '../contexts/ThemeContext';
 import { useState } from 'react';
@@ -21,21 +21,21 @@ const Dashboard = () => {
   const [applicationJob, setApplicationJob] = useState(null);
   const [applications, setApplications] = useState([]);
 
-  const fetchApplications = useCallback(async () => {
-    if (!profile?.user) return;
-    
-    try {
-      const data = await api.applications.getMyApplications(profile.user);
-      const apps = Array.isArray(data) ? data : data.results || [];
-      setApplications(apps);
-    } catch (err) {
-      // Silent error handling
-    }
-  }, [profile]);
-
   useEffect(() => {
+    if (!profile?.user) return;
+
+    const fetchApplications = async () => {
+      try {
+        const data = await api.applications.getMyApplications(profile.user);
+        const apps = Array.isArray(data) ? data : data.results || [];
+        setApplications(apps);
+      } catch (err) {
+        console.error('Failed to fetch applications:', err);
+      }
+    };
+
     fetchApplications();
-  }, [fetchApplications]);
+  }, [profile?.user]);
 
   const handleApply = (job) => {
     setApplicationJob(job);
