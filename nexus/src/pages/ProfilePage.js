@@ -5,15 +5,15 @@ import RecruiterSidebar from '../components/RecruiterSidebar';
 
 const ProfilePage = () => {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, profile } = useAuth();
   const isRecruiter = user?.role === 'recruiter' || user?.role === 'admin';
   const [formData, setFormData] = useState({
-    fullName: 'Alex Rivera',
-    professionalTitle: 'Senior Product Designer',
-    bio: 'Passionate Product Designer with 6+ years of experience in creating user-centric digital experiences. Specialized in mobile app design and design systems.',
-    email: user?.email || 'alex.rivera@example.com',
-    location: 'San Francisco, CA',
-    skills: ['UI Design', 'UX Research', 'Figma', 'Prototyping'],
+    fullName: profile?.full_name || user?.email?.split('@')[0] || 'User',
+    professionalTitle: profile?.professional_title || 'Job Seeker',
+    bio: profile?.bio || 'Tell us about yourself...',
+    email: user?.email || 'user@example.com',
+    location: profile?.location || 'Your location',
+    skills: profile?.skills ? profile.skills.split(',').map(skill => skill.trim()) : [''],
   });
 
   const [newSkill, setNewSkill] = useState('');

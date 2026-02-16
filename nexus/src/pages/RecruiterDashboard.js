@@ -1,10 +1,17 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { api } from '../utils/api';
 import RecruiterSidebar from '../components/RecruiterSidebar';
 
 const RecruiterDashboard = () => {
+  const navigate = useNavigate();
   const { user, logout } = useAuth();
+
+  const handleLogout = async () => {
+    await logout();
+    navigate('/');
+  };
   const [jobPosts, setJobPosts] = useState([]);
   const [stats] = useState({
     openPositions: 8,
@@ -86,7 +93,7 @@ const RecruiterDashboard = () => {
                 Post New Job
               </button>
               <button
-                onClick={logout}
+                onClick={handleLogout}
                 className="p-2 hover:bg-gray-100 rounded-lg"
                 title="Logout"
               >

@@ -13,15 +13,28 @@ export const useAuth = () => {
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem('access_token');
     const userData = localStorage.getItem('user');
     if (token && userData) {
-      setUser(JSON.parse(userData));
+      const parsedUser = JSON.parse(userData);
+      setUser(parsedUser);
+      // Fetch profile data when user is loaded from localStorage
+      fetchProfile();
     }
   }, []);
+
+  const fetchProfile = async () => {
+    try {
+      const userProfile = await api.profile.getMe();
+      setProfile(userProfile);
+    } catch (error) {
+      console.error('Failed to fetch profile:', error);
+    }
+  };
 
   const signup = async (userData) => {
     setLoading(true);
@@ -53,6 +66,10 @@ export const AuthProvider = ({ children }) => {
           };
           localStorage.setItem('user', JSON.stringify(userInfo));
           setUser(userInfo);
+          
+          // Fetch profile data for the new user
+          await fetchProfile();
+          
           return { success: true, role: userData.role || 'user' };
         }
       }
@@ -77,13 +94,15 @@ export const AuthProvider = ({ children }) => {
         localStorage.setItem('refresh_token', data.refresh);
 
         try {
-          // Fetch current user's profile to get role
+          // Fetch current user's profile to get role and complete data
           const userProfile = await api.profile.getMe();
           const userRole = userProfile.user?.role || 'user';
 
           const userData = { email: credentials.email, role: userRole };
           localStorage.setItem('user', JSON.stringify(userData));
           setUser(userData);
+          setProfile(userProfile);
+          
           return { success: true, role: userRole };
         } catch {
           const userData = { email: credentials.email, role: 'user' };
@@ -113,10 +132,11 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem('refresh_token');
     localStorage.removeItem('user');
     setUser(null);
+    setProfile(null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, signup, login, logout }}>
+    <AuthContext.Provider value={{ user, profile, loading, signup, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

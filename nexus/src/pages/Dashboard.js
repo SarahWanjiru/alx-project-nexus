@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { useEffect } from 'react';
 import { useJobs } from '../contexts/JobContext';
 import { useTheme } from '../contexts/ThemeContext';
 import { useState } from 'react';
@@ -7,7 +8,12 @@ import ApplicationModal from '../components/ApplicationModal';
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const { user, logout } = useAuth();
+  const { user, profile, logout } = useAuth();
+
+  const handleLogout = async () => {
+    await logout();
+    navigate('/');
+  };
   const { jobs, loading } = useJobs();
   const { isDark, toggleTheme } = useTheme();
   const [showApplicationModal, setShowApplicationModal] = useState(false);
@@ -187,7 +193,7 @@ const Dashboard = () => {
                 </svg>
               </button>
               <button
-                onClick={logout}
+                onClick={handleLogout}
                 className="p-2 hover:bg-gray-100 rounded-lg"
                 title="Logout"
               >
@@ -203,12 +209,14 @@ const Dashboard = () => {
                   />
                 </svg>
               </button>
-              <div className="flex items-center gap-3">
+               <div className="flex items-center gap-3">
                 <div className="text-right">
                   <p className="font-semibold">
-                    {user?.email?.split('@')[0] || 'Alex Rivera'}
+                    {user?.email?.split('@')[0] || 'User'}
                   </p>
-                  <p className="text-sm text-gray-500">Product Designer</p>
+                  <p className="text-sm text-gray-500">
+                    {profile?.professional_title || 'Job Seeker'}
+                  </p>
                 </div>
                 <div className="w-10 h-10 bg-gradient-to-br from-orange-400 to-pink-400 rounded-full"></div>
               </div>
@@ -222,7 +230,9 @@ const Dashboard = () => {
             <div className="col-span-2 space-y-6">
               {/* Greeting */}
               <div>
-                <h1 className="text-3xl font-bold mb-2">Good Morning, Alex!</h1>
+                <h1 className="text-3xl font-bold mb-2">
+                  Good Morning, {user?.email?.split('@')[0] || 'User'}!
+                </h1>
                 <p className="text-gray-600">
                   You have{' '}
                   <span className="text-blue-500 font-semibold">
