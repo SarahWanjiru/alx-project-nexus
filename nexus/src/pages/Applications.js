@@ -166,6 +166,28 @@ const Applications = () => {
           className={`${selectedApplication ? 'flex-1' : 'w-full'} bg-gray-50`}
         >
           <div className="p-8">
+            {loading ? (
+              <div className="flex items-center justify-center min-h-screen">
+                <div className="text-center">
+                  <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                  <p className="text-gray-600">Loading applications...</p>
+                </div>
+              </div>
+            ) : error ? (
+              <div className="flex items-center justify-center min-h-screen">
+                <div className="text-center">
+                  <svg className="w-16 h-16 text-red-500 mx-auto mb-4" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                  </svg>
+                  <p className="text-red-600 font-semibold mb-2">Error loading applications</p>
+                  <p className="text-gray-600 mb-4">{error}</p>
+                  <button onClick={fetchApplications} className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+                    Try Again
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <>
             <div className="flex items-center justify-between mb-6">
               <div>
                 <h1 className="text-3xl font-bold mb-2">My Applications</h1>
@@ -394,6 +416,8 @@ const Applications = () => {
                 </svg>
               </button>
             </div>
+              </>
+            )}
           </div>
         </div>
 
