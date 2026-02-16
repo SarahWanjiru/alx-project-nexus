@@ -122,12 +122,14 @@ const Dashboard = () => {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1">
+       <main className="flex-1">
         {/* Top Bar */}
         <header className="bg-white border-b border-gray-200 px-8 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-6">
-              <h2 className="text-2xl font-bold">Dashboard</h2>
+              <div>
+                <p className="text-gray-600">Good Morning, {user?.email?.split('@')[0] || 'User'}!</p>
+              </div>
               <div className="relative">
                 <input
                   type="text"
@@ -224,15 +226,12 @@ const Dashboard = () => {
           </div>
         </header>
 
-        <div className="p-8">
+         <div className="p-8">
           <div className="grid grid-cols-3 gap-6">
             {/* Left Column */}
             <div className="col-span-2 space-y-6">
-              {/* Greeting */}
+              {/* Job Matches Info */}
               <div>
-                <h1 className="text-3xl font-bold mb-2">
-                  Good Morning, {user?.email?.split('@')[0] || 'User'}!
-                </h1>
                 <p className="text-gray-600">
                   You have{' '}
                   <span className="text-blue-500 font-semibold">
