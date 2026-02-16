@@ -14,7 +14,10 @@ const ProfilePage = () => {
     email: user?.email || 'user@example.com',
     location: profile?.location || 'Your location',
     skills: profile?.skills
-      ? profile.skills.split(',').map((skill) => skill.trim()).filter((skill) => skill !== '')
+      ? profile.skills
+          .split(',')
+          .map((skill) => skill.trim())
+          .filter((skill) => skill !== '')
       : [],
   });
 
