@@ -9,7 +9,7 @@ import { api } from '../utils/api';
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const { user, profile, logout } = useAuth();
+  const { user, logout } = useAuth();
 
   const handleLogout = async () => {
     await logout();
