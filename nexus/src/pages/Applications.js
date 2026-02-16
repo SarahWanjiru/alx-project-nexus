@@ -1,11 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { api } from '../utils/api';
 
 const Applications = () => {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { profile } = useAuth();
   const [selectedApplication, setSelectedApplication] = useState(null);
   const [activeTab, setActiveTab] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
@@ -13,17 +13,13 @@ const Applications = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    fetchApplications();
-  }, [user]);
-
-  const fetchApplications = async () => {
-    if (!user) return;
+  const fetchApplications = useCallback(async () => {
+    if (!profile?.user) return;
 
     try {
       setLoading(true);
       setError(null);
-      const data = await api.applications.getMyApplications(user.id);
+      const data = await api.applications.getMyApplications(profile.user);
       const apps = Array.isArray(data) ? data : data.results || [];
       const mappedApps = apps.map((app) => ({
         id: app.id,
@@ -44,7 +40,11 @@ const Applications = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [profile]);
+
+  useEffect(() => {
+    fetchApplications();
+  }, [fetchApplications]);
 
   const getStatusBadge = (status) => {
     const badges = {

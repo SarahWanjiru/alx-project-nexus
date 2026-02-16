@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { useEffect } from 'react';
+import { useEffect, useCallback } from 'react';
 import { useJobs } from '../contexts/JobContext';
 import { useTheme } from '../contexts/ThemeContext';
 import { useState } from 'react';
@@ -9,7 +9,7 @@ import { api } from '../utils/api';
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const { user, logout } = useAuth();
+  const { user, profile, logout } = useAuth();
 
   const handleLogout = async () => {
     await logout();
@@ -21,21 +21,21 @@ const Dashboard = () => {
   const [applicationJob, setApplicationJob] = useState(null);
   const [applications, setApplications] = useState([]);
 
-  useEffect(() => {
-    if (user) {
-      fetchApplications();
-    }
-  }, [user]);
-
-  const fetchApplications = async () => {
+  const fetchApplications = useCallback(async () => {
+    if (!profile?.user) return;
+    
     try {
-      const data = await api.applications.getMyApplications(user.id);
+      const data = await api.applications.getMyApplications(profile.user);
       const apps = Array.isArray(data) ? data : data.results || [];
       setApplications(apps);
     } catch (err) {
       // Silent error handling
     }
-  };
+  }, [profile]);
+
+  useEffect(() => {
+    fetchApplications();
+  }, [fetchApplications]);
 
   const handleApply = (job) => {
     setApplicationJob(job);
