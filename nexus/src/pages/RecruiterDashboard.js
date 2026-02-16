@@ -15,6 +15,7 @@ const RecruiterDashboard = () => {
   const [companies, setCompanies] = useState([]);
   const [jobPosts, setJobPosts] = useState([]);
   const [recentApplications, setRecentApplications] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [stats, setStats] = useState({
     openPositions: 0,
     totalApplicants: 0,
@@ -27,6 +28,7 @@ const RecruiterDashboard = () => {
   }, []);
 
   const fetchRecruiterData = async () => {
+    setIsLoading(true);
     try {
       const companiesData = await api.companies.getAll();
       const companies = Array.isArray(companiesData)
@@ -34,52 +36,60 @@ const RecruiterDashboard = () => {
         : companiesData.results || [];
       setCompanies(companies);
 
-      let totalApps = 0;
-      const allApps = [];
-      const allJobs = [];
-
-      for (const company of companies) {
-        if (!company?.id) continue;
-
+      // Parallelize fetching jobs for all companies
+      const companyJobsPromises = companies.map(async (company) => {
+        if (!company?.id) return [];
         try {
           const jobsData = await api.companies.getJobs(company.id);
           const jobs = Array.isArray(jobsData)
             ? jobsData
             : jobsData.results || [];
-          allJobs.push(...jobs);
-
-          for (const job of jobs) {
-            if (!job?.id) continue;
-
-            try {
-              const appsData = await api.companies.getJobApplications(
-                company.id,
-                job.id
-              );
-              const apps = Array.isArray(appsData)
-                ? appsData
-                : appsData.results || [];
-              totalApps += apps.length;
-              allApps.push(...apps);
-            } catch (err) {
-              // Skip if no applications
-            }
-          }
+          // Attach company id to jobs for future reference
+          return jobs.map(job => ({ ...job, companyId: company.id }));
         } catch (err) {
-          // Skip if no jobs
+          console.error(`Error fetching jobs for company ${company?.name}:`, err);
+          return [];
         }
-      }
+      });
+
+      const allJobsWithCompanyIds = (await Promise.all(companyJobsPromises)).flat();
+      
+      // Parallelize fetching applications for all jobs
+      const jobApplicationsPromises = allJobsWithCompanyIds.map(async (job) => {
+        if (!job?.id || !job?.companyId) return [];
+        try {
+          const appsData = await api.companies.getJobApplications(
+            job.companyId,
+            job.id
+          );
+          const apps = Array.isArray(appsData)
+            ? appsData
+            : appsData.results || [];
+          return apps;
+        } catch (err) {
+          console.error(`Error fetching applications for job ${job?.title}:`, err);
+          return [];
+        }
+      });
+
+      const allApps = (await Promise.all(jobApplicationsPromises)).flat();
+      const allJobs = allJobsWithCompanyIds.map(job => ({
+        ...job,
+        companyId: undefined // Remove temporary companyId
+      }));
 
       setJobPosts(allJobs.slice(0, 2));
       setRecentApplications(allApps.slice(0, 2));
       setStats({
         openPositions: allJobs.filter((j) => j.is_active).length,
-        totalApplicants: totalApps,
+        totalApplicants: allApps.length,
         interviewsToday: allApps.filter((a) => a.status === 'interview').length,
         avgTimeToHire: '18d',
       });
     } catch (error) {
       // Handle error silently
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -118,6 +128,15 @@ const RecruiterDashboard = () => {
         </header>
 
         <div className="p-8">
+          {isLoading ? (
+            <div className="flex items-center justify-center min-h-[60vh]">
+              <div className="text-center">
+                <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                <p className="text-gray-600">Loading dashboard...</p>
+              </div>
+            </div>
+          ) : (
+            <>
           {/* Overview Section */}
           <div className="mb-8">
             <p className="text-gray-600">
@@ -448,6 +467,8 @@ const RecruiterDashboard = () => {
               </div>
             </div>
           </div>
+            </>
+          )}
         </div>
       </main>
     </div>
