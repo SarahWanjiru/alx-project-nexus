@@ -58,74 +58,32 @@ const RecruiterDashboard = () => {
         {/* Header */}
         <header className="bg-white border-b border-gray-200 px-8 py-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-2xl font-bold">Recruiter Dashboard</h2>
+            <div>
+              <p className="text-gray-600">Good Morning, {user?.email?.split('@')[0] || 'Recruiter'}!</p>
+            </div>
             <div className="flex items-center gap-4">
-              <div className="relative">
-                <input
-                  type="text"
-                  placeholder="Search candidates, jobs..."
-                  className="w-96 pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
-                <svg
-                  className="w-5 h-5 text-gray-400 absolute left-3 top-2.5"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </div>
-              <button className="px-6 py-2 bg-blue-500 text-white rounded-lg font-semibold hover:bg-blue-600 flex items-center gap-2">
-                <svg
-                  className="w-5 h-5"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-                Post New Job
-              </button>
-              <button
-                onClick={handleLogout}
-                className="p-2 hover:bg-gray-100 rounded-lg"
-                title="Logout"
-              >
+              <button className="p-2 hover:bg-gray-100 rounded-lg">
                 <svg
                   className="w-6 h-6 text-gray-600"
                   fill="currentColor"
                   viewBox="0 0 20 20"
                 >
-                  <path
-                    fillRule="evenodd"
-                    d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z"
-                    clipRule="evenodd"
-                  />
+                  <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
                 </svg>
               </button>
-              <div className="flex items-center gap-3">
-                <div className="text-right">
-                  <p className="font-semibold">
-                    {user?.email?.split('@')[0] || 'Sarah Jenkins'}
-                  </p>
-                  <p className="text-sm text-gray-500">Senior Talent Partner</p>
-                </div>
-                <div className="w-10 h-10 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full"></div>
-              </div>
+              <button
+                onClick={handleLogout}
+                className="px-4 py-2 text-red-600 hover:bg-red-100 rounded-lg font-medium"
+              >
+                Log Out
+              </button>
             </div>
           </div>
         </header>
 
         <div className="p-8">
-          {/* Welcome Section */}
+          {/* Overview Section */}
           <div className="mb-8">
-            <h1 className="text-3xl font-bold mb-2">Welcome back, Sarah</h1>
             <p className="text-gray-600">
               You have{' '}
               <span className="text-teal-500 font-semibold">
