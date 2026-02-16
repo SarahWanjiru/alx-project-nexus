@@ -125,7 +125,8 @@ export const AuthProvider = ({ children }) => {
       try {
         await api.auth.logout(refreshToken);
       } catch (error) {
-        console.error('Logout error:', error);
+        console.error('Logout API failed, but continuing with local logout');
+        // Continue with local logout even if API fails
       }
     }
     localStorage.removeItem('access_token');
