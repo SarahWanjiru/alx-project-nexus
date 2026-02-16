@@ -31,9 +31,9 @@ const Dashboard = () => {
     try {
       const data = await api.applications.getMyApplications(user.id);
       const apps = Array.isArray(data) ? data : data.results || [];
-      setApplications(apps.slice(0, 2));
+      setApplications(apps);
     } catch (err) {
-      console.error('Failed to fetch applications:', err);
+      // Silent error handling
     }
   };
 
@@ -301,7 +301,10 @@ const Dashboard = () => {
                       Loading...
                     </div>
                   ) : (
-                    jobs.slice(0, 2).map((job) => (
+                    jobs
+                      .filter(job => !applications.some(app => app.job?.id === job.id))
+                      .slice(0, 2)
+                      .map((job) => (
                       <div
                         key={job.id}
                         className="bg-white p-6 rounded-xl border border-gray-200"
@@ -391,8 +394,8 @@ const Dashboard = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {applications.length > 0 ? (
-                      applications.map((app) => (
+                    {applications.slice(0, 2).length > 0 ? (
+                      applications.slice(0, 2).map((app) => (
                         <tr key={app.id} className="border-b">
                           <td className="py-4">
                             <div className="flex items-center gap-3">

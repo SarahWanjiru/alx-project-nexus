@@ -24,7 +24,6 @@ const Applications = () => {
       setLoading(true);
       setError(null);
       const data = await api.applications.getMyApplications(user.id);
-      console.log('Applications data:', data);
       const apps = Array.isArray(data) ? data : data.results || [];
       const mappedApps = apps.map(app => ({
         id: app.id,
@@ -42,7 +41,6 @@ const Applications = () => {
       setApplications(mappedApps);
     } catch (err) {
       setError(err.message);
-      console.error('Failed to fetch applications:', err);
     } finally {
       setLoading(false);
     }
@@ -483,7 +481,7 @@ const Applications = () => {
                 {selectedApplication.responsibilities?.length > 0 ? (
                   selectedApplication.responsibilities.map((resp, idx) => (
                     <li
-                      key={idx}
+                      key={`resp-${idx}-${resp.substring(0, 20)}`}
                       className="flex items-start gap-2 text-gray-700"
                     >
                       <span className="text-blue-500 mt-1">•</span>
@@ -502,7 +500,7 @@ const Applications = () => {
                 {selectedApplication.requirements?.length > 0 ? (
                   selectedApplication.requirements.map((req, idx) => (
                     <li
-                      key={idx}
+                      key={`req-${idx}-${req.substring(0, 20)}`}
                       className="flex items-start gap-2 text-gray-700"
                     >
                       <span className="text-blue-500 mt-1">•</span>
