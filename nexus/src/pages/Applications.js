@@ -1,115 +1,43 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-// import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../contexts/AuthContext';
+import { api } from '../utils/api';
 
 const Applications = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [selectedApplication, setSelectedApplication] = useState(null);
   const [activeTab, setActiveTab] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
+  const [applications, setApplications] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const applications = [
-    {
-      id: 1,
-      title: 'Senior Product Designer',
-      company: 'Google',
-      location: 'Mountain View, CA',
-      logo: '/api/placeholder/60/60',
-      status: 'interviewing',
-      appliedDate: 'Oct 12, 2023',
-      salary: '$140k - $190k',
-      type: 'Full-time',
-      description:
-        'We are looking for a Senior Product Designer to join our team and help shape the future of our products.',
-      responsibilities: [
-        'Lead design projects from concept to completion',
-        'Collaborate with cross-functional teams',
-        'Create wireframes, prototypes, and high-fidelity designs',
-        'Conduct user research and usability testing',
-      ],
-      requirements: [
-        '5+ years of product design experience',
-        'Strong portfolio demonstrating design process',
-        'Proficiency in Figma and design tools',
-        'Excellent communication skills',
-      ],
-    },
-    {
-      id: 2,
-      title: 'Senior UI Designer',
-      company: 'Spotify',
-      location: 'Stockholm, SE',
-      logo: '/api/placeholder/60/60',
-      status: 'applied',
-      appliedDate: 'Oct 15, 2023',
-      salary: '$120k - $160k',
-      type: 'Full-time',
-      description:
-        'Join our design team to create beautiful and intuitive user interfaces for millions of users.',
-      responsibilities: [
-        'Design user interfaces for web and mobile',
-        'Maintain design system consistency',
-        'Work closely with developers',
-        'Present designs to stakeholders',
-      ],
-      requirements: [
-        '4+ years of UI design experience',
-        'Expert knowledge of design systems',
-        'Strong visual design skills',
-        'Experience with Sketch or Figma',
-      ],
-    },
-    {
-      id: 3,
-      title: 'UX Researcher',
-      company: 'Airbnb',
-      location: 'Remote',
-      logo: '/api/placeholder/60/60',
-      status: 'in_review',
-      appliedDate: 'Sep 28, 2023',
-      salary: '$130k - $170k',
-      type: 'Full-time',
-      description:
-        'Help us understand our users better through research and data-driven insights.',
-      responsibilities: [
-        'Conduct user interviews and surveys',
-        'Analyze user behavior data',
-        'Present research findings',
-        'Collaborate with product teams',
-      ],
-      requirements: [
-        '3+ years of UX research experience',
-        'Strong analytical skills',
-        'Experience with research tools',
-        'Excellent presentation skills',
-      ],
-    },
-    {
-      id: 4,
-      title: 'Senior Motion Designer',
-      company: 'Netflix',
-      location: 'Los Angeles, CA',
-      logo: '/api/placeholder/60/60',
-      status: 'rejected',
-      appliedDate: 'Sep 10, 2023',
-      salary: '$150k - $200k',
-      type: 'Full-time',
-      description:
-        'Create engaging motion graphics and animations for our streaming platform.',
-      responsibilities: [
-        'Design motion graphics for UI',
-        'Create animated prototypes',
-        'Develop animation guidelines',
-        'Collaborate with design team',
-      ],
-      requirements: [
-        '5+ years of motion design experience',
-        'Proficiency in After Effects',
-        'Strong animation portfolio',
-        'Understanding of UI/UX principles',
-      ],
-    },
-  ];
+  useEffect(() => {
+    fetchApplications();
+  }, [user]);
+
+  const fetchApplications = async () => {
+    if (!user) return;
+    
+    try {
+      setLoading(true);
+      setError(null);
+      // Get user's profile to get user ID
+      const profile = await api.profile.getMe();
+      const userId = profile.user?.id;
+      
+      if (userId) {
+        const data = await api.applications.getMyApplications(userId);
+        setApplications(data);
+      }
+    } catch (err) {
+      setError(err.message);
+      console.error('Failed to fetch applications:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const getStatusBadge = (status) => {
     const badges = {
