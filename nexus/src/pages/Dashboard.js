@@ -5,6 +5,7 @@ import { useJobs } from '../contexts/JobContext';
 import { useTheme } from '../contexts/ThemeContext';
 import { useState } from 'react';
 import ApplicationModal from '../components/ApplicationModal';
+import { api } from '../utils/api';
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -18,6 +19,23 @@ const Dashboard = () => {
   const { isDark, toggleTheme } = useTheme();
   const [showApplicationModal, setShowApplicationModal] = useState(false);
   const [applicationJob, setApplicationJob] = useState(null);
+  const [applications, setApplications] = useState([]);
+
+  useEffect(() => {
+    if (user) {
+      fetchApplications();
+    }
+  }, [user]);
+
+  const fetchApplications = async () => {
+    try {
+      const data = await api.applications.getMyApplications(user.id);
+      const apps = Array.isArray(data) ? data : data.results || [];
+      setApplications(apps.slice(0, 2));
+    } catch (err) {
+      console.error('Failed to fetch applications:', err);
+    }
+  };
 
   const handleApply = (job) => {
     setApplicationJob(job);
@@ -373,54 +391,50 @@ const Dashboard = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    <tr className="border-b">
-                      <td className="py-4">
-                        <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 bg-blue-100 rounded flex items-center justify-center">
-                            <span className="text-blue-600 font-bold text-sm">
-                              T
+                    {applications.length > 0 ? (
+                      applications.map((app) => (
+                        <tr key={app.id} className="border-b">
+                          <td className="py-4">
+                            <div className="flex items-center gap-3">
+                              <div className="w-8 h-8 bg-blue-100 rounded flex items-center justify-center">
+                                <span className="text-blue-600 font-bold text-sm">
+                                  {app.job?.company_name?.charAt(0) || 'C'}
+                                </span>
+                              </div>
+                              <span className="font-semibold">{app.job?.company_name || 'N/A'}</span>
+                            </div>
+                          </td>
+                          <td className="py-4 text-gray-600">{app.job?.title || 'N/A'}</td>
+                          <td className="py-4 text-gray-600">{new Date(app.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</td>
+                          <td className="py-4">
+                            <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                              app.status === 'interviewing' ? 'bg-orange-100 text-orange-600' :
+                              app.status === 'applied' ? 'bg-blue-100 text-blue-600' :
+                              app.status === 'in_review' ? 'bg-yellow-100 text-yellow-600' :
+                              'bg-gray-100 text-gray-600'
+                            }`}>
+                              {app.status === 'applied' ? 'Applied' :
+                               app.status === 'interviewing' ? 'Interviewing' :
+                               app.status === 'in_review' ? 'In Review' : app.status}
                             </span>
-                          </div>
-                          <span className="font-semibold">TechNode</span>
-                        </div>
-                      </td>
-                      <td className="py-4 text-gray-600">Product Designer</td>
-                      <td className="py-4 text-gray-600">Oct 12</td>
-                      <td className="py-4">
-                        <span className="px-3 py-1 bg-orange-100 text-orange-600 rounded-full text-xs font-semibold">
-                          Interviewing
-                        </span>
-                      </td>
-                      <td className="py-4">
-                        <button className="text-blue-500 font-semibold">
-                          Details
-                        </button>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="py-4">
-                        <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 bg-gray-800 rounded flex items-center justify-center">
-                            <span className="text-white font-bold text-sm">
-                              B
-                            </span>
-                          </div>
-                          <span className="font-semibold">ByteApp</span>
-                        </div>
-                      </td>
-                      <td className="py-4 text-gray-600">UI Designer</td>
-                      <td className="py-4 text-gray-600">Oct 08</td>
-                      <td className="py-4">
-                        <span className="px-3 py-1 bg-blue-100 text-blue-600 rounded-full text-xs font-semibold">
-                          Applied
-                        </span>
-                      </td>
-                      <td className="py-4">
-                        <button className="text-blue-500 font-semibold">
-                          Details
-                        </button>
-                      </td>
-                    </tr>
+                          </td>
+                          <td className="py-4">
+                            <button 
+                              onClick={() => navigate('/applications')}
+                              className="text-blue-500 font-semibold"
+                            >
+                              Details
+                            </button>
+                          </td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan="5" className="py-8 text-center text-gray-500">
+                          No applications yet
+                        </td>
+                      </tr>
+                    )}
                   </tbody>
                 </table>
               </div>
