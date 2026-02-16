@@ -23,9 +23,9 @@ const Dashboard = () => {
   const [successMessage, setSuccessMessage] = useState(null);
 
   useEffect(() => {
-    if (!profile?.user) return;
-
     const fetchApplications = async () => {
+      if (!profile?.user) return;
+
       try {
         const data = await api.applications.getMyApplications(profile.user);
         const apps = Array.isArray(data) ? data : data.results || [];
@@ -60,14 +60,7 @@ const Dashboard = () => {
 
   return (
     <div className="flex min-h-screen bg-gray-50">
-      {/* Success Message */}
-      {successMessage && (
-        <div className="fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50">
-          {successMessage}
-        </div>
-      )}
-
-      {/* Sidebar */}
+      {/* Sidebar */
       <aside className="w-64 bg-teal-900 text-white flex flex-col">
         <div className="p-6">
           <div className="flex items-center gap-3 mb-8">
@@ -158,9 +151,9 @@ const Dashboard = () => {
 
       {/* Main Content */}
        <main className="flex-1">
-        {/* Toast Notification */}
+        {/* Success Message */}
         {successMessage && (
-          <div className="fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-60">
+          <div className="fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50">
             {successMessage}
           </div>
         )}
@@ -433,10 +426,10 @@ const Dashboard = () => {
                             {app.job?.title || 'N/A'}
                           </td>
                           <td className="py-4 text-gray-600">
-                            {new Date(app.created_at).toLocaleDateString(
+                             {app.created_at ? new Date(app.created_at).toLocaleDateString(
                               'en-US',
                               { month: 'short', day: 'numeric' }
-                            )}
+                            ) : '—'}
                           </td>
                           <td className="py-4">
                             <span

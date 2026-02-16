@@ -8,18 +8,25 @@ const RecruiterDashboard = () => {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
 
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return 'Good morning';
+    if (hour < 18) return 'Good afternoon';
+    return 'Good evening';
+  };
+
   const handleLogout = async () => {
     await logout();
     navigate('/');
   };
-  const [companies, setCompanies] = useState([]);
+  const [, setCompanies] = useState([]);
   const [jobPosts, setJobPosts] = useState([]);
   const [recentApplications, setRecentApplications] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [stats, setStats] = useState({
     openPositions: 0,
     totalApplicants: 0,
-    interviewsToday: 0,
+    totalInterviews: 0,
     avgTimeToHire: '0d',
   });
 
@@ -83,7 +90,7 @@ const RecruiterDashboard = () => {
       setStats({
         openPositions: allJobs.filter((j) => j.is_active).length,
         totalApplicants: allApps.length,
-        interviewsToday: allApps.filter((a) => a.status === 'interview').length,
+        totalInterviews: allApps.filter((a) => a.status === 'interview').length,
         avgTimeToHire: '18d',
       });
     } catch (error) {
@@ -104,7 +111,7 @@ const RecruiterDashboard = () => {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-gray-600">
-                Good Morning, {user?.email?.split('@')[0] || 'Recruiter'}!
+                {getGreeting()}, {user?.email?.split('@')[0] || 'Recruiter'}!
               </p>
             </div>
             <div className="flex items-center gap-4">
@@ -210,8 +217,8 @@ const RecruiterDashboard = () => {
                       Next: 2PM
                     </span>
                   </div>
-                  <p className="text-gray-500 text-sm mb-1">Interviews Today</p>
-                  <p className="text-3xl font-bold">{stats.interviewsToday}</p>
+                  <p className="text-gray-500 text-sm mb-1">Total Interviews</p>
+                  <p className="text-3xl font-bold">{stats.totalInterviews}</p>
                 </div>
 
                 <div className="bg-white rounded-xl border-l-4 border-orange-500 p-6 shadow-sm">
