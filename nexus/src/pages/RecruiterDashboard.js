@@ -12,40 +12,65 @@ const RecruiterDashboard = () => {
     await logout();
     navigate('/');
   };
+  const [companies, setCompanies] = useState([]);
   const [jobPosts, setJobPosts] = useState([]);
-  const [stats] = useState({
-    openPositions: 8,
-    totalApplicants: 246,
-    interviewsToday: 5,
-    avgTimeToHire: '18d',
+  const [recentApplications, setRecentApplications] = useState([]);
+  const [stats, setStats] = useState({
+    openPositions: 0,
+    totalApplicants: 0,
+    interviewsToday: 0,
+    avgTimeToHire: '0d',
   });
-  const [candidates] = useState([
-    {
-      id: 1,
-      name: 'Marco Russo',
-      appliedFor: 'Product Designer',
-      matchScore: 95,
-      status: 'Interview',
-    },
-    {
-      id: 2,
-      name: 'Elena Gilbert',
-      appliedFor: 'Frontend Developer',
-      matchScore: 88,
-      status: 'New',
-    },
-  ]);
 
   useEffect(() => {
-    fetchJobPosts();
+    fetchRecruiterData();
   }, []);
 
-  const fetchJobPosts = async () => {
+  const fetchRecruiterData = async () => {
     try {
-      const data = await api.jobs.getAll();
-      setJobPosts(data.results?.slice(0, 2) || []);
+      const companiesData = await api.companies.getAll();
+      const companies = Array.isArray(companiesData) ? companiesData : (companiesData.results || []);
+      setCompanies(companies);
+
+      let totalApps = 0;
+      const allApps = [];
+      const allJobs = [];
+
+      for (const company of companies) {
+        if (!company?.id) continue;
+        
+        try {
+          const jobsData = await api.companies.getJobs(company.id);
+          const jobs = Array.isArray(jobsData) ? jobsData : (jobsData.results || []);
+          allJobs.push(...jobs);
+
+          for (const job of jobs) {
+            if (!job?.id) continue;
+            
+            try {
+              const appsData = await api.companies.getJobApplications(company.id, job.id);
+              const apps = Array.isArray(appsData) ? appsData : (appsData.results || []);
+              totalApps += apps.length;
+              allApps.push(...apps);
+            } catch (err) {
+              // Skip if no applications
+            }
+          }
+        } catch (err) {
+          // Skip if no jobs
+        }
+      }
+
+      setJobPosts(allJobs.slice(0, 2));
+      setRecentApplications(allApps.slice(0, 2));
+      setStats({
+        openPositions: allJobs.filter(j => j.is_active).length,
+        totalApplicants: totalApps,
+        interviewsToday: allApps.filter(a => a.status === 'interview').length,
+        avgTimeToHire: '18d',
+      });
     } catch (error) {
-      console.error('Failed to fetch jobs:', error);
+      // Handle error silently
     }
   };
 
@@ -87,7 +112,7 @@ const RecruiterDashboard = () => {
             <p className="text-gray-600">
               You have{' '}
               <span className="text-teal-500 font-semibold">
-                14 new applications
+                {stats.totalApplicants} new applications
               </span>{' '}
               to review for your open positions.
             </p>
@@ -250,63 +275,57 @@ const RecruiterDashboard = () => {
                   </button>
                 </div>
 
-                <table className="w-full">
-                  <thead>
-                    <tr className="text-left text-sm text-gray-500 border-b">
-                      <th className="pb-3 font-semibold">CANDIDATE</th>
-                      <th className="pb-3 font-semibold">APPLIED FOR</th>
-                      <th className="pb-3 font-semibold">MATCH SCORE</th>
-                      <th className="pb-3 font-semibold">STATUS</th>
-                      <th className="pb-3 font-semibold">ACTION</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {candidates.map((candidate) => (
-                      <tr key={candidate.id} className="border-b">
-                        <td className="py-4">
-                          <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 bg-gray-200 rounded-full"></div>
-                            <span className="font-semibold">
-                              {candidate.name}
-                            </span>
-                          </div>
-                        </td>
-                        <td className="py-4 text-gray-600">
-                          {candidate.appliedFor}
-                        </td>
-                        <td className="py-4">
-                          <div className="flex items-center gap-2">
-                            <div className="flex-1 bg-gray-200 rounded-full h-2 w-24">
-                              <div
-                                className="bg-teal-500 h-2 rounded-full"
-                                style={{ width: `${candidate.matchScore}%` }}
-                              ></div>
-                            </div>
-                            <span className="text-sm font-semibold text-teal-600">
-                              {candidate.matchScore}%
-                            </span>
-                          </div>
-                        </td>
-                        <td className="py-4">
-                          <span
-                            className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                              candidate.status === 'Interview'
-                                ? 'bg-blue-100 text-blue-600'
-                                : 'bg-green-100 text-green-600'
-                            }`}
-                          >
-                            {candidate.status}
-                          </span>
-                        </td>
-                        <td className="py-4">
-                          <button className="text-blue-500 font-semibold hover:text-blue-600">
-                            Review
-                          </button>
-                        </td>
+                {recentApplications.length > 0 ? (
+                  <table className="w-full">
+                    <thead>
+                      <tr className="text-left text-sm text-gray-500 border-b">
+                        <th className="pb-3 font-semibold">CANDIDATE</th>
+                        <th className="pb-3 font-semibold">APPLIED FOR</th>
+                        <th className="pb-3 font-semibold">STATUS</th>
+                        <th className="pb-3 font-semibold">ACTION</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody>
+                      {recentApplications.map((app) => (
+                        <tr key={app.id} className="border-b">
+                          <td className="py-4">
+                            <div className="flex items-center gap-3">
+                              <div className="w-10 h-10 bg-gray-200 rounded-full"></div>
+                              <span className="font-semibold">
+                                {app.user?.email?.split('@')[0] || 'Candidate'}
+                              </span>
+                            </div>
+                          </td>
+                          <td className="py-4 text-gray-600">
+                            {app.job?.title || 'N/A'}
+                          </td>
+                          <td className="py-4">
+                            <span
+                              className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                                app.status === 'interview'
+                                  ? 'bg-blue-100 text-blue-600'
+                                  : app.status === 'accepted'
+                                  ? 'bg-green-100 text-green-600'
+                                  : app.status === 'rejected'
+                                  ? 'bg-red-100 text-red-600'
+                                  : 'bg-yellow-100 text-yellow-600'
+                              }`}
+                            >
+                              {app.status}
+                            </span>
+                          </td>
+                          <td className="py-4">
+                            <button className="text-blue-500 font-semibold hover:text-blue-600">
+                              Review
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                ) : (
+                  <p className="text-gray-500 text-center py-8">No recent applications</p>
+                )}
               </div>
             </div>
 
