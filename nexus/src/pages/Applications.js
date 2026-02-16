@@ -25,7 +25,21 @@ const Applications = () => {
       setError(null);
       const data = await api.applications.getMyApplications(user.id);
       console.log('Applications data:', data);
-      setApplications(Array.isArray(data) ? data : data.results || []);
+      const apps = Array.isArray(data) ? data : data.results || [];
+      const mappedApps = apps.map(app => ({
+        id: app.id,
+        title: app.job?.title || 'N/A',
+        company: app.job?.company_name || 'N/A',
+        location: app.job?.location || 'N/A',
+        status: app.status || 'applied',
+        appliedDate: new Date(app.created_at).toLocaleDateString(),
+        type: app.job?.employment_type || 'N/A',
+        salary: app.job?.salary || 'N/A',
+        description: app.job?.description || '',
+        responsibilities: [],
+        requirements: []
+      }));
+      setApplications(mappedApps);
     } catch (err) {
       setError(err.message);
       console.error('Failed to fetch applications:', err);
@@ -466,30 +480,38 @@ const Applications = () => {
             <div className="mb-6">
               <h4 className="font-bold mb-3">Key Responsibilities</h4>
               <ul className="space-y-2">
-                {selectedApplication.responsibilities.map((resp, idx) => (
-                  <li
-                    key={idx}
-                    className="flex items-start gap-2 text-gray-700"
-                  >
-                    <span className="text-blue-500 mt-1">•</span>
-                    <span>{resp}</span>
-                  </li>
-                ))}
+                {selectedApplication.responsibilities?.length > 0 ? (
+                  selectedApplication.responsibilities.map((resp, idx) => (
+                    <li
+                      key={idx}
+                      className="flex items-start gap-2 text-gray-700"
+                    >
+                      <span className="text-blue-500 mt-1">•</span>
+                      <span>{resp}</span>
+                    </li>
+                  ))
+                ) : (
+                  <p className="text-gray-500">No responsibilities listed</p>
+                )}
               </ul>
             </div>
 
             <div className="mb-6">
               <h4 className="font-bold mb-3">Requirements</h4>
               <ul className="space-y-2">
-                {selectedApplication.requirements.map((req, idx) => (
-                  <li
-                    key={idx}
-                    className="flex items-start gap-2 text-gray-700"
-                  >
-                    <span className="text-blue-500 mt-1">•</span>
-                    <span>{req}</span>
-                  </li>
-                ))}
+                {selectedApplication.requirements?.length > 0 ? (
+                  selectedApplication.requirements.map((req, idx) => (
+                    <li
+                      key={idx}
+                      className="flex items-start gap-2 text-gray-700"
+                    >
+                      <span className="text-blue-500 mt-1">•</span>
+                      <span>{req}</span>
+                    </li>
+                  ))
+                ) : (
+                  <p className="text-gray-500">No requirements listed</p>
+                )}
               </ul>
             </div>
 

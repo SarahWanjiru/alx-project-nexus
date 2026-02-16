@@ -14,7 +14,7 @@ export const useAuth = () => {
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [profile, setProfile] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const token = localStorage.getItem('access_token');
@@ -22,8 +22,9 @@ export const AuthProvider = ({ children }) => {
     if (token && userData) {
       const parsedUser = JSON.parse(userData);
       setUser(parsedUser);
-      // Fetch profile data when user is loaded from localStorage
       fetchProfile();
+    } else {
+      setLoading(false);
     }
   }, []);
 
@@ -33,6 +34,8 @@ export const AuthProvider = ({ children }) => {
       setProfile(userProfile);
     } catch (error) {
       console.error('Failed to fetch profile:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
