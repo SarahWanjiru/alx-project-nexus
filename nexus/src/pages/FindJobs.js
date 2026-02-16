@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 // import { useAuth } from '../contexts/AuthContext';
 import { useJobs } from '../contexts/JobContext';
@@ -11,12 +11,22 @@ const FindJobs = () => {
   const [showApplicationModal, setShowApplicationModal] = useState(false);
   const [applicationJob, setApplicationJob] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [successMessage, setSuccessMessage] = useState(null);
   const [employmentTypes, setEmploymentTypes] = useState({
     fullTime: true,
     contract: false,
     remote: true,
     partTime: false,
   });
+
+  useEffect(() => {
+    if (successMessage) {
+      const timeoutId = setTimeout(() => {
+        setSuccessMessage(null);
+      }, 5000);
+      return () => clearTimeout(timeoutId);
+    }
+  }, [successMessage]);
 
   const toggleEmploymentType = (type) => {
     setEmploymentTypes((prev) => ({ ...prev, [type]: !prev[type] }));
@@ -30,23 +40,18 @@ const FindJobs = () => {
   const handleApplicationSuccess = () => {
     setShowApplicationModal(false);
     setApplicationJob(null);
-    // Show a success message in the UI instead of alert
-    const successDiv = document.createElement('div');
-    successDiv.className =
-      'fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-60';
-    successDiv.textContent = 'Application submitted successfully!';
-    document.body.appendChild(successDiv);
-
-    // Remove the message after 5 seconds
-    setTimeout(() => {
-      if (successDiv.parentNode) {
-        successDiv.parentNode.removeChild(successDiv);
-      }
-    }, 5000);
+    setSuccessMessage('Application submitted successfully!');
   };
 
   return (
     <div className="flex min-h-screen bg-gray-50">
+      {/* Success Message */}
+      {successMessage && (
+        <div className="fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50">
+          {successMessage}
+        </div>
+      )}
+
       {/* Sidebar */}
       <aside className="w-64 bg-teal-900 text-white flex flex-col">
         <div className="p-6">

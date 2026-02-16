@@ -14,8 +14,8 @@ const ProfilePage = () => {
     email: user?.email || 'user@example.com',
     location: profile?.location || 'Your location',
     skills: profile?.skills
-      ? profile.skills.split(',').map((skill) => skill.trim())
-      : [''],
+      ? profile.skills.split(',').map((skill) => skill.trim()).filter((skill) => skill !== '')
+      : [],
   });
 
   const [newSkill, setNewSkill] = useState('');
@@ -363,9 +363,9 @@ const ProfilePage = () => {
             </div>
 
             <div className="flex flex-wrap gap-2 mb-4">
-              {formData.skills.map((skill) => (
+              {formData.skills.map((skill, index) => (
                 <span
-                  key={skill}
+                  key={`${skill}-${index}`}
                   className="px-4 py-2 bg-teal-50 text-teal-700 rounded-lg font-semibold flex items-center gap-2"
                 >
                   {skill}

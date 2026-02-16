@@ -20,6 +20,7 @@ const Dashboard = () => {
   const [showApplicationModal, setShowApplicationModal] = useState(false);
   const [applicationJob, setApplicationJob] = useState(null);
   const [applications, setApplications] = useState([]);
+  const [successMessage, setSuccessMessage] = useState(null);
 
   useEffect(() => {
     if (!profile?.user) return;
@@ -37,6 +38,15 @@ const Dashboard = () => {
     fetchApplications();
   }, [profile?.user]);
 
+  useEffect(() => {
+    if (successMessage) {
+      const timeoutId = setTimeout(() => {
+        setSuccessMessage(null);
+      }, 5000);
+      return () => clearTimeout(timeoutId);
+    }
+  }, [successMessage]);
+
   const handleApply = (job) => {
     setApplicationJob(job);
     setShowApplicationModal(true);
@@ -45,23 +55,18 @@ const Dashboard = () => {
   const handleApplicationSuccess = () => {
     setShowApplicationModal(false);
     setApplicationJob(null);
-    // Show a success message in the UI instead of alert
-    const successDiv = document.createElement('div');
-    successDiv.className =
-      'fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-60';
-    successDiv.textContent = 'Application submitted successfully!';
-    document.body.appendChild(successDiv);
-
-    // Remove the message after 5 seconds
-    setTimeout(() => {
-      if (successDiv.parentNode) {
-        successDiv.parentNode.removeChild(successDiv);
-      }
-    }, 5000);
+    setSuccessMessage('Application submitted successfully!');
   };
 
   return (
     <div className="flex min-h-screen bg-gray-50">
+      {/* Success Message */}
+      {successMessage && (
+        <div className="fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50">
+          {successMessage}
+        </div>
+      )}
+
       {/* Sidebar */}
       <aside className="w-64 bg-teal-900 text-white flex flex-col">
         <div className="p-6">
@@ -152,7 +157,14 @@ const Dashboard = () => {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1">
+       <main className="flex-1">
+        {/* Toast Notification */}
+        {successMessage && (
+          <div className="fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-60">
+            {successMessage}
+          </div>
+        )}
+        
         {/* Top Bar */}
         <header className="bg-white border-b border-gray-200 px-8 py-4">
           <div className="flex items-center justify-between">

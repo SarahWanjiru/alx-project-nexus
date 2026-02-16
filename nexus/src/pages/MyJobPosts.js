@@ -1,15 +1,6 @@
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
 import RecruiterSidebar from '../components/RecruiterSidebar';
 
 const MyJobPosts = () => {
-  const navigate = useNavigate();
-  const { user, logout } = useAuth();
-
-  const handleLogout = async () => {
-    await logout();
-    navigate('/');
-  };
   const mockJobs = [
     {
       id: 1,
