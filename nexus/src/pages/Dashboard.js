@@ -47,10 +47,11 @@ const Dashboard = () => {
     setApplicationJob(null);
     // Show a success message in the UI instead of alert
     const successDiv = document.createElement('div');
-    successDiv.className = 'fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-60';
+    successDiv.className =
+      'fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-60';
     successDiv.textContent = 'Application submitted successfully!';
     document.body.appendChild(successDiv);
-    
+
     // Remove the message after 5 seconds
     setTimeout(() => {
       if (successDiv.parentNode) {
@@ -151,12 +152,14 @@ const Dashboard = () => {
       </aside>
 
       {/* Main Content */}
-       <main className="flex-1">
+      <main className="flex-1">
         {/* Top Bar */}
         <header className="bg-white border-b border-gray-200 px-8 py-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-600">Good Morning, {user?.email?.split('@')[0] || 'User'}!</p>
+              <p className="text-gray-600">
+                Good Morning, {user?.email?.split('@')[0] || 'User'}!
+              </p>
             </div>
             <div className="flex items-center gap-4">
               <button
@@ -200,7 +203,7 @@ const Dashboard = () => {
           </div>
         </header>
 
-         <div className="p-8">
+        <div className="p-8">
           <div className="grid grid-cols-3 gap-6">
             {/* Left Column */}
             <div className="col-span-2 space-y-6">
@@ -302,69 +305,74 @@ const Dashboard = () => {
                     </div>
                   ) : (
                     jobs
-                      .filter(job => !applications.some(app => app.job?.id === job.id))
+                      .filter(
+                        (job) =>
+                          !applications.some((app) => app.job?.id === job.id)
+                      )
                       .slice(0, 2)
                       .map((job) => (
-                      <div
-                        key={job.id}
-                        className="bg-white p-6 rounded-xl border border-gray-200"
-                      >
-                        <div className="flex items-start justify-between mb-4">
-                          <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
-                            <svg
-                              className="w-6 h-6 text-gray-400"
-                              fill="currentColor"
-                              viewBox="0 0 20 20"
-                            >
-                              <path
-                                fillRule="evenodd"
-                                d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 110 2h-3a1 1 0 01-1-1v-2a1 1 0 00-1-1H9a1 1 0 00-1 1v2a1 1 0 01-1 1H4a1 1 0 110-2V4zm3 1h2v2H7V5zm2 4H7v2h2V9zm2-4h2v2h-2V5zm2 4h-2v2h2V9z"
-                                clipRule="evenodd"
-                              />
-                            </svg>
+                        <div
+                          key={job.id}
+                          className="bg-white p-6 rounded-xl border border-gray-200"
+                        >
+                          <div className="flex items-start justify-between mb-4">
+                            <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
+                              <svg
+                                className="w-6 h-6 text-gray-400"
+                                fill="currentColor"
+                                viewBox="0 0 20 20"
+                              >
+                                <path
+                                  fillRule="evenodd"
+                                  d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 110 2h-3a1 1 0 01-1-1v-2a1 1 0 00-1-1H9a1 1 0 00-1 1v2a1 1 0 01-1 1H4a1 1 0 110-2V4zm3 1h2v2H7V5zm2 4H7v2h2V9zm2-4h2v2h-2V5zm2 4h-2v2h2V9z"
+                                  clipRule="evenodd"
+                                />
+                              </svg>
+                            </div>
+                            <button className="text-gray-400 hover:text-blue-500">
+                              <svg
+                                className="w-5 h-5"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"
+                                />
+                              </svg>
+                            </button>
                           </div>
-                          <button className="text-gray-400 hover:text-blue-500">
-                            <svg
-                              className="w-5 h-5"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"
-                              />
-                            </svg>
+                          <h4 className="font-bold text-lg mb-2">
+                            {job.title}
+                          </h4>
+                          <p className="text-gray-600 text-sm mb-4">
+                            {job.company} • {job.location}
+                          </p>
+                          <div className="flex items-center gap-2 mb-4">
+                            <span className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-semibold">
+                              {job.contract_type}
+                            </span>
+                            <span className="px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-xs font-semibold">
+                              {job.category}
+                            </span>
+                            {job.salary_min && (
+                              <span className="px-3 py-1 bg-green-50 text-green-600 rounded-full text-xs font-semibold">
+                                ${Math.round(job.salary_min / 1000)}k - $
+                                {Math.round(job.salary_max / 1000)}k
+                              </span>
+                            )}
+                          </div>
+                          <button
+                            onClick={() => handleApply(job)}
+                            className="w-full bg-blue-500 text-white py-3 rounded-lg font-semibold hover:bg-blue-600"
+                          >
+                            Apply Now
                           </button>
                         </div>
-                        <h4 className="font-bold text-lg mb-2">{job.title}</h4>
-                        <p className="text-gray-600 text-sm mb-4">
-                          {job.company} • {job.location}
-                        </p>
-                        <div className="flex items-center gap-2 mb-4">
-                          <span className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-semibold">
-                            {job.contract_type}
-                          </span>
-                          <span className="px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-xs font-semibold">
-                            {job.category}
-                          </span>
-                          {job.salary_min && (
-                            <span className="px-3 py-1 bg-green-50 text-green-600 rounded-full text-xs font-semibold">
-                              ${Math.round(job.salary_min / 1000)}k - $
-                              {Math.round(job.salary_max / 1000)}k
-                            </span>
-                          )}
-                        </div>
-                        <button
-                          onClick={() => handleApply(job)}
-                          className="w-full bg-blue-500 text-white py-3 rounded-lg font-semibold hover:bg-blue-600"
-                        >
-                          Apply Now
-                        </button>
-                      </div>
-                    ))
+                      ))
                   )}
                 </div>
               </div>
@@ -404,25 +412,43 @@ const Dashboard = () => {
                                   {app.job?.company_name?.charAt(0) || 'C'}
                                 </span>
                               </div>
-                              <span className="font-semibold">{app.job?.company_name || 'N/A'}</span>
+                              <span className="font-semibold">
+                                {app.job?.company_name || 'N/A'}
+                              </span>
                             </div>
                           </td>
-                          <td className="py-4 text-gray-600">{app.job?.title || 'N/A'}</td>
-                          <td className="py-4 text-gray-600">{new Date(app.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</td>
+                          <td className="py-4 text-gray-600">
+                            {app.job?.title || 'N/A'}
+                          </td>
+                          <td className="py-4 text-gray-600">
+                            {new Date(app.created_at).toLocaleDateString(
+                              'en-US',
+                              { month: 'short', day: 'numeric' }
+                            )}
+                          </td>
                           <td className="py-4">
-                            <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                              app.status === 'interviewing' ? 'bg-orange-100 text-orange-600' :
-                              app.status === 'applied' ? 'bg-blue-100 text-blue-600' :
-                              app.status === 'in_review' ? 'bg-yellow-100 text-yellow-600' :
-                              'bg-gray-100 text-gray-600'
-                            }`}>
-                              {app.status === 'applied' ? 'Applied' :
-                               app.status === 'interviewing' ? 'Interviewing' :
-                               app.status === 'in_review' ? 'In Review' : app.status}
+                            <span
+                              className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                                app.status === 'interviewing'
+                                  ? 'bg-orange-100 text-orange-600'
+                                  : app.status === 'applied'
+                                    ? 'bg-blue-100 text-blue-600'
+                                    : app.status === 'in_review'
+                                      ? 'bg-yellow-100 text-yellow-600'
+                                      : 'bg-gray-100 text-gray-600'
+                              }`}
+                            >
+                              {app.status === 'applied'
+                                ? 'Applied'
+                                : app.status === 'interviewing'
+                                  ? 'Interviewing'
+                                  : app.status === 'in_review'
+                                    ? 'In Review'
+                                    : app.status}
                             </span>
                           </td>
                           <td className="py-4">
-                            <button 
+                            <button
                               onClick={() => navigate('/applications')}
                               className="text-blue-500 font-semibold"
                             >
@@ -433,7 +459,10 @@ const Dashboard = () => {
                       ))
                     ) : (
                       <tr>
-                        <td colSpan="5" className="py-8 text-center text-gray-500">
+                        <td
+                          colSpan="5"
+                          className="py-8 text-center text-gray-500"
+                        >
                           No applications yet
                         </td>
                       </tr>

@@ -19,13 +19,13 @@ const Applications = () => {
 
   const fetchApplications = async () => {
     if (!user) return;
-    
+
     try {
       setLoading(true);
       setError(null);
       const data = await api.applications.getMyApplications(user.id);
       const apps = Array.isArray(data) ? data : data.results || [];
-      const mappedApps = apps.map(app => ({
+      const mappedApps = apps.map((app) => ({
         id: app.id,
         title: app.job?.title || 'N/A',
         company: app.job?.company_name || 'N/A',
@@ -36,7 +36,7 @@ const Applications = () => {
         salary: app.job?.salary || 'N/A',
         description: app.job?.description || '',
         responsibilities: [],
-        requirements: []
+        requirements: [],
       }));
       setApplications(mappedApps);
     } catch (err) {
@@ -87,7 +87,7 @@ const Applications = () => {
       <aside className="w-64 bg-teal-900 text-white flex flex-col">
         <div className="p-6">
           <div className="flex items-center gap-3 mb-8">
-              <img
+            <img
               src="/Nexus Connect.png"
               alt="Nexus Connect"
               className="w-10 h-10 rounded-xl shadow-lg object-cover"

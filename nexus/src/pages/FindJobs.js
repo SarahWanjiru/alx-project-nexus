@@ -32,10 +32,11 @@ const FindJobs = () => {
     setApplicationJob(null);
     // Show a success message in the UI instead of alert
     const successDiv = document.createElement('div');
-    successDiv.className = 'fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-60';
+    successDiv.className =
+      'fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-60';
     successDiv.textContent = 'Application submitted successfully!';
     document.body.appendChild(successDiv);
-    
+
     // Remove the message after 5 seconds
     setTimeout(() => {
       if (successDiv.parentNode) {

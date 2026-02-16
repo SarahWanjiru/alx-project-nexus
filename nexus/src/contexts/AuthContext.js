@@ -69,10 +69,10 @@ export const AuthProvider = ({ children }) => {
           };
           localStorage.setItem('user', JSON.stringify(userInfo));
           setUser(userInfo);
-          
+
           // Fetch profile data for the new user
           await fetchProfile();
-          
+
           return { success: true, role: userData.role || 'user' };
         }
       }
@@ -105,7 +105,7 @@ export const AuthProvider = ({ children }) => {
           localStorage.setItem('user', JSON.stringify(userData));
           setUser(userData);
           setProfile(userProfile);
-          
+
           return { success: true, role: userRole };
         } catch {
           const userData = { email: credentials.email, role: 'user' };
@@ -140,7 +140,9 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, profile, loading, signup, login, logout }}>
+    <AuthContext.Provider
+      value={{ user, profile, loading, signup, login, logout }}
+    >
       {children}
     </AuthContext.Provider>
   );

@@ -95,10 +95,10 @@ const Messages = () => {
           <div className="p-6">
             <div className="flex items-center gap-3 mb-8">
               <img
-              src="/Nexus Connect.png"
-              alt="Nexus Connect"
-              className="w-10 h-10 rounded-xl shadow-lg object-cover"
-            />
+                src="/Nexus Connect.png"
+                alt="Nexus Connect"
+                className="w-10 h-10 rounded-xl shadow-lg object-cover"
+              />
               <div>
                 <h1 className="font-bold">Nexus Connect</h1>
                 <p className="text-xs text-teal-300">JOB SEEKER</p>

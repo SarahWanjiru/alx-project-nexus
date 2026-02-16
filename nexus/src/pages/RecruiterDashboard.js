@@ -29,7 +29,9 @@ const RecruiterDashboard = () => {
   const fetchRecruiterData = async () => {
     try {
       const companiesData = await api.companies.getAll();
-      const companies = Array.isArray(companiesData) ? companiesData : (companiesData.results || []);
+      const companies = Array.isArray(companiesData)
+        ? companiesData
+        : companiesData.results || [];
       setCompanies(companies);
 
       let totalApps = 0;
@@ -38,18 +40,25 @@ const RecruiterDashboard = () => {
 
       for (const company of companies) {
         if (!company?.id) continue;
-        
+
         try {
           const jobsData = await api.companies.getJobs(company.id);
-          const jobs = Array.isArray(jobsData) ? jobsData : (jobsData.results || []);
+          const jobs = Array.isArray(jobsData)
+            ? jobsData
+            : jobsData.results || [];
           allJobs.push(...jobs);
 
           for (const job of jobs) {
             if (!job?.id) continue;
-            
+
             try {
-              const appsData = await api.companies.getJobApplications(company.id, job.id);
-              const apps = Array.isArray(appsData) ? appsData : (appsData.results || []);
+              const appsData = await api.companies.getJobApplications(
+                company.id,
+                job.id
+              );
+              const apps = Array.isArray(appsData)
+                ? appsData
+                : appsData.results || [];
               totalApps += apps.length;
               allApps.push(...apps);
             } catch (err) {
@@ -64,9 +73,9 @@ const RecruiterDashboard = () => {
       setJobPosts(allJobs.slice(0, 2));
       setRecentApplications(allApps.slice(0, 2));
       setStats({
-        openPositions: allJobs.filter(j => j.is_active).length,
+        openPositions: allJobs.filter((j) => j.is_active).length,
         totalApplicants: totalApps,
-        interviewsToday: allApps.filter(a => a.status === 'interview').length,
+        interviewsToday: allApps.filter((a) => a.status === 'interview').length,
         avgTimeToHire: '18d',
       });
     } catch (error) {
@@ -84,7 +93,9 @@ const RecruiterDashboard = () => {
         <header className="bg-white border-b border-gray-200 px-8 py-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-600">Good Morning, {user?.email?.split('@')[0] || 'Recruiter'}!</p>
+              <p className="text-gray-600">
+                Good Morning, {user?.email?.split('@')[0] || 'Recruiter'}!
+              </p>
             </div>
             <div className="flex items-center gap-4">
               <button className="p-2 hover:bg-gray-100 rounded-lg">
@@ -305,10 +316,10 @@ const RecruiterDashboard = () => {
                                 app.status === 'interview'
                                   ? 'bg-blue-100 text-blue-600'
                                   : app.status === 'accepted'
-                                  ? 'bg-green-100 text-green-600'
-                                  : app.status === 'rejected'
-                                  ? 'bg-red-100 text-red-600'
-                                  : 'bg-yellow-100 text-yellow-600'
+                                    ? 'bg-green-100 text-green-600'
+                                    : app.status === 'rejected'
+                                      ? 'bg-red-100 text-red-600'
+                                      : 'bg-yellow-100 text-yellow-600'
                               }`}
                             >
                               {app.status}
@@ -324,7 +335,9 @@ const RecruiterDashboard = () => {
                     </tbody>
                   </table>
                 ) : (
-                  <p className="text-gray-500 text-center py-8">No recent applications</p>
+                  <p className="text-gray-500 text-center py-8">
+                    No recent applications
+                  </p>
                 )}
               </div>
             </div>
@@ -404,6 +417,7 @@ const RecruiterDashboard = () => {
                   <label className="flex items-start gap-3 cursor-pointer">
                     <input
                       type="checkbox"
+                      readOnly
                       className="mt-1 w-4 h-4 text-blue-500"
                     />
                     <span className="text-sm text-gray-700">
@@ -413,6 +427,7 @@ const RecruiterDashboard = () => {
                   <label className="flex items-start gap-3 cursor-pointer">
                     <input
                       type="checkbox"
+                      readOnly
                       className="mt-1 w-4 h-4 text-blue-500"
                     />
                     <span className="text-sm text-gray-700">
@@ -422,6 +437,7 @@ const RecruiterDashboard = () => {
                   <label className="flex items-start gap-3 cursor-pointer">
                     <input
                       type="checkbox"
+                      readOnly
                       className="mt-1 w-4 h-4 text-blue-500"
                     />
                     <span className="text-sm text-gray-700">
