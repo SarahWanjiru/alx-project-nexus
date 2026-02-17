@@ -10,7 +10,7 @@ const ProfilePage = () => {
   const [formData, setFormData] = useState({
     fullName: profile?.full_name || user?.email?.split('@')[0] || 'User',
     professionalTitle: profile?.professional_title || 'Job Seeker',
-    bio: profile?.bio || 'Tell us about yourself...',
+    bio: profile?.bio || '',
     email: user?.email || 'user@example.com',
     location: profile?.location || 'Your location',
     skills: profile?.skills
@@ -26,7 +26,7 @@ const ProfilePage = () => {
       setFormData({
         fullName: profile?.full_name || user?.email?.split('@')[0] || 'User',
         professionalTitle: profile?.professional_title || 'Job Seeker',
-        bio: profile?.bio || 'Tell us about yourself...',
+        bio: profile?.bio || '',
         email: user?.email || 'user@example.com',
         location: profile?.location || 'Your location',
         skills: profile?.skills
@@ -286,6 +286,7 @@ const ProfilePage = () => {
               onChange={(e) =>
                 setFormData({ ...formData, bio: e.target.value })
               }
+              placeholder="Tell us about yourself..."
               rows="4"
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
             />
