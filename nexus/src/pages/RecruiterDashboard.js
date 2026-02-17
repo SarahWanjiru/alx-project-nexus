@@ -22,6 +22,7 @@ const RecruiterDashboard = () => {
   const [, setCompanies] = useState([]);
   const [jobPosts, setJobPosts] = useState([]);
   const [recentApplications, setRecentApplications] = useState([]);
+  const [allApplications, setAllApplications] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [stats, setStats] = useState({
@@ -93,6 +94,7 @@ const RecruiterDashboard = () => {
 
       setJobPosts(allJobs.slice(0, 2));
       setRecentApplications(allApps.slice(0, 2));
+      setAllApplications(allApps);
       setStats({
         openPositions: allJobs.filter((j) => j.is_active).length,
         totalApplicants: allApps.length,
@@ -109,6 +111,21 @@ const RecruiterDashboard = () => {
   useEffect(() => {
     fetchRecruiterData();
   }, [fetchRecruiterData]);
+
+  const getRelativeTime = (dateString) => {
+    if (!dateString) return '—';
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffMs = now - date;
+    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+    if (diffDays === 0) return 'Today';
+    if (diffDays === 1) return '1 day ago';
+    return `${diffDays} days ago`;
+  };
+
+  const getApplicantCount = (jobId) => {
+    return allApplications.filter(app => app.job?.id === jobId).length;
+  };
 
   return (
     <div className="flex min-h-screen bg-gray-50">
@@ -318,13 +335,13 @@ const RecruiterDashboard = () => {
                             <div>
                               <h4 className="font-bold text-lg">{job.title}</h4>
                               <p className="text-gray-600 text-sm">
-                                {job.location} • Posted 3 days ago
+                                {job.location} • Posted {getRelativeTime(job.created_at)}
                               </p>
                             </div>
                           </div>
                           <div className="flex items-center gap-4">
                             <div className="text-right">
-                              <p className="text-2xl font-bold">42</p>
+                              <p className="text-2xl font-bold">{getApplicantCount(job.id)}</p>
                               <p className="text-gray-500 text-xs">
                                 APPLICANTS
                               </p>
