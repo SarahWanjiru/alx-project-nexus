@@ -16,7 +16,6 @@ jest.mock('./contexts/AuthContext', () => ({
 
 jest.mock('./pages/SignUp', () => () => <div>SignUp</div>);
 jest.mock('./pages/Login', () => () => <div>Login</div>);
-jest.mock('./pages/Explore', () => () => <div>Explore</div>);
 jest.mock('./pages/Jobs', () => () => <div>Jobs</div>);
 jest.mock('./components/ProtectedRoute', () => ({ children }) => (
   <div>{children}</div>
