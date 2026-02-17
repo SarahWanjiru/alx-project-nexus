@@ -123,7 +123,10 @@ const Applications = () => {
               </svg>
               Find Jobs
             </button>
-            <button key="nav-applications" className="w-full flex items-center gap-3 px-4 py-3 bg-teal-800 rounded-lg">
+            <button
+              key="nav-applications"
+              className="w-full flex items-center gap-3 px-4 py-3 bg-teal-800 rounded-lg"
+            >
               <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                 <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
                 <path

@@ -230,7 +230,10 @@ const Dashboard = () => {
 
               {/* Stats Cards */}
               <div className="grid grid-cols-3 gap-4">
-                <div key="stat-applications" className="bg-white p-6 rounded-xl border border-gray-200">
+                <div
+                  key="stat-applications"
+                  className="bg-white p-6 rounded-xl border border-gray-200"
+                >
                   <div className="flex items-center justify-between mb-4">
                     <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
                       <svg
@@ -251,7 +254,10 @@ const Dashboard = () => {
                   <p className="text-3xl font-bold">12</p>
                 </div>
 
-                <div key="stat-views" className="bg-white p-6 rounded-xl border border-gray-200">
+                <div
+                  key="stat-views"
+                  className="bg-white p-6 rounded-xl border border-gray-200"
+                >
                   <div className="flex items-center justify-between mb-4">
                     <div className="w-10 h-10 bg-teal-100 rounded-lg flex items-center justify-center">
                       <svg
@@ -275,7 +281,10 @@ const Dashboard = () => {
                   <p className="text-3xl font-bold">45</p>
                 </div>
 
-                <div key="stat-messages" className="bg-white p-6 rounded-xl border border-gray-200">
+                <div
+                  key="stat-messages"
+                  className="bg-white p-6 rounded-xl border border-gray-200"
+                >
                   <div className="flex items-center justify-between mb-4">
                     <div className="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center">
                       <svg
