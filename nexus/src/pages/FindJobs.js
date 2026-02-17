@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 // import { useAuth } from '../contexts/AuthContext';
 import { useJobs } from '../contexts/JobContext';
@@ -11,12 +11,22 @@ const FindJobs = () => {
   const [showApplicationModal, setShowApplicationModal] = useState(false);
   const [applicationJob, setApplicationJob] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [successMessage, setSuccessMessage] = useState(null);
   const [employmentTypes, setEmploymentTypes] = useState({
     fullTime: true,
     contract: false,
     remote: true,
     partTime: false,
   });
+
+  useEffect(() => {
+    if (successMessage) {
+      const timeoutId = setTimeout(() => {
+        setSuccessMessage(null);
+      }, 5000);
+      return () => clearTimeout(timeoutId);
+    }
+  }, [successMessage]);
 
   const toggleEmploymentType = (type) => {
     setEmploymentTypes((prev) => ({ ...prev, [type]: !prev[type] }));
@@ -30,28 +40,30 @@ const FindJobs = () => {
   const handleApplicationSuccess = () => {
     setShowApplicationModal(false);
     setApplicationJob(null);
-    alert('Application submitted successfully!');
+    setSuccessMessage('Application submitted successfully!');
   };
 
   return (
     <div className="flex min-h-screen bg-gray-50">
+      {/* Success Message */}
+      {successMessage && (
+        <div className="fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50">
+          {successMessage}
+        </div>
+      )}
+
       {/* Sidebar */}
       <aside className="w-64 bg-teal-900 text-white flex flex-col">
         <div className="p-6">
           <div className="flex items-center gap-3 mb-8">
-            <div className="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center">
-              <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
-                <path
-                  fillRule="evenodd"
-                  d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            </div>
+            <img
+              src="/Nexus Connect.png"
+              alt="Nexus Connect"
+              className="w-10 h-10 rounded-xl shadow-lg object-cover"
+            />
             <div>
-              <h1 className="font-bold">JobPortal</h1>
-              <p className="text-xs text-teal-300">SEEKER ACCOUNT</p>
+              <h1 className="font-bold">Nexus Connect</h1>
+              <p className="text-xs text-teal-300">JOB SEEKER</p>
             </div>
           </div>
 

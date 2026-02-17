@@ -13,15 +13,41 @@ export const useAuth = () => {
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [profile, setProfile] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const token = localStorage.getItem('access_token');
     const userData = localStorage.getItem('user');
     if (token && userData) {
-      setUser(JSON.parse(userData));
+      try {
+        const parsedUser = JSON.parse(userData);
+        setUser(parsedUser);
+        fetchProfile();
+      } catch (error) {
+        console.error('Failed to parse user data from localStorage:', error);
+        // Clear corrupted data
+        localStorage.removeItem('user');
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('refresh_token');
+        setUser(null);
+        setLoading(false);
+      }
+    } else {
+      setLoading(false);
     }
   }, []);
+
+  const fetchProfile = async () => {
+    try {
+      const userProfile = await api.profile.getMe();
+      setProfile(userProfile);
+    } catch (error) {
+      console.error('Failed to fetch profile:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const signup = async (userData) => {
     setLoading(true);
@@ -53,6 +79,10 @@ export const AuthProvider = ({ children }) => {
           };
           localStorage.setItem('user', JSON.stringify(userInfo));
           setUser(userInfo);
+
+          // Fetch profile data for the new user
+          await fetchProfile();
+
           return { success: true, role: userData.role || 'user' };
         }
       }
@@ -77,13 +107,15 @@ export const AuthProvider = ({ children }) => {
         localStorage.setItem('refresh_token', data.refresh);
 
         try {
-          // Fetch current user's profile to get role
+          // Fetch current user's profile to get role and complete data
           const userProfile = await api.profile.getMe();
           const userRole = userProfile.user?.role || 'user';
 
           const userData = { email: credentials.email, role: userRole };
           localStorage.setItem('user', JSON.stringify(userData));
           setUser(userData);
+          setProfile(userProfile);
+
           return { success: true, role: userRole };
         } catch {
           const userData = { email: credentials.email, role: 'user' };
@@ -106,17 +138,21 @@ export const AuthProvider = ({ children }) => {
       try {
         await api.auth.logout(refreshToken);
       } catch (error) {
-        console.error('Logout error:', error);
+        console.error('Logout API failed, but continuing with local logout');
+        // Continue with local logout even if API fails
       }
     }
     localStorage.removeItem('access_token');
     localStorage.removeItem('refresh_token');
     localStorage.removeItem('user');
     setUser(null);
+    setProfile(null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, signup, login, logout }}>
+    <AuthContext.Provider
+      value={{ user, profile, loading, signup, login, logout }}
+    >
       {children}
     </AuthContext.Provider>
   );

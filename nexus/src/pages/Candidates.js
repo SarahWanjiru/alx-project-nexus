@@ -71,13 +71,14 @@ const Candidates = () => {
                 <input
                   type="checkbox"
                   className="w-4 h-4 text-blue-500 rounded"
+                  readOnly
                 />
                 <span className="text-gray-700">Entry Level</span>
               </label>
               <label className="flex items-center gap-2 cursor-pointer">
                 <input
                   type="checkbox"
-                  checked
+                  defaultChecked
                   className="w-4 h-4 text-blue-500 rounded"
                 />
                 <span className="text-gray-700">Mid-Senior</span>
@@ -86,6 +87,7 @@ const Candidates = () => {
                 <input
                   type="checkbox"
                   className="w-4 h-4 text-blue-500 rounded"
+                  readOnly
                 />
                 <span className="text-gray-700">Director / Lead</span>
               </label>

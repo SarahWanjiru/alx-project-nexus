@@ -53,6 +53,7 @@ export const api = {
     },
 
     logout: async (refreshToken) => {
+      // Logout endpoint requires access token in Authorization header
       const response = await fetch(`${API_URL}/logout/`, {
         method: 'POST',
         headers: {

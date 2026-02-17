@@ -1,115 +1,50 @@
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-// import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../contexts/AuthContext';
+import { api } from '../utils/api';
 
 const Applications = () => {
   const navigate = useNavigate();
+  const { profile } = useAuth();
   const [selectedApplication, setSelectedApplication] = useState(null);
   const [activeTab, setActiveTab] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
+  const [applications, setApplications] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const applications = [
-    {
-      id: 1,
-      title: 'Senior Product Designer',
-      company: 'Google',
-      location: 'Mountain View, CA',
-      logo: '/api/placeholder/60/60',
-      status: 'interviewing',
-      appliedDate: 'Oct 12, 2023',
-      salary: '$140k - $190k',
-      type: 'Full-time',
-      description:
-        'We are looking for a Senior Product Designer to join our team and help shape the future of our products.',
-      responsibilities: [
-        'Lead design projects from concept to completion',
-        'Collaborate with cross-functional teams',
-        'Create wireframes, prototypes, and high-fidelity designs',
-        'Conduct user research and usability testing',
-      ],
-      requirements: [
-        '5+ years of product design experience',
-        'Strong portfolio demonstrating design process',
-        'Proficiency in Figma and design tools',
-        'Excellent communication skills',
-      ],
-    },
-    {
-      id: 2,
-      title: 'Senior UI Designer',
-      company: 'Spotify',
-      location: 'Stockholm, SE',
-      logo: '/api/placeholder/60/60',
-      status: 'applied',
-      appliedDate: 'Oct 15, 2023',
-      salary: '$120k - $160k',
-      type: 'Full-time',
-      description:
-        'Join our design team to create beautiful and intuitive user interfaces for millions of users.',
-      responsibilities: [
-        'Design user interfaces for web and mobile',
-        'Maintain design system consistency',
-        'Work closely with developers',
-        'Present designs to stakeholders',
-      ],
-      requirements: [
-        '4+ years of UI design experience',
-        'Expert knowledge of design systems',
-        'Strong visual design skills',
-        'Experience with Sketch or Figma',
-      ],
-    },
-    {
-      id: 3,
-      title: 'UX Researcher',
-      company: 'Airbnb',
-      location: 'Remote',
-      logo: '/api/placeholder/60/60',
-      status: 'in_review',
-      appliedDate: 'Sep 28, 2023',
-      salary: '$130k - $170k',
-      type: 'Full-time',
-      description:
-        'Help us understand our users better through research and data-driven insights.',
-      responsibilities: [
-        'Conduct user interviews and surveys',
-        'Analyze user behavior data',
-        'Present research findings',
-        'Collaborate with product teams',
-      ],
-      requirements: [
-        '3+ years of UX research experience',
-        'Strong analytical skills',
-        'Experience with research tools',
-        'Excellent presentation skills',
-      ],
-    },
-    {
-      id: 4,
-      title: 'Senior Motion Designer',
-      company: 'Netflix',
-      location: 'Los Angeles, CA',
-      logo: '/api/placeholder/60/60',
-      status: 'rejected',
-      appliedDate: 'Sep 10, 2023',
-      salary: '$150k - $200k',
-      type: 'Full-time',
-      description:
-        'Create engaging motion graphics and animations for our streaming platform.',
-      responsibilities: [
-        'Design motion graphics for UI',
-        'Create animated prototypes',
-        'Develop animation guidelines',
-        'Collaborate with design team',
-      ],
-      requirements: [
-        '5+ years of motion design experience',
-        'Proficiency in After Effects',
-        'Strong animation portfolio',
-        'Understanding of UI/UX principles',
-      ],
-    },
-  ];
+  const fetchApplications = useCallback(async () => {
+    if (!profile?.user) return;
+
+    try {
+      setLoading(true);
+      setError(null);
+      const data = await api.applications.getMyApplications(profile.user);
+      const apps = Array.isArray(data) ? data : data.results || [];
+      const mappedApps = apps.map((app) => ({
+        id: app.id,
+        title: app.job?.title || 'N/A',
+        company: app.job?.company_name || 'N/A',
+        location: app.job?.location || 'N/A',
+        status: app.status || 'applied',
+        appliedDate: new Date(app.created_at).toLocaleDateString(),
+        type: app.job?.employment_type || 'N/A',
+        salary: app.job?.salary || 'N/A',
+        description: app.job?.description || '',
+        responsibilities: [],
+        requirements: [],
+      }));
+      setApplications(mappedApps);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  }, [profile]);
+
+  useEffect(() => {
+    fetchApplications();
+  }, [fetchApplications]);
 
   const getStatusBadge = (status) => {
     const badges = {
@@ -152,24 +87,20 @@ const Applications = () => {
       <aside className="w-64 bg-teal-900 text-white flex flex-col">
         <div className="p-6">
           <div className="flex items-center gap-3 mb-8">
-            <div className="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center">
-              <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
-                <path
-                  fillRule="evenodd"
-                  d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            </div>
+            <img
+              src="/Nexus Connect.png"
+              alt="Nexus Connect"
+              className="w-10 h-10 rounded-xl shadow-lg object-cover"
+            />
             <div>
-              <h1 className="font-bold">JobPortal</h1>
-              <p className="text-xs text-teal-300">SEEKER ACCOUNT</p>
+              <h1 className="font-bold">Nexus Connect</h1>
+              <p className="text-xs text-teal-300">JOB SEEKER</p>
             </div>
           </div>
 
           <nav className="space-y-2">
             <button
+              key="nav-dashboard"
               onClick={() => navigate('/dashboard')}
               className="w-full flex items-center gap-3 px-4 py-3 hover:bg-teal-800 rounded-lg"
             >
@@ -179,6 +110,7 @@ const Applications = () => {
               Dashboard
             </button>
             <button
+              key="nav-find-jobs"
               onClick={() => navigate('/find-jobs')}
               className="w-full flex items-center gap-3 px-4 py-3 hover:bg-teal-800 rounded-lg"
             >
@@ -191,7 +123,10 @@ const Applications = () => {
               </svg>
               Find Jobs
             </button>
-            <button className="w-full flex items-center gap-3 px-4 py-3 bg-teal-800 rounded-lg">
+            <button
+              key="nav-applications"
+              className="w-full flex items-center gap-3 px-4 py-3 bg-teal-800 rounded-lg"
+            >
               <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                 <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
                 <path
@@ -203,6 +138,7 @@ const Applications = () => {
               Applications
             </button>
             <button
+              key="nav-messages"
               onClick={() => navigate('/messages')}
               className="w-full flex items-center gap-3 px-4 py-3 hover:bg-teal-800 rounded-lg relative"
             >
@@ -214,6 +150,7 @@ const Applications = () => {
               <span className="absolute right-4 w-2 h-2 bg-blue-400 rounded-full"></span>
             </button>
             <button
+              key="nav-profile"
               onClick={() => navigate('/profile')}
               className="w-full flex items-center gap-3 px-4 py-3 hover:bg-teal-800 rounded-lg"
             >
@@ -236,154 +173,171 @@ const Applications = () => {
           className={`${selectedApplication ? 'flex-1' : 'w-full'} bg-gray-50`}
         >
           <div className="p-8">
-            <div className="flex items-center justify-between mb-6">
-              <div>
-                <h1 className="text-3xl font-bold mb-2">My Applications</h1>
-                <p className="text-gray-600">
-                  You have {applications.length} active job applications across
-                  various stages.
-                </p>
-              </div>
-              <button className="px-4 py-2 bg-blue-100 text-blue-600 rounded-lg font-semibold flex items-center gap-2">
-                <svg
-                  className="w-5 h-5"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-                4 New Updates
-              </button>
-            </div>
-
-            {/* Tabs */}
-            <div className="bg-white rounded-xl border border-gray-200 mb-6">
-              <div className="flex items-center border-b border-gray-200 px-6">
-                <button
-                  onClick={() => setActiveTab('all')}
-                  className={`px-4 py-4 font-semibold border-b-2 ${activeTab === 'all' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-600'}`}
-                >
-                  All{' '}
-                  <span className="ml-2 px-2 py-1 bg-gray-100 rounded text-sm">
-                    {getTabCount('all')}
-                  </span>
-                </button>
-                <button
-                  onClick={() => setActiveTab('applied')}
-                  className={`px-4 py-4 font-semibold border-b-2 ${activeTab === 'applied' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-600'}`}
-                >
-                  Applied{' '}
-                  <span className="ml-2 px-2 py-1 bg-gray-100 rounded text-sm">
-                    {getTabCount('applied')}
-                  </span>
-                </button>
-                <button
-                  onClick={() => setActiveTab('in_review')}
-                  className={`px-4 py-4 font-semibold border-b-2 ${activeTab === 'in_review' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-600'}`}
-                >
-                  In Review{' '}
-                  <span className="ml-2 px-2 py-1 bg-gray-100 rounded text-sm">
-                    {getTabCount('in_review')}
-                  </span>
-                </button>
-                <button
-                  onClick={() => setActiveTab('interviewing')}
-                  className={`px-4 py-4 font-semibold border-b-2 ${activeTab === 'interviewing' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-600'}`}
-                >
-                  Interviewing{' '}
-                  <span className="ml-2 px-2 py-1 bg-gray-100 rounded text-sm">
-                    {getTabCount('interviewing')}
-                  </span>
-                </button>
-                <button
-                  onClick={() => setActiveTab('hired_rejected')}
-                  className={`px-4 py-4 font-semibold border-b-2 ${activeTab === 'hired_rejected' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-600'}`}
-                >
-                  Hired/Rejected{' '}
-                  <span className="ml-2 px-2 py-1 bg-gray-100 rounded text-sm">
-                    {getTabCount('hired_rejected')}
-                  </span>
-                </button>
-              </div>
-
-              {/* Filters */}
-              <div className="p-6 flex items-center gap-4">
-                <div className="flex-1 relative">
-                  <svg
-                    className="w-5 h-5 text-gray-400 absolute left-3 top-3"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  <input
-                    type="text"
-                    placeholder="Filter by company, role or location"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg"
-                  />
+            {loading ? (
+              <div className="flex items-center justify-center min-h-screen">
+                <div className="text-center">
+                  <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                  <p className="text-gray-600">Loading applications...</p>
                 </div>
-                <button className="px-4 py-2 border border-gray-300 rounded-lg flex items-center gap-2 text-gray-600">
+              </div>
+            ) : error ? (
+              <div className="flex items-center justify-center min-h-screen">
+                <div className="text-center">
                   <svg
-                    className="w-5 h-5"
+                    className="w-16 h-16 text-red-500 mx-auto mb-4"
                     fill="currentColor"
                     viewBox="0 0 20 20"
                   >
                     <path
                       fillRule="evenodd"
-                      d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
                       clipRule="evenodd"
                     />
                   </svg>
-                  Date Applied
-                </button>
+                  <p className="text-red-600 font-semibold mb-2">
+                    Error loading applications
+                  </p>
+                  <p className="text-gray-600 mb-4">{error}</p>
+                  <button
+                    onClick={fetchApplications}
+                    className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+                  >
+                    Try Again
+                  </button>
+                </div>
               </div>
-            </div>
+            ) : (
+              <>
+                <div className="flex items-center justify-between mb-6">
+                  <div>
+                    <h1 className="text-3xl font-bold mb-2">My Applications</h1>
+                    <p className="text-gray-600">
+                      You have {applications.length} active job applications
+                      across various stages.
+                    </p>
+                  </div>
+                  <button className="px-4 py-2 bg-blue-100 text-blue-600 rounded-lg font-semibold flex items-center gap-2">
+                    <svg
+                      className="w-5 h-5"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    4 New Updates
+                  </button>
+                </div>
 
-            {/* Applications List */}
-            <div className="space-y-4">
-              {filteredApplications.map((app) => (
-                <div
-                  key={app.id}
-                  className="bg-white rounded-xl border border-gray-200 p-6"
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-4">
-                      <div className="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center">
-                        <svg
-                          className="w-8 h-8 text-gray-400"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 110 2h-3a1 1 0 01-1-1v-2a1 1 0 00-1-1H9a1 1 0 00-1 1v2a1 1 0 01-1 1H4a1 1 0 110-2V4zm3 1h2v2H7V5zm2 4H7v2h2V9zm2-4h2v2h-2V5zm2 4h-2v2h2V9z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                      </div>
-                      <div>
-                        <div className="flex items-center gap-3 mb-2">
-                          <h3 className="text-xl font-bold">{app.title}</h3>
-                          <span
-                            className={`px-3 py-1 rounded text-xs font-bold ${getStatusBadge(app.status).class}`}
-                          >
-                            {getStatusBadge(app.status).text}
-                          </span>
-                        </div>
-                        <div className="flex items-center gap-4 text-gray-600">
-                          <span className="flex items-center gap-1">
+                {/* Tabs */}
+                <div className="bg-white rounded-xl border border-gray-200 mb-6">
+                  <div className="flex items-center border-b border-gray-200 px-6">
+                    <button
+                      key="tab-all"
+                      onClick={() => setActiveTab('all')}
+                      className={`px-4 py-4 font-semibold border-b-2 ${activeTab === 'all' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-600'}`}
+                    >
+                      All{' '}
+                      <span className="ml-2 px-2 py-1 bg-gray-100 rounded text-sm">
+                        {getTabCount('all')}
+                      </span>
+                    </button>
+                    <button
+                      key="tab-applied"
+                      onClick={() => setActiveTab('applied')}
+                      className={`px-4 py-4 font-semibold border-b-2 ${activeTab === 'applied' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-600'}`}
+                    >
+                      Applied{' '}
+                      <span className="ml-2 px-2 py-1 bg-gray-100 rounded text-sm">
+                        {getTabCount('applied')}
+                      </span>
+                    </button>
+                    <button
+                      key="tab-in-review"
+                      onClick={() => setActiveTab('in_review')}
+                      className={`px-4 py-4 font-semibold border-b-2 ${activeTab === 'in_review' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-600'}`}
+                    >
+                      In Review{' '}
+                      <span className="ml-2 px-2 py-1 bg-gray-100 rounded text-sm">
+                        {getTabCount('in_review')}
+                      </span>
+                    </button>
+                    <button
+                      key="tab-interviewing"
+                      onClick={() => setActiveTab('interviewing')}
+                      className={`px-4 py-4 font-semibold border-b-2 ${activeTab === 'interviewing' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-600'}`}
+                    >
+                      Interviewing{' '}
+                      <span className="ml-2 px-2 py-1 bg-gray-100 rounded text-sm">
+                        {getTabCount('interviewing')}
+                      </span>
+                    </button>
+                    <button
+                      key="tab-hired-rejected"
+                      onClick={() => setActiveTab('hired_rejected')}
+                      className={`px-4 py-4 font-semibold border-b-2 ${activeTab === 'hired_rejected' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-600'}`}
+                    >
+                      Hired/Rejected{' '}
+                      <span className="ml-2 px-2 py-1 bg-gray-100 rounded text-sm">
+                        {getTabCount('hired_rejected')}
+                      </span>
+                    </button>
+                  </div>
+
+                  {/* Filters */}
+                  <div className="p-6 flex items-center gap-4">
+                    <div className="flex-1 relative">
+                      <svg
+                        className="w-5 h-5 text-gray-400 absolute left-3 top-3"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                      <input
+                        type="text"
+                        placeholder="Filter by company, role or location"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg"
+                      />
+                    </div>
+                    <button className="px-4 py-2 border border-gray-300 rounded-lg flex items-center gap-2 text-gray-600">
+                      <svg
+                        className="w-5 h-5"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                      Date Applied
+                    </button>
+                  </div>
+                </div>
+
+                {/* Applications List */}
+                <div className="space-y-4">
+                  {filteredApplications.map((app) => (
+                    <div
+                      key={app.id}
+                      className="bg-white rounded-xl border border-gray-200 p-6"
+                    >
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-4">
+                          <div className="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center">
                             <svg
-                              className="w-4 h-4"
+                              className="w-8 h-8 text-gray-400"
                               fill="currentColor"
                               viewBox="0 0 20 20"
                             >
@@ -393,77 +347,102 @@ const Applications = () => {
                                 clipRule="evenodd"
                               />
                             </svg>
-                            {app.company}
-                          </span>
-                          <span className="flex items-center gap-1">
+                          </div>
+                          <div>
+                            <div className="flex items-center gap-3 mb-2">
+                              <h3 className="text-xl font-bold">{app.title}</h3>
+                              <span
+                                className={`px-3 py-1 rounded text-xs font-bold ${getStatusBadge(app.status).class}`}
+                              >
+                                {getStatusBadge(app.status).text}
+                              </span>
+                            </div>
+                            <div className="flex items-center gap-4 text-gray-600">
+                              <span className="flex items-center gap-1">
+                                <svg
+                                  className="w-4 h-4"
+                                  fill="currentColor"
+                                  viewBox="0 0 20 20"
+                                >
+                                  <path
+                                    fillRule="evenodd"
+                                    d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 110 2h-3a1 1 0 01-1-1v-2a1 1 0 00-1-1H9a1 1 0 00-1 1v2a1 1 0 01-1 1H4a1 1 0 110-2V4zm3 1h2v2H7V5zm2 4H7v2h2V9zm2-4h2v2h-2V5zm2 4h-2v2h2V9z"
+                                    clipRule="evenodd"
+                                  />
+                                </svg>
+                                {app.company}
+                              </span>
+                              <span className="flex items-center gap-1">
+                                <svg
+                                  className="w-4 h-4"
+                                  fill="currentColor"
+                                  viewBox="0 0 20 20"
+                                >
+                                  <path
+                                    fillRule="evenodd"
+                                    d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
+                                    clipRule="evenodd"
+                                  />
+                                </svg>
+                                {app.location}
+                              </span>
+                              <span className="flex items-center gap-1">
+                                <svg
+                                  className="w-4 h-4"
+                                  fill="currentColor"
+                                  viewBox="0 0 20 20"
+                                >
+                                  <path
+                                    fillRule="evenodd"
+                                    d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+                                    clipRule="evenodd"
+                                  />
+                                </svg>
+                                Applied {app.appliedDate}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={() => setSelectedApplication(app)}
+                            className="px-6 py-2 bg-blue-500 text-white rounded-lg font-semibold hover:bg-blue-600"
+                          >
+                            View Details
+                          </button>
+                          <button className="p-2 hover:bg-gray-100 rounded-lg">
                             <svg
-                              className="w-4 h-4"
+                              className="w-5 h-5 text-gray-600"
                               fill="currentColor"
                               viewBox="0 0 20 20"
                             >
-                              <path
-                                fillRule="evenodd"
-                                d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
-                                clipRule="evenodd"
-                              />
+                              <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
                             </svg>
-                            {app.location}
-                          </span>
-                          <span className="flex items-center gap-1">
-                            <svg
-                              className="w-4 h-4"
-                              fill="currentColor"
-                              viewBox="0 0 20 20"
-                            >
-                              <path
-                                fillRule="evenodd"
-                                d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
-                                clipRule="evenodd"
-                              />
-                            </svg>
-                            Applied {app.appliedDate}
-                          </span>
+                          </button>
                         </div>
                       </div>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <button
-                        onClick={() => setSelectedApplication(app)}
-                        className="px-6 py-2 bg-blue-500 text-white rounded-lg font-semibold hover:bg-blue-600"
-                      >
-                        View Details
-                      </button>
-                      <button className="p-2 hover:bg-gray-100 rounded-lg">
-                        <svg
-                          className="w-5 h-5 text-gray-600"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                        >
-                          <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
-                        </svg>
-                      </button>
-                    </div>
-                  </div>
+                  ))}
                 </div>
-              ))}
-            </div>
 
-            <div className="text-center mt-8">
-              <button className="text-blue-500 font-semibold flex items-center gap-2 mx-auto">
-                Load More Applications
-                <svg
-                  className="w-5 h-5"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </button>
-            </div>
+                <div className="text-center mt-8">
+                  <button className="text-blue-500 font-semibold flex items-center gap-2 mx-auto">
+                    Load More Applications
+                    <svg
+                      className="w-5 h-5"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              </>
+            )}
           </div>
         </div>
 
@@ -548,30 +527,38 @@ const Applications = () => {
             <div className="mb-6">
               <h4 className="font-bold mb-3">Key Responsibilities</h4>
               <ul className="space-y-2">
-                {selectedApplication.responsibilities.map((resp, idx) => (
-                  <li
-                    key={idx}
-                    className="flex items-start gap-2 text-gray-700"
-                  >
-                    <span className="text-blue-500 mt-1">•</span>
-                    <span>{resp}</span>
-                  </li>
-                ))}
+                {selectedApplication.responsibilities?.length > 0 ? (
+                  selectedApplication.responsibilities.map((resp, idx) => (
+                    <li
+                      key={`resp-${idx}-${resp.substring(0, 20)}`}
+                      className="flex items-start gap-2 text-gray-700"
+                    >
+                      <span className="text-blue-500 mt-1">•</span>
+                      <span>{resp}</span>
+                    </li>
+                  ))
+                ) : (
+                  <p className="text-gray-500">No responsibilities listed</p>
+                )}
               </ul>
             </div>
 
             <div className="mb-6">
               <h4 className="font-bold mb-3">Requirements</h4>
               <ul className="space-y-2">
-                {selectedApplication.requirements.map((req, idx) => (
-                  <li
-                    key={idx}
-                    className="flex items-start gap-2 text-gray-700"
-                  >
-                    <span className="text-blue-500 mt-1">•</span>
-                    <span>{req}</span>
-                  </li>
-                ))}
+                {selectedApplication.requirements?.length > 0 ? (
+                  selectedApplication.requirements.map((req, idx) => (
+                    <li
+                      key={`req-${idx}-${req.substring(0, 20)}`}
+                      className="flex items-start gap-2 text-gray-700"
+                    >
+                      <span className="text-blue-500 mt-1">•</span>
+                      <span>{req}</span>
+                    </li>
+                  ))
+                ) : (
+                  <p className="text-gray-500">No requirements listed</p>
+                )}
               </ul>
             </div>
 

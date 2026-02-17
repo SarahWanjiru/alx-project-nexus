@@ -1,20 +1,43 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import RecruiterSidebar from '../components/RecruiterSidebar';
 
 const ProfilePage = () => {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, profile } = useAuth();
   const isRecruiter = user?.role === 'recruiter' || user?.role === 'admin';
   const [formData, setFormData] = useState({
-    fullName: 'Alex Rivera',
-    professionalTitle: 'Senior Product Designer',
-    bio: 'Passionate Product Designer with 6+ years of experience in creating user-centric digital experiences. Specialized in mobile app design and design systems.',
-    email: user?.email || 'alex.rivera@example.com',
-    location: 'San Francisco, CA',
-    skills: ['UI Design', 'UX Research', 'Figma', 'Prototyping'],
+    fullName: profile?.full_name || user?.email?.split('@')[0] || 'User',
+    professionalTitle: profile?.professional_title || 'Job Seeker',
+    bio: profile?.bio || '',
+    email: user?.email || 'user@example.com',
+    location: profile?.location || 'Your location',
+    skills: profile?.skills
+      ? profile.skills
+          .split(',')
+          .map((skill) => skill.trim())
+          .filter((skill) => skill !== '')
+      : [],
   });
+
+  useEffect(() => {
+    if (profile || user) {
+      setFormData({
+        fullName: profile?.full_name || user?.email?.split('@')[0] || 'User',
+        professionalTitle: profile?.professional_title || 'Job Seeker',
+        bio: profile?.bio || '',
+        email: user?.email || 'user@example.com',
+        location: profile?.location || 'Your location',
+        skills: profile?.skills
+          ? profile.skills
+              .split(',')
+              .map((skill) => skill.trim())
+              .filter((skill) => skill !== '')
+          : [],
+      });
+    }
+  }, [profile, user]);
 
   const [newSkill, setNewSkill] = useState('');
 
@@ -47,23 +70,14 @@ const ProfilePage = () => {
         <aside className="w-64 bg-teal-900 text-white flex flex-col">
           <div className="p-6">
             <div className="flex items-center gap-3 mb-8">
-              <div className="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center">
-                <svg
-                  className="w-6 h-6"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
-                  <path
-                    fillRule="evenodd"
-                    d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </div>
+              <img
+                src="/Nexus Connect.png"
+                alt="Nexus Connect"
+                className="w-10 h-10 rounded-xl shadow-lg object-cover"
+              />
               <div>
-                <h1 className="font-bold">JobPortal</h1>
-                <p className="text-xs text-teal-300">SEEKER ACCOUNT</p>
+                <h1 className="font-bold">Nexus Connect</h1>
+                <p className="text-xs text-teal-300">JOB SEEKER</p>
               </div>
             </div>
 
@@ -272,6 +286,7 @@ const ProfilePage = () => {
               onChange={(e) =>
                 setFormData({ ...formData, bio: e.target.value })
               }
+              placeholder="Tell us about yourself..."
               rows="4"
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
             />
@@ -370,9 +385,9 @@ const ProfilePage = () => {
             </div>
 
             <div className="flex flex-wrap gap-2 mb-4">
-              {formData.skills.map((skill) => (
+              {formData.skills.map((skill, index) => (
                 <span
-                  key={skill}
+                  key={`${skill}-${index}`}
                   className="px-4 py-2 bg-teal-50 text-teal-700 rounded-lg font-semibold flex items-center gap-2"
                 >
                   {skill}

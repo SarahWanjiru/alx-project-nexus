@@ -42,7 +42,7 @@ const ApplicationModal = ({ job, onClose, onSuccess }) => {
       await api.jobs.apply(job.id, data);
       onSuccess();
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to submit application');
+      setError(err.message || 'Failed to submit application');
     } finally {
       setLoading(false);
     }
@@ -86,7 +86,6 @@ const ApplicationModal = ({ job, onClose, onSuccess }) => {
             </div>
             <div className="flex items-center justify-between">
               <h2 className="text-lg font-bold">Application Progress</h2>
-              <span className="text-blue-500 font-semibold">Step 2 of 3</span>
             </div>
           </div>
           <button
@@ -111,16 +110,13 @@ const ApplicationModal = ({ job, onClose, onSuccess }) => {
         <div className="px-8 py-4 border-b border-gray-200">
           <div className="flex items-center justify-between mb-2">
             <span className="text-sm font-semibold text-gray-700">
-              STEP 2: RESUME & COVER LETTER
-            </span>
-            <span className="text-sm text-green-600">
-              ✓ Personal Info Saved
+              RESUME & COVER LETTER
             </span>
           </div>
           <div className="w-full bg-gray-200 rounded-full h-2">
             <div
               className="bg-blue-500 h-2 rounded-full"
-              style={{ width: '66%' }}
+              style={{ width: '100%' }}
             ></div>
           </div>
         </div>
@@ -369,9 +365,16 @@ const ApplicationModal = ({ job, onClose, onSuccess }) => {
             </button>
           </div>
 
+          {/* Error Message */}
+          {error && (
+            <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg text-red-600">
+              {error}
+            </div>
+          )}
+
           {/* Footer Info */}
           <div className="mt-6 text-center text-sm text-gray-500">
-            By submitting this application, you agree to TechCorp's{' '}
+            By submitting this application, you agree to Nexus Connect's{' '}
             <a href="/privacy" className="text-blue-500 hover:underline">
               Privacy Policy
             </a>{' '}

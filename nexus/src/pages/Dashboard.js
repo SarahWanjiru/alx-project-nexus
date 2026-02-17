@@ -1,17 +1,51 @@
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { useEffect } from 'react';
 import { useJobs } from '../contexts/JobContext';
 import { useTheme } from '../contexts/ThemeContext';
 import { useState } from 'react';
 import ApplicationModal from '../components/ApplicationModal';
+import { api } from '../utils/api';
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const { user, logout } = useAuth();
+  const { user, profile, logout } = useAuth();
+
+  const handleLogout = async () => {
+    await logout();
+    navigate('/');
+  };
   const { jobs, loading } = useJobs();
   const { isDark, toggleTheme } = useTheme();
   const [showApplicationModal, setShowApplicationModal] = useState(false);
   const [applicationJob, setApplicationJob] = useState(null);
+  const [applications, setApplications] = useState([]);
+  const [successMessage, setSuccessMessage] = useState(null);
+
+  useEffect(() => {
+    const fetchApplications = async () => {
+      if (!profile?.user) return;
+
+      try {
+        const data = await api.applications.getMyApplications(profile.user);
+        const apps = Array.isArray(data) ? data : data.results || [];
+        setApplications(apps);
+      } catch (err) {
+        console.error('Failed to fetch applications:', err);
+      }
+    };
+
+    fetchApplications();
+  }, [profile?.user]);
+
+  useEffect(() => {
+    if (successMessage) {
+      const timeoutId = setTimeout(() => {
+        setSuccessMessage(null);
+      }, 5000);
+      return () => clearTimeout(timeoutId);
+    }
+  }, [successMessage]);
 
   const handleApply = (job) => {
     setApplicationJob(job);
@@ -21,7 +55,7 @@ const Dashboard = () => {
   const handleApplicationSuccess = () => {
     setShowApplicationModal(false);
     setApplicationJob(null);
-    alert('Application submitted successfully!');
+    setSuccessMessage('Application submitted successfully!');
   };
 
   return (
@@ -43,6 +77,7 @@ const Dashboard = () => {
 
           <nav className="space-y-2">
             <button
+              key="nav-dashboard"
               onClick={() => navigate('/dashboard')}
               className="w-full flex items-center gap-3 px-4 py-3 bg-teal-800 rounded-lg"
             >
@@ -52,6 +87,7 @@ const Dashboard = () => {
               Dashboard
             </button>
             <button
+              key="nav-find-jobs"
               onClick={() => navigate('/find-jobs')}
               className="w-full flex items-center gap-3 px-4 py-3 hover:bg-teal-800 rounded-lg"
             >
@@ -65,6 +101,7 @@ const Dashboard = () => {
               Find Jobs
             </button>
             <button
+              key="nav-applications"
               onClick={() => navigate('/applications')}
               className="w-full flex items-center gap-3 px-4 py-3 hover:bg-teal-800 rounded-lg"
             >
@@ -79,6 +116,7 @@ const Dashboard = () => {
               Applications
             </button>
             <button
+              key="nav-messages"
               onClick={() => navigate('/messages')}
               className="w-full flex items-center gap-3 px-4 py-3 hover:bg-teal-800 rounded-lg relative"
             >
@@ -90,6 +128,7 @@ const Dashboard = () => {
               <span className="absolute right-4 w-2 h-2 bg-blue-400 rounded-full"></span>
             </button>
             <button
+              key="nav-profile"
               onClick={() => navigate('/profile')}
               className="w-full flex items-center gap-3 px-4 py-3 hover:bg-teal-800 rounded-lg"
             >
@@ -117,29 +156,20 @@ const Dashboard = () => {
 
       {/* Main Content */}
       <main className="flex-1">
+        {/* Success Message */}
+        {successMessage && (
+          <div className="fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50">
+            {successMessage}
+          </div>
+        )}
+
         {/* Top Bar */}
         <header className="bg-white border-b border-gray-200 px-8 py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-6">
-              <h2 className="text-2xl font-bold">Dashboard</h2>
-              <div className="relative">
-                <input
-                  type="text"
-                  placeholder="Search jobs, companies..."
-                  className="w-96 pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
-                <svg
-                  className="w-5 h-5 text-gray-400 absolute left-3 top-2.5"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </div>
+            <div>
+              <p className="text-gray-600">
+                Good Morning, {user?.email?.split('@')[0] || 'User'}!
+              </p>
             </div>
             <div className="flex items-center gap-4">
               <button
@@ -173,45 +203,12 @@ const Dashboard = () => {
                   <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
                 </svg>
               </button>
-              <button className="p-2 hover:bg-gray-100 rounded-lg">
-                <svg
-                  className="w-6 h-6 text-gray-600"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </button>
               <button
-                onClick={logout}
-                className="p-2 hover:bg-gray-100 rounded-lg"
-                title="Logout"
+                onClick={handleLogout}
+                className="px-4 py-2 text-red-600 hover:bg-red-100 rounded-lg font-medium"
               >
-                <svg
-                  className="w-6 h-6 text-gray-600"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z"
-                    clipRule="evenodd"
-                  />
-                </svg>
+                Log Out
               </button>
-              <div className="flex items-center gap-3">
-                <div className="text-right">
-                  <p className="font-semibold">
-                    {user?.email?.split('@')[0] || 'Alex Rivera'}
-                  </p>
-                  <p className="text-sm text-gray-500">Product Designer</p>
-                </div>
-                <div className="w-10 h-10 bg-gradient-to-br from-orange-400 to-pink-400 rounded-full"></div>
-              </div>
             </div>
           </div>
         </header>
@@ -220,9 +217,8 @@ const Dashboard = () => {
           <div className="grid grid-cols-3 gap-6">
             {/* Left Column */}
             <div className="col-span-2 space-y-6">
-              {/* Greeting */}
+              {/* Job Matches Info */}
               <div>
-                <h1 className="text-3xl font-bold mb-2">Good Morning, Alex!</h1>
                 <p className="text-gray-600">
                   You have{' '}
                   <span className="text-blue-500 font-semibold">
@@ -234,7 +230,10 @@ const Dashboard = () => {
 
               {/* Stats Cards */}
               <div className="grid grid-cols-3 gap-4">
-                <div className="bg-white p-6 rounded-xl border border-gray-200">
+                <div
+                  key="stat-applications"
+                  className="bg-white p-6 rounded-xl border border-gray-200"
+                >
                   <div className="flex items-center justify-between mb-4">
                     <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
                       <svg
@@ -255,7 +254,10 @@ const Dashboard = () => {
                   <p className="text-3xl font-bold">12</p>
                 </div>
 
-                <div className="bg-white p-6 rounded-xl border border-gray-200">
+                <div
+                  key="stat-views"
+                  className="bg-white p-6 rounded-xl border border-gray-200"
+                >
                   <div className="flex items-center justify-between mb-4">
                     <div className="w-10 h-10 bg-teal-100 rounded-lg flex items-center justify-center">
                       <svg
@@ -279,7 +281,10 @@ const Dashboard = () => {
                   <p className="text-3xl font-bold">45</p>
                 </div>
 
-                <div className="bg-white p-6 rounded-xl border border-gray-200">
+                <div
+                  key="stat-messages"
+                  className="bg-white p-6 rounded-xl border border-gray-200"
+                >
                   <div className="flex items-center justify-between mb-4">
                     <div className="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center">
                       <svg
@@ -318,67 +323,75 @@ const Dashboard = () => {
                       Loading...
                     </div>
                   ) : (
-                    jobs.slice(0, 2).map((job) => (
-                      <div
-                        key={job.id}
-                        className="bg-white p-6 rounded-xl border border-gray-200"
-                      >
-                        <div className="flex items-start justify-between mb-4">
-                          <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
-                            <svg
-                              className="w-6 h-6 text-gray-400"
-                              fill="currentColor"
-                              viewBox="0 0 20 20"
-                            >
-                              <path
-                                fillRule="evenodd"
-                                d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 110 2h-3a1 1 0 01-1-1v-2a1 1 0 00-1-1H9a1 1 0 00-1 1v2a1 1 0 01-1 1H4a1 1 0 110-2V4zm3 1h2v2H7V5zm2 4H7v2h2V9zm2-4h2v2h-2V5zm2 4h-2v2h2V9z"
-                                clipRule="evenodd"
-                              />
-                            </svg>
+                    jobs
+                      .filter(
+                        (job) =>
+                          !applications.some((app) => app.job?.id === job.id)
+                      )
+                      .slice(0, 2)
+                      .map((job) => (
+                        <div
+                          key={job.id}
+                          className="bg-white p-6 rounded-xl border border-gray-200"
+                        >
+                          <div className="flex items-start justify-between mb-4">
+                            <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
+                              <svg
+                                className="w-6 h-6 text-gray-400"
+                                fill="currentColor"
+                                viewBox="0 0 20 20"
+                              >
+                                <path
+                                  fillRule="evenodd"
+                                  d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 110 2h-3a1 1 0 01-1-1v-2a1 1 0 00-1-1H9a1 1 0 00-1 1v2a1 1 0 01-1 1H4a1 1 0 110-2V4zm3 1h2v2H7V5zm2 4H7v2h2V9zm2-4h2v2h-2V5zm2 4h-2v2h2V9z"
+                                  clipRule="evenodd"
+                                />
+                              </svg>
+                            </div>
+                            <button className="text-gray-400 hover:text-blue-500">
+                              <svg
+                                className="w-5 h-5"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"
+                                />
+                              </svg>
+                            </button>
                           </div>
-                          <button className="text-gray-400 hover:text-blue-500">
-                            <svg
-                              className="w-5 h-5"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"
-                              />
-                            </svg>
+                          <h4 className="font-bold text-lg mb-2">
+                            {job.title}
+                          </h4>
+                          <p className="text-gray-600 text-sm mb-4">
+                            {job.company} • {job.location}
+                          </p>
+                          <div className="flex items-center gap-2 mb-4">
+                            <span className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-semibold">
+                              {job.contract_type}
+                            </span>
+                            <span className="px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-xs font-semibold">
+                              {job.category}
+                            </span>
+                            {job.salary_min && (
+                              <span className="px-3 py-1 bg-green-50 text-green-600 rounded-full text-xs font-semibold">
+                                ${Math.round(job.salary_min / 1000)}k - $
+                                {Math.round(job.salary_max / 1000)}k
+                              </span>
+                            )}
+                          </div>
+                          <button
+                            onClick={() => handleApply(job)}
+                            className="w-full bg-blue-500 text-white py-3 rounded-lg font-semibold hover:bg-blue-600"
+                          >
+                            Apply Now
                           </button>
                         </div>
-                        <h4 className="font-bold text-lg mb-2">{job.title}</h4>
-                        <p className="text-gray-600 text-sm mb-4">
-                          {job.company} • {job.location}
-                        </p>
-                        <div className="flex items-center gap-2 mb-4">
-                          <span className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-semibold">
-                            {job.contract_type}
-                          </span>
-                          <span className="px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-xs font-semibold">
-                            {job.category}
-                          </span>
-                          {job.salary_min && (
-                            <span className="px-3 py-1 bg-green-50 text-green-600 rounded-full text-xs font-semibold">
-                              ${Math.round(job.salary_min / 1000)}k - $
-                              {Math.round(job.salary_max / 1000)}k
-                            </span>
-                          )}
-                        </div>
-                        <button
-                          onClick={() => handleApply(job)}
-                          className="w-full bg-blue-500 text-white py-3 rounded-lg font-semibold hover:bg-blue-600"
-                        >
-                          Apply Now
-                        </button>
-                      </div>
-                    ))
+                      ))
                   )}
                 </div>
               </div>
@@ -408,54 +421,73 @@ const Dashboard = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    <tr className="border-b">
-                      <td className="py-4">
-                        <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 bg-blue-100 rounded flex items-center justify-center">
-                            <span className="text-blue-600 font-bold text-sm">
-                              T
+                    {applications.slice(0, 2).length > 0 ? (
+                      applications.slice(0, 2).map((app) => (
+                        <tr key={app.id} className="border-b">
+                          <td className="py-4">
+                            <div className="flex items-center gap-3">
+                              <div className="w-8 h-8 bg-blue-100 rounded flex items-center justify-center">
+                                <span className="text-blue-600 font-bold text-sm">
+                                  {app.job?.company_name?.charAt(0) || 'C'}
+                                </span>
+                              </div>
+                              <span className="font-semibold">
+                                {app.job?.company_name || 'N/A'}
+                              </span>
+                            </div>
+                          </td>
+                          <td className="py-4 text-gray-600">
+                            {app.job?.title || 'N/A'}
+                          </td>
+                          <td className="py-4 text-gray-600">
+                            {app.created_at
+                              ? new Date(app.created_at).toLocaleDateString(
+                                  'en-US',
+                                  { month: 'short', day: 'numeric' }
+                                )
+                              : '—'}
+                          </td>
+                          <td className="py-4">
+                            <span
+                              className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                                app.status === 'interviewing'
+                                  ? 'bg-orange-100 text-orange-600'
+                                  : app.status === 'applied'
+                                    ? 'bg-blue-100 text-blue-600'
+                                    : app.status === 'in_review'
+                                      ? 'bg-yellow-100 text-yellow-600'
+                                      : 'bg-gray-100 text-gray-600'
+                              }`}
+                            >
+                              {app.status === 'applied'
+                                ? 'Applied'
+                                : app.status === 'interviewing'
+                                  ? 'Interviewing'
+                                  : app.status === 'in_review'
+                                    ? 'In Review'
+                                    : app.status}
                             </span>
-                          </div>
-                          <span className="font-semibold">TechNode</span>
-                        </div>
-                      </td>
-                      <td className="py-4 text-gray-600">Product Designer</td>
-                      <td className="py-4 text-gray-600">Oct 12</td>
-                      <td className="py-4">
-                        <span className="px-3 py-1 bg-orange-100 text-orange-600 rounded-full text-xs font-semibold">
-                          Interviewing
-                        </span>
-                      </td>
-                      <td className="py-4">
-                        <button className="text-blue-500 font-semibold">
-                          Details
-                        </button>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="py-4">
-                        <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 bg-gray-800 rounded flex items-center justify-center">
-                            <span className="text-white font-bold text-sm">
-                              B
-                            </span>
-                          </div>
-                          <span className="font-semibold">ByteApp</span>
-                        </div>
-                      </td>
-                      <td className="py-4 text-gray-600">UI Designer</td>
-                      <td className="py-4 text-gray-600">Oct 08</td>
-                      <td className="py-4">
-                        <span className="px-3 py-1 bg-blue-100 text-blue-600 rounded-full text-xs font-semibold">
-                          Applied
-                        </span>
-                      </td>
-                      <td className="py-4">
-                        <button className="text-blue-500 font-semibold">
-                          Details
-                        </button>
-                      </td>
-                    </tr>
+                          </td>
+                          <td className="py-4">
+                            <button
+                              onClick={() => navigate('/applications')}
+                              className="text-blue-500 font-semibold"
+                            >
+                              Details
+                            </button>
+                          </td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td
+                          colSpan="5"
+                          className="py-8 text-center text-gray-500"
+                        >
+                          No applications yet
+                        </td>
+                      </tr>
+                    )}
                   </tbody>
                 </table>
               </div>
@@ -499,59 +531,55 @@ const Dashboard = () => {
                   </span>
                 </div>
                 <div className="space-y-4">
-                  <div>
-                    <div className="flex items-start gap-3">
-                      <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                        <svg
-                          className="w-5 h-5 text-blue-600"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                        >
-                          <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
-                          <path
-                            fillRule="evenodd"
-                            d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                      </div>
-                      <div className="flex-1">
-                        <p className="font-semibold text-sm mb-1">
-                          Interview Invitation
-                        </p>
-                        <p className="text-gray-600 text-xs mb-2">
-                          TechNode invited you for an interview for Product
-                          Designer.
-                        </p>
-                        <p className="text-gray-400 text-xs">2 hours ago</p>
-                      </div>
+                  <div key="notification-1" className="flex items-start gap-3">
+                    <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <svg
+                        className="w-5 h-5 text-blue-600"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
+                        <path
+                          fillRule="evenodd"
+                          d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </div>
+                    <div className="flex-1">
+                      <p className="font-semibold text-sm mb-1">
+                        Interview Invitation
+                      </p>
+                      <p className="text-gray-600 text-xs mb-2">
+                        TechNode invited you for an interview for Product
+                        Designer.
+                      </p>
+                      <p className="text-gray-400 text-xs">2 hours ago</p>
                     </div>
                   </div>
-                  <div>
-                    <div className="flex items-start gap-3">
-                      <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                        <svg
-                          className="w-5 h-5 text-green-600"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                        >
-                          <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-                          <path
-                            fillRule="evenodd"
-                            d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                      </div>
-                      <div className="flex-1">
-                        <p className="font-semibold text-sm mb-1">
-                          Profile Viewed
-                        </p>
-                        <p className="text-gray-600 text-xs mb-2">
-                          A recruiter from ByteApp viewed your profile.
-                        </p>
-                        <p className="text-gray-400 text-xs">5 hours ago</p>
-                      </div>
+                  <div key="notification-2" className="flex items-start gap-3">
+                    <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <svg
+                        className="w-5 h-5 text-green-600"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                        <path
+                          fillRule="evenodd"
+                          d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </div>
+                    <div className="flex-1">
+                      <p className="font-semibold text-sm mb-1">
+                        Profile Viewed
+                      </p>
+                      <p className="text-gray-600 text-xs mb-2">
+                        A recruiter from ByteApp viewed your profile.
+                      </p>
+                      <p className="text-gray-400 text-xs">5 hours ago</p>
                     </div>
                   </div>
                 </div>
