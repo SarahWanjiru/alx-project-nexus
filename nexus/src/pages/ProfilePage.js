@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import RecruiterSidebar from '../components/RecruiterSidebar';
@@ -20,6 +20,24 @@ const ProfilePage = () => {
           .filter((skill) => skill !== '')
       : [],
   });
+
+  useEffect(() => {
+    if (profile || user) {
+      setFormData({
+        fullName: profile?.full_name || user?.email?.split('@')[0] || 'User',
+        professionalTitle: profile?.professional_title || 'Job Seeker',
+        bio: profile?.bio || 'Tell us about yourself...',
+        email: user?.email || 'user@example.com',
+        location: profile?.location || 'Your location',
+        skills: profile?.skills
+          ? profile.skills
+              .split(',')
+              .map((skill) => skill.trim())
+              .filter((skill) => skill !== '')
+          : [],
+      });
+    }
+  }, [profile, user]);
 
   const [newSkill, setNewSkill] = useState('');
 
