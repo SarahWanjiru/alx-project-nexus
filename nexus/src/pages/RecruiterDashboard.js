@@ -124,7 +124,7 @@ const RecruiterDashboard = () => {
   };
 
   const getApplicantCount = (jobId) => {
-    return allApplications.filter(app => app.job?.id === jobId).length;
+    return allApplications.filter((app) => app.job?.id === jobId).length;
   };
 
   return (
@@ -166,12 +166,23 @@ const RecruiterDashboard = () => {
             <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <svg className="w-6 h-6 text-red-600" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                  <svg
+                    className="w-6 h-6 text-red-600"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                      clipRule="evenodd"
+                    />
                   </svg>
                   <p className="text-red-800 font-semibold">{error}</p>
                 </div>
-                <button onClick={fetchRecruiterData} className="px-4 py-2 bg-red-600 text-white rounded-lg font-semibold hover:bg-red-700">
+                <button
+                  onClick={fetchRecruiterData}
+                  className="px-4 py-2 bg-red-600 text-white rounded-lg font-semibold hover:bg-red-700"
+                >
                   Retry
                 </button>
               </div>
@@ -335,13 +346,16 @@ const RecruiterDashboard = () => {
                             <div>
                               <h4 className="font-bold text-lg">{job.title}</h4>
                               <p className="text-gray-600 text-sm">
-                                {job.location} • Posted {getRelativeTime(job.created_at)}
+                                {job.location} • Posted{' '}
+                                {getRelativeTime(job.created_at)}
                               </p>
                             </div>
                           </div>
                           <div className="flex items-center gap-4">
                             <div className="text-right">
-                              <p className="text-2xl font-bold">{getApplicantCount(job.id)}</p>
+                              <p className="text-2xl font-bold">
+                                {getApplicantCount(job.id)}
+                              </p>
                               <p className="text-gray-500 text-xs">
                                 APPLICANTS
                               </p>
