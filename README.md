@@ -45,7 +45,6 @@ Nexus is an interactive job board platform built as part of the ProDev Frontend 
 - **Authentication**: JWT (Simple JWT)
 - **Database**: PostgreSQL
 - **File Storage**: Media uploads for resumes/cover letters
-- **Backend URL**: https://job-board-platform-fcav.onrender.com/api
 
 ## Design
 
