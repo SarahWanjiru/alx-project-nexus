@@ -60,7 +60,7 @@ const Dashboard = () => {
 
   return (
     <div className="flex min-h-screen bg-gray-50">
-      {/* Sidebar */
+      {/* Sidebar */}
       <aside className="w-64 bg-teal-900 text-white flex flex-col">
         <div className="p-6">
           <div className="flex items-center gap-3 mb-8">
@@ -77,6 +77,7 @@ const Dashboard = () => {
 
           <nav className="space-y-2">
             <button
+              key="nav-dashboard"
               onClick={() => navigate('/dashboard')}
               className="w-full flex items-center gap-3 px-4 py-3 bg-teal-800 rounded-lg"
             >
@@ -86,6 +87,7 @@ const Dashboard = () => {
               Dashboard
             </button>
             <button
+              key="nav-find-jobs"
               onClick={() => navigate('/find-jobs')}
               className="w-full flex items-center gap-3 px-4 py-3 hover:bg-teal-800 rounded-lg"
             >
@@ -99,6 +101,7 @@ const Dashboard = () => {
               Find Jobs
             </button>
             <button
+              key="nav-applications"
               onClick={() => navigate('/applications')}
               className="w-full flex items-center gap-3 px-4 py-3 hover:bg-teal-800 rounded-lg"
             >
@@ -113,6 +116,7 @@ const Dashboard = () => {
               Applications
             </button>
             <button
+              key="nav-messages"
               onClick={() => navigate('/messages')}
               className="w-full flex items-center gap-3 px-4 py-3 hover:bg-teal-800 rounded-lg relative"
             >
@@ -124,6 +128,7 @@ const Dashboard = () => {
               <span className="absolute right-4 w-2 h-2 bg-blue-400 rounded-full"></span>
             </button>
             <button
+              key="nav-profile"
               onClick={() => navigate('/profile')}
               className="w-full flex items-center gap-3 px-4 py-3 hover:bg-teal-800 rounded-lg"
             >
@@ -157,7 +162,7 @@ const Dashboard = () => {
             {successMessage}
           </div>
         )}
-        
+
         {/* Top Bar */}
         <header className="bg-white border-b border-gray-200 px-8 py-4">
           <div className="flex items-center justify-between">
@@ -225,7 +230,7 @@ const Dashboard = () => {
 
               {/* Stats Cards */}
               <div className="grid grid-cols-3 gap-4">
-                <div className="bg-white p-6 rounded-xl border border-gray-200">
+                <div key="stat-applications" className="bg-white p-6 rounded-xl border border-gray-200">
                   <div className="flex items-center justify-between mb-4">
                     <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
                       <svg
@@ -246,7 +251,7 @@ const Dashboard = () => {
                   <p className="text-3xl font-bold">12</p>
                 </div>
 
-                <div className="bg-white p-6 rounded-xl border border-gray-200">
+                <div key="stat-views" className="bg-white p-6 rounded-xl border border-gray-200">
                   <div className="flex items-center justify-between mb-4">
                     <div className="w-10 h-10 bg-teal-100 rounded-lg flex items-center justify-center">
                       <svg
@@ -270,7 +275,7 @@ const Dashboard = () => {
                   <p className="text-3xl font-bold">45</p>
                 </div>
 
-                <div className="bg-white p-6 rounded-xl border border-gray-200">
+                <div key="stat-messages" className="bg-white p-6 rounded-xl border border-gray-200">
                   <div className="flex items-center justify-between mb-4">
                     <div className="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center">
                       <svg
@@ -426,10 +431,12 @@ const Dashboard = () => {
                             {app.job?.title || 'N/A'}
                           </td>
                           <td className="py-4 text-gray-600">
-                             {app.created_at ? new Date(app.created_at).toLocaleDateString(
-                              'en-US',
-                              { month: 'short', day: 'numeric' }
-                            ) : '—'}
+                            {app.created_at
+                              ? new Date(app.created_at).toLocaleDateString(
+                                  'en-US',
+                                  { month: 'short', day: 'numeric' }
+                                )
+                              : '—'}
                           </td>
                           <td className="py-4">
                             <span
@@ -515,59 +522,55 @@ const Dashboard = () => {
                   </span>
                 </div>
                 <div className="space-y-4">
-                  <div>
-                    <div className="flex items-start gap-3">
-                      <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                        <svg
-                          className="w-5 h-5 text-blue-600"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                        >
-                          <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
-                          <path
-                            fillRule="evenodd"
-                            d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                      </div>
-                      <div className="flex-1">
-                        <p className="font-semibold text-sm mb-1">
-                          Interview Invitation
-                        </p>
-                        <p className="text-gray-600 text-xs mb-2">
-                          TechNode invited you for an interview for Product
-                          Designer.
-                        </p>
-                        <p className="text-gray-400 text-xs">2 hours ago</p>
-                      </div>
+                  <div key="notification-1" className="flex items-start gap-3">
+                    <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <svg
+                        className="w-5 h-5 text-blue-600"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
+                        <path
+                          fillRule="evenodd"
+                          d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </div>
+                    <div className="flex-1">
+                      <p className="font-semibold text-sm mb-1">
+                        Interview Invitation
+                      </p>
+                      <p className="text-gray-600 text-xs mb-2">
+                        TechNode invited you for an interview for Product
+                        Designer.
+                      </p>
+                      <p className="text-gray-400 text-xs">2 hours ago</p>
                     </div>
                   </div>
-                  <div>
-                    <div className="flex items-start gap-3">
-                      <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                        <svg
-                          className="w-5 h-5 text-green-600"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                        >
-                          <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-                          <path
-                            fillRule="evenodd"
-                            d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                      </div>
-                      <div className="flex-1">
-                        <p className="font-semibold text-sm mb-1">
-                          Profile Viewed
-                        </p>
-                        <p className="text-gray-600 text-xs mb-2">
-                          A recruiter from ByteApp viewed your profile.
-                        </p>
-                        <p className="text-gray-400 text-xs">5 hours ago</p>
-                      </div>
+                  <div key="notification-2" className="flex items-start gap-3">
+                    <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <svg
+                        className="w-5 h-5 text-green-600"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                        <path
+                          fillRule="evenodd"
+                          d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </div>
+                    <div className="flex-1">
+                      <p className="font-semibold text-sm mb-1">
+                        Profile Viewed
+                      </p>
+                      <p className="text-gray-600 text-xs mb-2">
+                        A recruiter from ByteApp viewed your profile.
+                      </p>
+                      <p className="text-gray-400 text-xs">5 hours ago</p>
                     </div>
                   </div>
                 </div>

@@ -100,6 +100,7 @@ const Applications = () => {
 
           <nav className="space-y-2">
             <button
+              key="nav-dashboard"
               onClick={() => navigate('/dashboard')}
               className="w-full flex items-center gap-3 px-4 py-3 hover:bg-teal-800 rounded-lg"
             >
@@ -109,6 +110,7 @@ const Applications = () => {
               Dashboard
             </button>
             <button
+              key="nav-find-jobs"
               onClick={() => navigate('/find-jobs')}
               className="w-full flex items-center gap-3 px-4 py-3 hover:bg-teal-800 rounded-lg"
             >
@@ -121,7 +123,7 @@ const Applications = () => {
               </svg>
               Find Jobs
             </button>
-            <button className="w-full flex items-center gap-3 px-4 py-3 bg-teal-800 rounded-lg">
+            <button key="nav-applications" className="w-full flex items-center gap-3 px-4 py-3 bg-teal-800 rounded-lg">
               <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                 <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
                 <path
@@ -133,6 +135,7 @@ const Applications = () => {
               Applications
             </button>
             <button
+              key="nav-messages"
               onClick={() => navigate('/messages')}
               className="w-full flex items-center gap-3 px-4 py-3 hover:bg-teal-800 rounded-lg relative"
             >
@@ -144,6 +147,7 @@ const Applications = () => {
               <span className="absolute right-4 w-2 h-2 bg-blue-400 rounded-full"></span>
             </button>
             <button
+              key="nav-profile"
               onClick={() => navigate('/profile')}
               className="w-full flex items-center gap-3 px-4 py-3 hover:bg-teal-800 rounded-lg"
             >
@@ -229,6 +233,7 @@ const Applications = () => {
                 <div className="bg-white rounded-xl border border-gray-200 mb-6">
                   <div className="flex items-center border-b border-gray-200 px-6">
                     <button
+                      key="tab-all"
                       onClick={() => setActiveTab('all')}
                       className={`px-4 py-4 font-semibold border-b-2 ${activeTab === 'all' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-600'}`}
                     >
@@ -238,6 +243,7 @@ const Applications = () => {
                       </span>
                     </button>
                     <button
+                      key="tab-applied"
                       onClick={() => setActiveTab('applied')}
                       className={`px-4 py-4 font-semibold border-b-2 ${activeTab === 'applied' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-600'}`}
                     >
@@ -247,6 +253,7 @@ const Applications = () => {
                       </span>
                     </button>
                     <button
+                      key="tab-in-review"
                       onClick={() => setActiveTab('in_review')}
                       className={`px-4 py-4 font-semibold border-b-2 ${activeTab === 'in_review' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-600'}`}
                     >
@@ -256,6 +263,7 @@ const Applications = () => {
                       </span>
                     </button>
                     <button
+                      key="tab-interviewing"
                       onClick={() => setActiveTab('interviewing')}
                       className={`px-4 py-4 font-semibold border-b-2 ${activeTab === 'interviewing' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-600'}`}
                     >
@@ -265,6 +273,7 @@ const Applications = () => {
                       </span>
                     </button>
                     <button
+                      key="tab-hired-rejected"
                       onClick={() => setActiveTab('hired_rejected')}
                       className={`px-4 py-4 font-semibold border-b-2 ${activeTab === 'hired_rejected' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-600'}`}
                     >
