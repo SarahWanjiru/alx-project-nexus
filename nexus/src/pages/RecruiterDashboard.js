@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { api } from '../utils/api';
@@ -30,11 +30,7 @@ const RecruiterDashboard = () => {
     avgTimeToHire: '0d',
   });
 
-  useEffect(() => {
-    fetchRecruiterData();
-  }, []);
-
-  const fetchRecruiterData = async () => {
+  const fetchRecruiterData = useCallback(async () => {
     setIsLoading(true);
     try {
       const companiesData = await api.companies.getAll();
@@ -106,7 +102,11 @@ const RecruiterDashboard = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    fetchRecruiterData();
+  }, [fetchRecruiterData]);
 
   return (
     <div className="flex min-h-screen bg-gray-50">
